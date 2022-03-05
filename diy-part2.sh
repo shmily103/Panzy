@@ -22,6 +22,9 @@ sed -i 's/ssid=OpenWrt/ssid=Panzy/g' package/kernel/mac80211/files/lib/wifi/mac8
 mv package/Panzy/upx tools/upx
 mv package/Panzy/ucl tools/ucl
 
+# Fix permission
+chmod a+x package/Panzy
+
 # fix unblockmusic
 # chmod a+x package/Panzy/luci-app-unblockneteasemusic/root/etc/init.d/unblockneteasemusic
 # rm -rf package/feeds/packages/kcptun
