@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build OpenWrt 22.03.0
+name: Build OpenWrt 21.02.3
 
 on:
   repository_dispatch:
@@ -24,7 +24,7 @@ on:
 
 env:
   REPO_URL: https://git.openwrt.org/openwrt/openwrt.git
-  REPO_BRANCH: v22.03.0
+  REPO_BRANCH: v21.02.3
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: config/22.03.config
   DIY_P1_SH: diy-part1.sh
