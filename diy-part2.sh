@@ -25,6 +25,9 @@ mv package/Panzy/ucl tools/ucl
 # Fix permission
 chmod a+x -R package/Panzy
 
+# Fix aria2
+sed -i 's/procd_add_jail_mount "$config_file"/procd_add_jail_mount "$ca_certificate" "$certificate" "$rpc_certificate" "$rpc_private_key"/g' feeds/packages/net/aria2/files/aria2.init
+
 # fix unblockmusic
 # chmod a+x package/Panzy/luci-app-unblockneteasemusic/root/etc/init.d/unblockneteasemusic
 # rm -rf package/feeds/packages/kcptun
