@@ -1,79 +1,59 @@
-# Copyright (C) 2021 xiaorouji
+# SPDX-License-Identifier: GPL-3.0-only
 #
-# This is free software, licensed under the GNU General Public License v3.
-#
+# Copyright (C) 2021 ImmortalWrt.org
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hysteria
-PKG_VERSION:=0.8.6
+PKG_VERSION:=2.2.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://codeload.github.com/HyNetwork/hysteria/tar.gz/v$(PKG_VERSION)?
-PKG_HASH:=7c107575e50c260b2aab12e64900e711ff63846d7cf9b49165bd54d3795d68a7
+PKG_SOURCE_URL:=https://codeload.github.com/apernet/hysteria/tar.gz/app/v$(PKG_VERSION)?
+PKG_HASH:=d3e6809ac2b8e1c58e1c95cdb96bd44d99b17c7824bdd931d4d51c9e3818d402
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-app-v$(PKG_VERSION)
 
-PKG_CONFIG_DEPENDS:= \
-	CONFIG_HYSTERIA_COMPRESS_GOPROXY \
-	CONFIG_HYSTERIA_COMPRESS_UPX
+PKG_LICENSE:=MIT
+PKG_LICENSE_FILE:=LICENSE
+PKG_MAINTAINER:=Tianling Shen <cnsztl@immortalwrt.org>
 
 PKG_BUILD_DEPENDS:=golang/host
 PKG_BUILD_PARALLEL:=1
 PKG_USE_MIPS16:=0
+PKG_BUILD_FLAGS:=no-mips16
 
-GO_PKG:=github.com/tobyxdd/hysteria
-GO_PKG_BUILD_PKG:=$(GO_PKG)/cmd
-GO_PKG_LDFLAGS:=-s -w
-GO_PKG_LDFLAGS_X:= \
-	main.appVersion=$(PKG_VERSION)
+GO_PKG:=github.com/apernet/hysteria
+GO_PKG_BUILD_PKG:=$(GO_PKG)/app
+GO_PKG_LDFLAGS_X = \
+	$(GO_PKG)/app/cmd.appVersion=v$(PKG_VERSION) \
+	$(GO_PKG)/app/cmd.appType=release \
+	$(GO_PKG)/app/cmd.appPlatform=$(GO_OS) \
+	$(GO_PKG)/app/cmd.appArch=$(GO_ARCH)
 
 include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/golang/golang-package.mk
 
-define Package/$(PKG_NAME)
-	SECTION:=net
-	CATEGORY:=Network
-	SUBMENU:=Web Servers/Proxies
-	DEPENDS:=$$(GO_ARCH_DEPENDS)
-	TITLE:=Hysteria is a feature-packed network utility optimized for networks of poor quality (e.g. satellite connections, congested public Wi-Fi, connecting from China to servers abroad)
-	URL:=https://github.com/HyNetwork/hysteria
+define Package/hysteria
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=A feature-packed network utility optimized for networks of poor quality
+  URL:=https://github.com/apernet/hysteria
+  DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle
 endef
 
-define Package/$(PKG_NAME)/config
-
-menu "Configuration"
-	depends on PACKAGE_$(PKG_NAME)
-
-config HYSTERIA_COMPRESS_GOPROXY
-	bool "Compiling with GOPROXY proxy"
-	default n
-
-config HYSTERIA_COMPRESS_UPX
-	bool "Compress executable files with UPX"
-	depends on !mips64
-	default y
-
-endmenu
-
+define Package/hysteria/description
+  Hysteria is a feature-packed network utility optimized for networks
+  of poor quality (e.g. satellite connections, congested public Wi-Fi,
+  connecting from China to servers abroad) powered by a custom version
+  of QUIC protocol.
 endef
 
-ifeq ($(CONFIG_HYSTERIA_COMPRESS_GOPROXY),y)
-export GO111MODULE=on
-export GOPROXY=https://goproxy.io
-endif
-
-define Build/Compile
-	$(call GoPackage/Build/Compile)
-ifeq ($(CONFIG_HYSTERIA_COMPRESS_UPX),y)
-	$(STAGING_DIR_HOST)/bin/upx --lzma --best $(GO_PKG_BUILD_BIN_DIR)/cmd
-endif
-endef
-
-define Package/$(PKG_NAME)/install
+define Package/hysteria/install
 	$(call GoPackage/Package/Install/Bin,$(PKG_INSTALL_DIR))
+
 	$(INSTALL_DIR) $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/cmd $(1)/usr/bin/hysteria
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/app $(1)/usr/bin/hysteria
 endef
 
-$(eval $(call GoBinPackage,$(PKG_NAME)))
-$(eval $(call BuildPackage,$(PKG_NAME)))
+$(eval $(call GoBinPackage,hysteria))
+$(eval $(call BuildPackage,hysteria))
