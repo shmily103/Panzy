@@ -7,7 +7,7 @@
 #=================================================
 
 name: Build OpenWrt 23.05.3
-.
+
 on:
   repository_dispatch:
 #  release:
