@@ -22,6 +22,12 @@ sed -i 's/ssid=OpenWrt/ssid=Panzy/g' package/kernel/mac80211/files/lib/wifi/mac8
 mv package/Panzy/upx tools/upx
 mv package/Panzy/ucl tools/ucl
 
+# Modify default theme
+#sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
+
+# Modify hostname
+sed -i 's/OpenWrt/Panzy/g' package/base-files/files/bin/config_generate
+
 # Fix permission
 chmod a+x -R package/Panzy
 
