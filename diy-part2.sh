@@ -29,7 +29,7 @@ mv package/Panzy/ucl tools/ucl
 sed -i 's/OpenWrt/Panzy/g' package/base-files/files/bin/config_generate
 
 # Modify LAN port
-sed -i 's/eth0/eth6/g' package/base-files/files/etc/board.d
+sed -i 's/eth0/eth6/g' package/base-files/files/etc/board.d/99-default_network
 
 # Fix permission
 chmod a+x -R package/Panzy
