@@ -28,6 +28,9 @@ mv package/Panzy/ucl tools/ucl
 # Modify hostname
 sed -i 's/OpenWrt/Panzy/g' package/base-files/files/bin/config_generate
 
+# Modify LAN port
+sed -i 's/eth0/eth6/g' package/base-files/files/etc/board.d
+
 # Fix permission
 chmod a+x -R package/Panzy
 
