@@ -21,7 +21,7 @@ define Package/default-settings
   PKGARCH:=all
   DEPENDS:=+luci-base +luci +@LUCI_LANG_zh_Hans +kmod-usb-ohci +kmod-usb-uhci +kmod-usb-storage +kmod-usb-storage-extras +cfdisk \
 	+kmod-usb2 +kmod-usb3 +block-mount +badblocks +kmod-fs-ext4 +kmod-fs-vfat +kmod-nls-utf8 +fdisk +usbutils +ntfs-3g +luci-compat\
-	+luci-theme-material +luci-app-advanced-reboot +luci-app-aria2 +ariang +luci-app-samba4 +luci-app-ramfree +wireless-tools +wireless-regdb
+	+luci-theme-material +luci-app-aria2 +ariang +luci-app-samba4 +luci-app-ramfree +wireless-tools +wireless-regdb
 endef
 
 $(eval $(call BuildPackage,default-settings))
