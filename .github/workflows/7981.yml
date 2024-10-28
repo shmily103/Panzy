@@ -10,7 +10,7 @@
 # See /LICENSE for more information.
 #
 
-name: WRT1900ACS
+name: 7981
 
 on:
   repository_dispatch:
