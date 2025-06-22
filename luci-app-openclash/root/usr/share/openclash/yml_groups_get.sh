@@ -139,19 +139,20 @@ ruby -ryaml -rYAML -I "/usr/share/openclash" -E UTF-8 -e "
    threadsp = [];
    threads_uci = [];
    uci_commands = [];
+   uci_name_tmp = [];
 
    if not Value.key?('proxy-groups') or Value['proxy-groups'].nil? then
       proxy-groups = [];
    end;
 
 	Value_1 = File.readlines('/tmp/Proxy_Group').map!{|x| x.strip};
-   Value['proxy-groups'].each do |x|
+   Value['proxy-groups'].each_with_index do |x, index|
+      uci_name_tmp << %x{uci -q add openclash groups 2>&1}.chomp
       threadsp << Thread.new {
       begin
          next unless x['name'] && x['type'];
-         uci_name_tmp=%x{uci -q add openclash groups 2>&1}.chomp
-         uci_set='uci -q set openclash.' + uci_name_tmp + '.'
-         uci_add='uci -q add_list openclash.' + uci_name_tmp + '.'
+         uci_set='uci -q set openclash.' + uci_name_tmp[index] + '.'
+         uci_add='uci -q add_list openclash.' + uci_name_tmp[index] + '.'
 
          YAML.LOG('Start Getting【${CONFIG_NAME} - ' + x['type'].to_s + ' - ' + x['name'].to_s + '】Group Setting...');
 
@@ -223,18 +224,18 @@ ruby -ryaml -rYAML -I "/usr/share/openclash" -E UTF-8 -e "
          };
 
          threads_g << Thread.new {
-            #interface-name
-            if x.key?('interface-name') then
-               uci_commands << uci_set + 'interface_name=\"' + x['interface-name'].to_s + '\"'
-            end
-         };
-         
-         threads_g << Thread.new {
-            #routing-mark
-            if x.key?('routing-mark') then
-               uci_commands << uci_set + 'routing_mark=\"' + x['routing-mark'].to_s + '\"'
-            end
-         };
+             #interface-name
+             if x.key?('interface-name') then
+                uci_commands << uci_set + 'interface_name=\"' + x['interface-name'].to_s + '\"'
+             end
+          };
+          
+          threads_g << Thread.new {
+             #routing-mark
+             if x.key?('routing-mark') then
+                uci_commands << uci_set + 'routing_mark=\"' + x['routing-mark'].to_s + '\"'
+             end
+          };
          
          threads_g << Thread.new {
             #other_group
@@ -262,6 +263,11 @@ ruby -ryaml -rYAML -I "/usr/share/openclash" -E UTF-8 -e "
       };
    end;
    threads_uci.each(&:join);
+   uci_name_tmp.each do |x|
+      if x =~ /uci -q delete/ then
+         system(x);
+      end;
+   end;
    system('uci -q commit openclash');
    system('rm -rf /tmp/yaml_other_group.yaml 2>/dev/null');
 " 2>/dev/null >> $LOG_FILE

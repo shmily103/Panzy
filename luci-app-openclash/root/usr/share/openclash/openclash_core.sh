@@ -2,6 +2,19 @@
 . /lib/functions.sh
 . /usr/share/openclash/openclash_ps.sh
 . /usr/share/openclash/log.sh
+. /usr/share/openclash/openclash_curl.sh
+
+set_lock() {
+   exec 872>"/tmp/lock/openclash_core.lock" 2>/dev/null
+   flock -x 872 2>/dev/null
+}
+
+del_lock() {
+   flock -u 872 2>/dev/null
+   rm -rf "/tmp/lock/openclash_core.lock" 2>/dev/null
+}
+
+set_lock
 
 github_address_mod=$(uci -q get openclash.config.github_address_mod || echo 0)
 if [ "$github_address_mod" = "0" ] && [ -z "$(echo $2 2>/dev/null |grep -E 'http|one_key_update')" ] && [ -z "$(echo $3 2>/dev/null |grep 'http')" ]; then
@@ -15,11 +28,12 @@ if [ -n "$2" ] && [ "$2" != "one_key_update" ]; then
 fi
 CORE_TYPE="$1"
 C_CORE_TYPE=$(uci -q get openclash.config.core_type)
+SMART_ENABLE=$(uci -q get openclash.config.smart_enable || echo 0)
+[ "$SMART_ENABLE" -eq 1 ] && CORE_TYPE="Smart"
 [ -z "$CORE_TYPE" ] && CORE_TYPE="Meta"
 small_flash_memory=$(uci -q get openclash.config.small_flash_memory)
 CPU_MODEL=$(uci -q get openclash.config.core_version)
 RELEASE_BRANCH=$(uci -q get openclash.config.release_branch || echo "master")
-LOG_FILE="/tmp/openclash.log"
 
 if [ "$github_address_mod" != "0" ]; then
    [ ! -f "/tmp/clash_last_version" ] && /usr/share/openclash/clash_version.sh "$github_address_mod" 2>/dev/null
@@ -29,6 +43,7 @@ fi
 if [ ! -f "/tmp/clash_last_version" ]; then
    LOG_OUT "Error: 【"$CORE_TYPE"】Core Version Check Error, Please Try Again Later..."
    SLOG_CLEAN
+   del_lock
    exit 0
 fi
 
@@ -41,67 +56,79 @@ else
 fi
 
 CORE_CV=$($meta_core_path -v 2>/dev/null |awk -F ' ' '{print $3}' |head -1)
-CORE_LV=$(sed -n 3p /tmp/clash_last_version 2>/dev/null)
+DOWNLOAD_FILE="/tmp/clash_meta.tar.gz"
+TMP_FILE="/tmp/clash_meta"
+TARGET_CORE_PATH="$meta_core_path"
 
-   
+if [ "$CORE_TYPE" = "Smart" ]; then
+   CORE_URL_PATH="$RELEASE_BRANCH/smart"
+   CORE_LV=$(sed -n 2p /tmp/clash_last_version 2>/dev/null)
+else
+   CORE_URL_PATH="$RELEASE_BRANCH/meta"
+   CORE_LV=$(sed -n 1p /tmp/clash_last_version 2>/dev/null)
+fi
+
 [ "$C_CORE_TYPE" = "$CORE_TYPE" ] || [ -z "$C_CORE_TYPE" ] && if_restart=1
 
 if [ "$CORE_CV" != "$CORE_LV" ] || [ -z "$CORE_CV" ]; then
    if [ "$CPU_MODEL" != 0 ]; then
-      LOG_OUT "【Meta】Core Downloading, Please Try to Download and Upload Manually If Fails"
+      LOG_OUT "【$CORE_TYPE】Core Downloading, Please Try to Download and Upload Manually If Fails"
       if [ "$github_address_mod" != "0" ]; then
          if [ "$github_address_mod" == "https://cdn.jsdelivr.net/" ] || [ "$github_address_mod" == "https://fastly.jsdelivr.net/" ] || [ "$github_address_mod" == "https://testingcf.jsdelivr.net/" ]; then
-            curl -SsL --connect-timeout 30 -m 60 --speed-time 30 --speed-limit 1 --retry 2 "$github_address_mod"gh/vernesong/OpenClash@core/"$RELEASE_BRANCH"/meta/clash-"$CPU_MODEL".tar.gz -o /tmp/clash_meta.tar.gz 2>&1 |sed ':a;N;$!ba; s/\n/ /g' | awk -v time="$(date "+%Y-%m-%d %H:%M:%S")" -v file="/tmp/clash_meta.tar.gz" '{print time "【" file "】Download Failed:【"$0"】"}' >> "$LOG_FILE"
+            DOWNLOAD_URL="${github_address_mod}gh/vernesong/OpenClash@core/${CORE_URL_PATH}/clash-${CPU_MODEL}.tar.gz"
          else
-            curl -SsL --connect-timeout 30 -m 60 --speed-time 30 --speed-limit 1 --retry 2 "$github_address_mod"https://raw.githubusercontent.com/vernesong/OpenClash/core/"$RELEASE_BRANCH"/meta/clash-"$CPU_MODEL".tar.gz -o /tmp/clash_meta.tar.gz 2>&1 |sed ':a;N;$!ba; s/\n/ /g' | awk -v time="$(date "+%Y-%m-%d %H:%M:%S")" -v file="/tmp/clash_meta.tar.gz" '{print time "【" file "】Download Failed:【"$0"】"}' >> "$LOG_FILE"
+            DOWNLOAD_URL="${github_address_mod}https://raw.githubusercontent.com/vernesong/OpenClash/core/${CORE_URL_PATH}/clash-${CPU_MODEL}.tar.gz"
          fi
       else
-         curl -SsL --connect-timeout 30 -m 60 --speed-time 30 --speed-limit 1 --retry 2 https://raw.githubusercontent.com/vernesong/OpenClash/core/"$RELEASE_BRANCH"/meta/clash-"$CPU_MODEL".tar.gz -o /tmp/clash_meta.tar.gz 2>&1 |sed ':a;N;$!ba; s/\n/ /g' | awk -v time="$(date "+%Y-%m-%d %H:%M:%S")" -v file="/tmp/clash_meta.tar.gz" '{print time "【" file "】Download Failed:【"$0"】"}' >> "$LOG_FILE"
+         DOWNLOAD_URL="https://raw.githubusercontent.com/vernesong/OpenClash/core/${CORE_URL_PATH}/clash-${CPU_MODEL}.tar.gz"
       fi
 
-      if [ "${PIPESTATUS[0]}" -eq 0 ]; then
-         gzip -t /tmp/clash_meta.tar.gz >/dev/null 2>&1
-      fi
+      DOWNLOAD_FILE_CURL "$DOWNLOAD_URL" "$DOWNLOAD_FILE"
 
-      if [ "$?" == "0" ]; then
-         LOG_OUT "【"$CORE_TYPE"】Core Download Successful, Start Update..."
-         [ -s "/tmp/clash_meta.tar.gz" ] && {
-            tar zxvfo /tmp/clash_meta.tar.gz -C /tmp >/dev/null 2>&1
-            mv /tmp/clash /tmp/clash_meta >/dev/null 2>&1
-            rm -rf /tmp/clash_meta.tar.gz >/dev/null 2>&1
-            chmod 4755 /tmp/clash_meta >/dev/null 2>&1
-            /tmp/clash_meta -v >/dev/null 2>&1
-         }
-			   
-         if [ "$?" != "0" ]; then
-            LOG_OUT "【"$CORE_TYPE"】Core Update Failed. Please Make Sure Enough Flash Memory Space or Selected Correct Core Platform And Try Again!"
-            rm -rf /tmp/clash_meta >/dev/null 2>&1
-            SLOG_CLEAN
-            exit 0
-         fi
+      if [ "$?" -eq 0 ]; then
+         gzip -t "$DOWNLOAD_FILE" >/dev/null 2>&1
 
-         mv /tmp/clash_meta "$meta_core_path" >/dev/null 2>&1
+         if [ "$?" -eq 0 ]; then
+            LOG_OUT "【"$CORE_TYPE"】Core Download Successful, Start Update..."
+            [ -s "$DOWNLOAD_FILE" ] && {
+               tar zxvfo "$DOWNLOAD_FILE" -C /tmp >/dev/null 2>&1
+               mv /tmp/clash "$TMP_FILE" >/dev/null 2>&1
+               rm -rf "$DOWNLOAD_FILE" >/dev/null 2>&1
+               chmod 4755 "$TMP_FILE" >/dev/null 2>&1
+               "$TMP_FILE" -v >/dev/null 2>&1
+            }
+               
+            if [ "$?" != "0" ]; then
+               LOG_OUT "【"$CORE_TYPE"】Core Update Failed. Please Make Sure Enough Flash Memory Space or Selected Correct Core Platform And Try Again!"
+               rm -rf "$TMP_FILE" >/dev/null 2>&1
+               SLOG_CLEAN
+               del_lock
+               exit 0
+            fi
 
-         if [ "$?" == "0" ]; then
-            LOG_OUT "【"$CORE_TYPE"】Core Update Successful!"
-            if [ "$if_restart" -eq 1 ]; then
-               uci -q set openclash.config.config_reload=1
-               uci -q commit openclash
-               if ([ -z "$2" ] || ([ -n "$2" ] && [ "$2" != "one_key_update" ])) && [ "$(find /tmp/lock/ |grep -v "openclash.lock" |grep -c "openclash")" -le 1 ] && [ "$(unify_ps_prevent)" -eq 0 ]; then
-                  uci -q set openclash.config.config_reload=0
+            mv "$TMP_FILE" "$TARGET_CORE_PATH" >/dev/null 2>&1
+
+            if [ "$?" == "0" ]; then
+               LOG_OUT "【"$CORE_TYPE"】Core Update Successful!"
+               if [ "$if_restart" -eq 1 ]; then
+                  uci -q set openclash.config.restart=1
                   uci -q commit openclash
-                  /etc/init.d/openclash restart >/dev/null 2>&1 &
+                  if ([ -z "$2" ] || ([ -n "$2" ] && [ "$2" != "one_key_update" ])) && [ "$(unify_ps_prevent)" -eq 0 ]; then
+                     uci -q set openclash.config.restart=0
+                     uci -q commit openclash
+                     /etc/init.d/openclash restart >/dev/null 2>&1 &
+                  fi
+               else
+                  SLOG_CLEAN
                fi
             else
+               LOG_OUT "【"$CORE_TYPE"】Core Update Failed. Please Make Sure Enough Flash Memory Space And Try Again!"
                SLOG_CLEAN
             fi
          else
-            LOG_OUT "【"$CORE_TYPE"】Core Update Failed. Please Make Sure Enough Flash Memory Space And Try Again!"
+            LOG_OUT "【"$CORE_TYPE"】Core Update Failed, Please Check The Network or Try Again Later!"
             SLOG_CLEAN
          fi
-      else
-         LOG_OUT "【"$CORE_TYPE"】Core Update Failed, Please Check The Network or Try Again Later!"
-         SLOG_CLEAN
       fi
    else
       LOG_OUT "No Compiled Version Selected, Please Select In Update Page And Try Again!"
@@ -112,5 +139,5 @@ else
    SLOG_CLEAN
 fi
 
-rm -rf /tmp/clash_meta >/dev/null 2>&1
-
+rm -rf "$TMP_FILE" >/dev/null 2>&1
+del_lock

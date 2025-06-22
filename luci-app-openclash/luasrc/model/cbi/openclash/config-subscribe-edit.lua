@@ -103,8 +103,6 @@ o.rmempty     = true
 o.description = font_red..bold_on..translate("Note: There is A Risk of Privacy Leakage in Online Convert")..bold_off..font_off
 o:depends("sub_convert", "1")
 o:value("https://api.dler.io/sub", translate("api.dler.io")..translate("(Default)"))
-o:value("https://v.id9.cc/sub", translate("v.id9.cc")..translate("(Support Vless By Pinyun)"))
-o:value("https://sub.id9.cc/sub", translate("sub.id9.cc"))
 o:value("https://api.wcc.best/sub", translate("api.wcc.best"))
 o.default = "https://api.dler.io/sub"
 o.placeholder = "https://api.dler.io/sub"
@@ -180,7 +178,7 @@ o:depends("sub_convert", "1")
 
 ---- custom params
 o = s:option(DynamicList, "custom_params", translate("Custom Params"))
-o.description = font_red..bold_on..translate("eg: \"rename=\\s+([2-9])[xX]@ (HIGH:$1)\"")..bold_off..font_off
+o.description = font_red..bold_on..translate("eg: \"rename=match@replace\" , \"rename=\\s+([2-9])[xX]@ (HIGH:$1)\"")..bold_off..font_off
 o.rmempty     = false
 o:depends("sub_convert", "1")
 

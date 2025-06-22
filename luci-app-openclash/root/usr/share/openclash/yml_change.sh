@@ -169,6 +169,8 @@ yml_dns_get()
    config_get_bool "skip_cert_verify" "$section" "skip_cert_verify" "0"
    config_get_bool "ecs_override" "$section" "ecs_override" "0"
    config_get "ecs_subnet" "$section" "ecs_subnet" ""
+   config_get "disable_ipv4" "$section" "disable_ipv4" "0"
+   config_get "disable_ipv6" "$section" "disable_ipv6" "0"
 
    if [ "$enabled" = "0" ]; then
       return
@@ -178,7 +180,7 @@ yml_dns_get()
       return
    fi
    
-   if [[ "$ip" =~ "$regex" ]]; then
+   if [[ "$ip" =~ "$regex" ]] || [ -n "$(echo ${ip} |grep -Eo ${regex})" ]; then
       ip="[${ip}]"
    fi
 
@@ -276,21 +278,41 @@ yml_dns_get()
       ecs_override=""
    fi
 
+   if [ "$disable_ipv4" = "1" ]; then
+      if [ -n "$specific_group" ] || [ -n "$interface" ] || [ -n "$http3" ] || [ -n "$skip_cert_verify" ] || [ -n "$ecs_subnet" ] || [ -n "$ecs_override" ]; then
+         disable_ipv4="&disable-ipv4=true"
+      else
+         disable_ipv4="#disable-ipv4=true"
+      fi
+   else
+      disable_ipv4=""
+   fi
+
+   if [ "$disable_ipv6" = "1" ]; then
+      if [ -n "$specific_group" ] || [ -n "$interface" ] || [ -n "$http3" ] || [ -n "$skip_cert_verify" ] || [ -n "$ecs_subnet" ] || [ -n "$ecs_override" ] || [ -n "$disable_ipv4" ]; then
+         disable_ipv6="&disable-ipv6=true"
+      else
+         disable_ipv6="#disable-ipv6=true"
+      fi
+   else
+      disable_ipv6=""
+   fi
+
    if [ "$node_resolve" = "1" ]; then
       if [ -z "$(grep "^ \{0,\}proxy-server-nameserver:$" /tmp/yaml_config.proxynamedns.yaml 2>/dev/null)" ]; then
          echo "  proxy-server-nameserver:" >/tmp/yaml_config.proxynamedns.yaml
       fi
-      echo "    - \"$dns_type$dns_address$specific_group$interface$http3$skip_cert_verify$ecs_subnet$ecs_override\"" >>/tmp/yaml_config.proxynamedns.yaml
+      echo "    - \"$dns_type$dns_address$specific_group$interface$http3$skip_cert_verify$ecs_subnet$ecs_override$disable_ipv4$disable_ipv6\"" >>/tmp/yaml_config.proxynamedns.yaml
    fi
 
    if [ "$direct_nameserver" = "1" ]; then
       if [ -z "$(grep "^ \{0,\}direct-nameserver:$" /tmp/yaml_config.directnamedns.yaml 2>/dev/null)" ]; then
          echo "  direct-nameserver:" >/tmp/yaml_config.directnamedns.yaml
       fi
-      echo "    - \"$dns_type$dns_address$specific_group$interface$http3$skip_cert_verify$ecs_subnet$ecs_override\"" >>/tmp/yaml_config.directnamedns.yaml
+      echo "    - \"$dns_type$dns_address$specific_group$interface$http3$skip_cert_verify$ecs_subnet$ecs_override$disable_ipv4$disable_ipv6\"" >>/tmp/yaml_config.directnamedns.yaml
    fi
 
-   dns_address="$dns_address$specific_group$interface$http3$skip_cert_verify$ecs_subnet$ecs_override"
+   dns_address="$dns_address$specific_group$interface$http3$skip_cert_verify$ecs_subnet$ecs_override$disable_ipv4$disable_ipv6"
 
    if [ -n "$group" ]; then
       if [ "$group" = "nameserver" ]; then
@@ -345,8 +367,14 @@ threads << Thread.new {
       Value['secret']='$2';
       Value['bind-address']='*';
       Value['external-ui']='/usr/share/openclash/ui';
-      Value['keep-alive-interval']=15;
-      Value['keep-alive-idle']=600;
+      Value['external-ui-name']='metacubexd';
+      if Value.key?('external-ui-url') then
+         Value.delete('external-ui-url');
+      end;
+      if not Value.key?('keep-alive-interval') and not Value.key?('keep-alive-idle') then
+         Value['keep-alive-interval']=15;
+         Value['keep-alive-idle']=600;
+      end;
       if $6 == 1 then
          Value['ipv6']=true;
       else
@@ -374,6 +402,13 @@ threads << Thread.new {
       if '${29}' != '0' then
          Value['global-client-fingerprint']='${29}';
       end;
+      if ${36} == 1 then
+         if Value.key?('experimental') then
+            Value['experimental']['quic-go-disable-gso']=true;
+         else
+            Value['experimental']={'quic-go-disable-gso'=>true};
+         end;
+      end;
 
       if ${16} == 1 then
          Value['dns']['ipv6']=true;
@@ -398,7 +433,7 @@ threads << Thread.new {
       end;
       
       if ${18} == 1 then
-         Value_sniffer={'sniffer'=>{'enable'=>true}};
+         Value_sniffer={'sniffer'=>{'enable'=>true, 'override-destination'=>true, 'sniff'=>{'QUIC'=>{'ports'=>[443]}, 'TLS'=>{'ports'=>[443, 8443]}, 'HTTP'=>{'ports'=>[80, '8080-8880'], 'override-destination'=>true}}, 'force-domain'=>['+.netflix.com', '+.nflxvideo.net', '+.amazonaws.com', '+.media.dssott.com'], 'skip-domain'=>['+.apple.com', 'Mijia Cloud', 'dlg.io.mi.com', '+.oray.com', '+.sunlogin.net', '+.push.apple.com']}};
          Value['sniffer']=Value_sniffer['sniffer'];
          if '$1' == 'redir-host' then
             Value['sniffer']['force-dns-mapping']=true;
@@ -420,7 +455,7 @@ threads << Thread.new {
          Value['tun']=Value_2['tun'];
          Value['tun']['stack']='$stack_type';
          Value['tun']['device']='utun';
-         Value_2={'dns-hijack'=>['tcp://any:53']};
+         Value_2={'dns-hijack'=>['127.0.0.1:53']};
          Value['tun'].merge!(Value_2);
          Value['tun']['endpoint-independent-nat']=true;
          Value['tun']['auto-route']=false;
@@ -459,6 +494,9 @@ threads << Thread.new {
       end;
       if Value.key?('auto-redir') then
          Value.delete('auto-redir');
+      end;
+      if Value.key?('geo-auto-update') then
+         Value['geo-auto-update']=false;
       end;
    rescue Exception => e
       YAML.LOG('Error: Set General Failed,【' + e.message + '】');
@@ -781,10 +819,24 @@ begin
       Value['dns'].merge!(Value_1);
       Value['dns'].merge!(Value_2);
    end;
-   if ${33} == 1 or Value['dns']['respect-rules'].to_s == 'true' then
-      if not Value['dns'].has_key?('proxy-server-nameserver') or Value['dns']['proxy-server-nameserver'].to_a.empty? then
+   local_exclude = (%x{ls -l /sys/class/net/ |awk '{print \$9}'  2>&1}.each_line.map(&:strip) + ['h3=', 'skip-cert-verify=', 'ecs=', 'ecs-override='] + ['utun', 'tailscale0', 'docker0', 'tun163', 'br-lan', 'mihomo']).uniq.join('|');
+   reg = /^[^#&]+#(?:(?:#{local_exclude})[^&]*&)*(?:(?!(?:#{local_exclude}))[^&]+)/;
+   if not Value['dns'].has_key?('proxy-server-nameserver') or Value['dns']['proxy-server-nameserver'].to_a.empty? then
+      all_match = Value['dns']['nameserver'].all? { |x| x =~ reg }
+      if ${33} == 1 or Value['dns']['respect-rules'].to_s == 'true' or all_match then
          Value['dns'].merge!({'proxy-server-nameserver'=>['114.114.114.114','119.29.29.29','8.8.8.8','1.1.1.1']});
-         YAML.LOG('Tip: Respect-rules Option Need Proxy-server-nameserver Option Must Be Setted, Auto Set to【114.114.114.114, 119.29.29.29, 8.8.8.8, 1.1.1.1】');
+         if all_match then
+            YAML.LOG('Tip: Nameserver Option Maybe All Setted The Proxy Option, Auto Set Proxy-server-nameserver Option to【114.114.114.114, 119.29.29.29, 8.8.8.8, 1.1.1.1】For Avoiding Proxies Server Resolve Loop...');
+         else
+            YAML.LOG('Tip: Respect-rules Option Need Proxy-server-nameserver Option Must Be Setted, Auto Set to【114.114.114.114, 119.29.29.29, 8.8.8.8, 1.1.1.1】');
+         end;
+      end;
+   else
+      all_match = Value['dns']['proxy-server-nameserver'].all? { |x| x =~ reg }
+      if all_match then
+         Value_1={'proxy-server-nameserver'=>['114.114.114.114','119.29.29.29','8.8.8.8','1.1.1.1']};
+         Value['dns']['proxy-server-nameserver'] = Value['dns']['proxy-server-nameserver'] | Value_1['proxy-server-nameserver'];
+         YAML.LOG('Tip: Proxy-server-nameserver Option Maybe All Setted The Proxy Option, Auto Set Proxy-server-nameserver Option to【114.114.114.114, 119.29.29.29, 8.8.8.8, 1.1.1.1】For Avoiding Proxies Server Resolve Loop...');
       end;
    end;
 rescue Exception => e

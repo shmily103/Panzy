@@ -247,8 +247,11 @@ unlink = fs.unlink
 readlink = fs.readlink
 
 function filename(str)
+	if not str then
+		return nil
+	end
 	local idx = str:match(".+()%.%w+$")
-	if(idx) then
+	if idx then
 		return str:sub(1, idx-1)
 	else
 		return str
@@ -258,23 +261,26 @@ end
 function filesize(e)
 	local t=0
 	local a={' KB',' MB',' GB',' TB',' PB'}
+	if e < 0 then
+        e = -e
+    end
 	repeat
 		e=e/1024
 		t=t+1
 	until(e<=1024)
-	return string.format("%.1f",e)..a[t]
+	return string.format("%.1f",e)..a[t] or "0.0 KB"
 end
 
 function lanip()
 	local lan_int_name = uci:get("openclash", "config", "lan_interface_name") or "0"
 	local lan_ip
 	if lan_int_name == "0" then
-		lan_ip = SYS.exec("uci -q get network.lan.ipaddr |awk -F '/' '{print $1}' 2>/dev/null |tr -d '\n'")
+		lan_ip = SYS.exec("uci -q get network.lan.ipaddr 2>/dev/null |awk -F '/' '{print $1}' 2>/dev/null |tr -d '\n'")
 	else
-		lan_ip = SYS.exec(string.format("ip address show %s | grep -w 'inet' 2>/dev/null |grep -Eo 'inet [0-9\.]+' | awk '{print $2}' |head -1 | tr -d '\n'", lan_int_name))
+		lan_ip = SYS.exec(string.format("ip address show %s 2>/dev/null | grep -w 'inet' 2>/dev/null | grep -Eo 'inet [0-9\.]+' | awk '{print $2}' | head -1 | tr -d '\n'", lan_int_name))
 	end
 	if not lan_ip or lan_ip == "" then
-		lan_ip = SYS.exec("ip address show $(uci -q -p /tmp/state get network.lan.ifname || uci -q -p /tmp/state get network.lan.device) | grep -w 'inet'  2>/dev/null |grep -Eo 'inet [0-9\.]+' | awk '{print $2}' |head -1 | tr -d '\n'")
+		lan_ip = SYS.exec("ip address show $(uci -q -p /tmp/state get network.lan.ifname || uci -q -p /tmp/state get network.lan.device) | grep -w 'inet'  2>/dev/null | grep -Eo 'inet [0-9\.]+' | awk '{print $2}' | head -1 | tr -d '\n'")
 	end
 	if not lan_ip or lan_ip == "" then
 		lan_ip = SYS.exec("ip addr show 2>/dev/null | grep -w 'inet' | grep 'global' | grep 'brd' | grep -Eo 'inet [0-9\.]+' | awk '{print $2}' | head -n 1 | tr -d '\n'")

@@ -215,15 +215,6 @@ msgstr "使用 Dnsmasq 转发"
 msgid "Firewall Redirect"
 msgstr "使用防火墙转发"
 
-msgid "Disable Dnsmasq's DNS Cache"
-msgstr "禁止 Dnsmasq 缓存 DNS"
-
-msgid "Recommended Enabled For Avoiding Some Connection Errors"
-msgstr "推荐启用，防止因缓存造成连接错误"
-
-msgid "(Maybe Incompatible For Your Firmware)"
-msgstr "（部分固件可能不兼容）"
-
 msgid "Custom DNS Setting"
 msgstr "*自定义上游 DNS 服务器"
 
@@ -458,6 +449,12 @@ msgstr "自动更新 GeoSite 数据库"
 msgid "Update GeoSite Database"
 msgstr "更新 GeoSite 数据库"
 
+msgid "Auto Update Geo ASN"
+msgstr "自动更新 Geo ASN 数据库"
+
+msgid "Update Geo ASN Database"
+msgstr "更新 Geo ASN 数据库"
+
 msgid "Auto Update Chnroute Lists"
 msgstr "自动更新大陆白名单"
 
@@ -610,6 +607,9 @@ msgstr "查询更新失败"
 
 msgid "<New>"
 msgstr "<可更新>"
+
+msgid "Getting Last Version..."
+msgstr "最新版本获取中..."
 
 msgid "Update Core File"
 msgstr "更新内核"
@@ -789,6 +789,18 @@ msgstr "启用传输协议设置"
 msgid "Hysterir QUIC parameters"
 msgstr "QUIC 参数"
 
+msgid "QUIC init stream receive window"
+msgstr "QUIC 初始流接收窗口大小"
+
+msgid "QUIC max stream receive window"
+msgstr "QUIC 最大的流接收窗口大小"
+
+msgid "QUIC init connection receive window"
+msgstr "QUIC 初始的连接接收窗口大小"
+
+msgid "QUIC max connection receive window"
+msgstr "QUIC 最大的连接接收窗口大小"
+
 msgid "Edit Rule Providers"
 msgstr "编辑规则集配置"
 
@@ -876,8 +888,8 @@ msgstr "Relay【嵌套中转】"
 msgid "Other Group (Support Regex)"
 msgstr "包含其他策略组（请勿重复添加，支持正则匹配）"
 
-msgid "The Added Proxy Groups Must Exist Except 'DIRECT' & 'REJECT'"
-msgstr "注意：除'DIRECT'和'REJECT'外，修改配置文件前添加的其他策略组必须已创建"
+msgid "The Added Proxy Groups Must Exist Except 'DIRECT' & 'REJECT' & 'REJECT-DROP' & 'PASS' & 'GLOBAL'"
+msgstr "注意：除'DIRECT'、'REJECT'、'REJECT-DROP'、'PASS'、'GLOBAL'外，修改配置文件前添加的其他策略组必须已创建"
 
 msgid "The Added Proxy Provider Must Exist"
 msgstr "修改配置文件前添加的代理集必须已创建"
@@ -1189,13 +1201,16 @@ msgid "Running Mode"
 msgstr "运行模式"
 
 msgid "Yacd Control Panel"
-msgstr "Yacd 控制面板"
+msgstr "Yacd 面板"
 
 msgid "Dashboard Control Panel"
-msgstr "Dashboard 控制面板"
+msgstr "Dashboard 面板"
 
 msgid "Metacubexd Control Panel"
-msgstr "Metacubexd 控制面板"
+msgstr "Metacubexd 面板"
+
+msgid "zashboard Control Panel"
+msgstr "zashboard 面板"
 
 msgid "Control Panel Login IP"
 msgstr "控制面板登录 IP"
@@ -1242,7 +1257,7 @@ msgstr "备份"
 msgid "Enhance"
 msgstr "增强"
 
-msgid "Compatible"
+msgid "Compat"
 msgstr "兼容"
 
 msgid "Mix"
@@ -1353,11 +1368,14 @@ msgstr "注意：如更新失败可手动下载并上传"
 msgid "Note: the client may not support update, because the firmware with squashfs format will not release flash space after updating"
 msgstr "注意：客户端可能无法更新，因为squashfs格式的固件更新后不会释放闪存空间"
 
-msgid "Compiled Version Selected (Auto-save when you click to update or download)"
-msgstr "已选择编译版本（点击更新或下载时自动保存）"
+msgid "Compiled Version"
+msgstr "编译版本"
 
-msgid "Release Branch Selected (Auto-save when you click to update or download)"
-msgstr "已选择更新分支（点击更新或下载时自动保存）"
+msgid "Release Branch"
+msgstr "更新分支"
+
+msgid "Note: options will auto-save when you click to update or download"
+msgstr "注意：以下选项在点击更新或下载时将自动保存"
 
 msgid "CPU Architecture"
 msgstr "处理器架构"
@@ -1494,6 +1512,9 @@ msgstr "自定义 GeoIP MMDB 数据库的更新来源，编辑后点击下方按
 msgid "Custom GeoSite Data URL, Click Button Below To Refresh After Edit"
 msgstr "自定义 GeoSite 数据库的更新来源，编辑后点击下方按钮生效"
 
+msgid "Custom Geo ASN Data URL, Click Button Below To Refresh After Edit"
+msgstr "自定义 Geo ASN 数据库的更新来源，编辑后点击下方按钮生效"
+
 msgid "Custom Chnroute Lists URL, Click Button Below To Refresh After Edit"
 msgstr "自定义大陆 IP 段的更新来源，编辑后点击下方按钮生效"
 
@@ -1511,9 +1532,6 @@ msgstr "(全部国家且且包含官方全部信息数据)"
 
 msgid "(Only CN)"
 msgstr "(仅中国数据)"
-
-msgid "(Large Size)"
-msgstr "(18MB大文件，请确保足够的剩余空间)"
 
 msgid "Other Rules Edit"
 msgstr "设置第三方规则"
@@ -1605,8 +1623,11 @@ msgstr "开始下载"
 msgid "Download Successful, Start Pre Update Test..."
 msgstr "下载成功，开始进行更新前测试..."
 
-msgid "Pre Update Test Failed, The File is Saved in /tmp/openclash.ipk, Please Try to Update Manually!"
-msgstr "更新前测试失败，文件保存在 /tmp/openclash.ipk，请尝试手动更新！"
+msgid "Pre Update Test Failed, The File is Saved in /tmp/openclash.apk, Please Try to Update Manually With"
+msgstr "更新前测试失败，文件保存在 /tmp/openclash.apk，请尝试以下命令手动更新"
+
+msgid "Pre Update Test Failed, The File is Saved in /tmp/openclash.ipk, Please Try to Update Manually With"
+msgstr "更新前测试失败，文件保存在 /tmp/openclash.ipk，请尝试以下命令手动更新"
 
 msgid "Pre Update Test Passed, Ready to Update and Please Do not Refresh The Page and Other Operations..."
 msgstr "更新前测试通过，准备开始更新，更新过程请不要刷新页面和进行其他操作..."
@@ -1620,11 +1641,11 @@ msgstr "正在安装新版本，更新过程请不要刷新页面和进行其他
 msgid "OpenClash Update Successful, About To Restart!"
 msgstr "OpenClash 更新成功，即将进行重启！"
 
-msgid "OpenClash Update Failed, The File is Saved in /tmp/openclash.ipk, Please Try to Update Manually!"
-msgstr "OpenClash 更新失败，文件保存在 /tmp/openclash.ipk，请尝试手动更新！"
+msgid "OpenClash Update Failed, The File is Saved in /tmp/openclash.ipk, Please Try to Update Manually With"
+msgstr "OpenClash 更新失败，文件保存在 /tmp/openclash.ipk，请尝试以下命令手动更新"
 
-msgid "OpenClash Update Failed, The File is Saved in /tmp/openclash.apk, Please Try to Update Manually!"
-msgstr "OpenClash 更新失败，文件保存在 /tmp/openclash.apk，请尝试手动更新！"
+msgid "OpenClash Update Failed, The File is Saved in /tmp/openclash.apk, Please Try to Update Manually With"
+msgstr "OpenClash 更新失败，文件保存在 /tmp/openclash.apk，请尝试以下命令手动更新"
 
 msgid "Download Failed, Please Check The Network or Try Again Later!"
 msgstr "下载失败，请检查网络或稍后再试！"
@@ -1848,6 +1869,24 @@ msgstr "GEOIP 数据库版本没有更新，停止继续操作..."
 msgid "Geoip Database Update Error, Please Try Again Later..."
 msgstr "GEOIP 数据库下载失败，请检查网络或稍后再试..."
 
+msgid "Start Downloading Geo ASN Database..."
+msgstr "开始下载 GEO ASN 数据库..."
+
+msgid "Geo ASN Database Download Success, Check Updated..."
+msgstr "GEO ASN 数据库下载成功，检查数据库版本是否更新..."
+
+msgid "Geo ASN Database Has Been Updated, Starting To Replace The Old Version..."
+msgstr "GEO ASN 数据库版本有更新，开始替换数据库版本..."
+
+msgid "Geo ASN Database Update Successful!"
+msgstr "GEO ASN 数据库更新成功！"
+
+msgid "Updated Geo ASN Database No Change, Do Nothing..."
+msgstr "GEO ASN 数据库版本没有更新，停止继续操作..."
+
+msgid "Geo ASN Database Update Error, Please Try Again Later..."
+msgstr "GEO ASN 数据库下载失败，请检查网络或稍后再试..."
+
 msgid "Start Getting"
 msgstr "开始获取"
 
@@ -1965,12 +2004,6 @@ msgstr "提示：检测到大陆白名单列表不存在，准备开始下载...
 msgid "Tip: Detected that the Chnroute Cidr List Format is wrong, Ready to Reformat..."
 msgstr "提示：检测到大陆白名单列表格式错误，准备重新格式化..."
 
-msgid "Error: Could Not Load The Capsh Library, Please Verify The Capsh Shell Library Work Well..."
-msgstr "错误：Capsh 异常，请尝试重新安装依赖【libcap】和相应的Capsh库，终止启动..."
-
-msgid "Tip: You Could Download And Re-Install The libcap & libcap-bin Library From The Address Give"
-msgstr "提示：你可以尝试从给出的地址中查找、下载并重新安装架构对应的 libcap 和 libcap-bin 依赖"
-
 msgid "Error: OpenClash Can Not Start, Please Check The Error Info And Try Again!"
 msgstr "错误：OpenClash 启动失败，请到日志页面查看详细错误信息！"
 
@@ -2043,18 +2076,6 @@ msgstr "重置 OpenClash 防火墙规则..."
 msgid "Warning: OpenClash Now Disabled, Need Start From Luci Page, Exit..."
 msgstr "警告：OpenClash 目前处于未启用状态，请从插件页面启动本插件，脚本退出..."
 
-msgid "Warning: Multiple Restart Scripts Running, Exit..."
-msgstr "警告：多个 OpenClash 启动脚本运行中，此脚本退出..."
-
-msgid "Watchdog: Multiple Clash Processes, Kill All..."
-msgstr "守护程序：检测到多个 Clash 内核运行，清理中..."
-
-msgid "Watchdog: Clash Core Problem, Restart..."
-msgstr "守护程序：检测到 Clash 内核崩溃，重启中..."
-
-msgid "Watchdog: Already Restart 3 Times With Clash Core Problem, Auto-Exit..."
-msgstr "守护程序：已尝试自动重启三次 Clash 内核，为防止频繁重启造成严重后果，OpenClash 将停止运行..."
-
 msgid "Watchdog: Log Size Limit, Clean Up All Log Records..."
 msgstr "守护程序：因日志大小限制，清理所有日志内容..."
 
@@ -2088,8 +2109,8 @@ msgstr "游戏代理为测试功能，不保证规则可用性"
 msgid "Preparation steps:"
 msgstr "准备步骤："
 
-msgid "1. In the <server and policy group management> page, create the policy group and node you are going to use, and apply the configuration (when adding nodes, you must select the policy group you want to join). Policy group type suggestion: fallback, game nodes must be support UDP and not a Vmess"
-msgstr "1、在《服务器与策略组管理》页面创建您准备使用的策略组和节点，并应用配置（节点添加时必须选择要加入的策略组），策略组类型建议: FallBack，游戏节点必须支持 UDP 且不是 Vmess 节点"
+msgid "1. Check the policy group and node you are going to use, Policy group type suggestion: fallback, game nodes must be support UDP and not a Vmess"
+msgstr "1、检查您准备使用的策略组和节点，策略组类型建议: FallBack，游戏节点必须支持 UDP 且不是 Vmess 节点"
 
 msgid "2. Click the <manage third party game rules> or <manage third party rule set> button to enter the rule list and download the rules you want to use"
 msgstr "2、点击《管理第三方游戏规则》或者《管理第三方规则集》按钮进入规则列表下载您要使用的规则"
@@ -2100,8 +2121,8 @@ msgstr "3、在此页面设置您已下载的规则的对应配置文件、策�
 msgid "4. Install the TUN or Meta core"
 msgstr "4、安装 TUN 或者 Meta 内核"
 
-msgid "When setting this page, if the groups is empty, please go to the <server and group management> page to add"
-msgstr "本页设置时如策略组为空，请先到《服务器与策略组管理》页面进行添加"
+msgid "When setting this page, if the groups is empty, please go to the <Onekey Create> page to add"
+msgstr "本页设置时如策略组为空，请先到《一键生成》页面进行添加"
 
 msgid "Introduction to rule set usage: https://wiki.metacubex.one/config/rule-providers/content/"
 msgstr "规则集使用介绍：https://wiki.metacubex.one/config/rule-providers/content/"
@@ -2721,8 +2742,8 @@ msgstr "未选择上传文件"
 msgid "Custom Params"
 msgstr "自定义参数"
 
-msgid "eg: \"rename=\\s+([2-9])[xX]@ (HIGH:$1)\""
-msgstr "格式示例：\"rename=\\s+([2-9])[xX]@ (高倍率:$1)\""
+msgid "eg: \"rename=match@replace\" , \"rename=\\s+([2-9])[xX]@ (HIGH:$1)\""
+msgstr "格式示例：\"rename=match@replace\" , \"rename=\\s+([2-9])[xX]@ (高倍率:$1)\""
 
 msgid "Use Rule Provider"
 msgstr "使用规则集"
@@ -2792,9 +2813,6 @@ msgstr "流量（域名）探测能有效防止域名分流异常和DNS劫持失
 
 msgid "Override All Dns Query"
 msgstr "启用后将尽可能的覆盖DNS查询到的域名"
-
-msgid "(Support Vless By Pinyun)"
-msgstr "(由品云提供，支持 Vless)"
 
 msgid "Meta Settings"
 msgstr "Meta 设置"
@@ -2958,6 +2976,9 @@ msgstr "切换（更新） Yacd 版本"
 msgid "Update Metacubexd Version"
 msgstr "更新 Metacubexd 版本"
 
+msgid "Update zashboard Version"
+msgstr "更新 zashboard 版本"
+
 msgid "Downloading File..."
 msgstr "文件下载中..."
 
@@ -3051,6 +3072,9 @@ msgstr "警告：TUN 接口启动失败，尝试重启内核..."
 msgid "Error: Core Start Failed, Please Check The Log Infos!"
 msgstr "错误：内核启动失败，请查看《内核日志》排查失败原因！"
 
+msgid "Error: Core Status Abnormal, Please Check The Log Infos!"
+msgstr "错误：内核状态异常，请查看《内核日志》排查异常原因！"
+
 msgid "Forced Sniff Pure IP Connections"
 msgstr "强制探测（嗅探）所有纯 IP 的连接"
 
@@ -3102,8 +3126,8 @@ msgstr "测速（连通性）间隔修改"
 msgid "Modify The URL-Test Interval In The Config"
 msgstr "修改配置文件中的测速（连通性）间隔"
 
-msgid "Whether to Enable Process Rules, If You Are Not Sure, Please Choose off Which Useful in Router Environment"
-msgstr "是否启用进程规则，在路由环境下保持关闭可以提升性能"
+msgid "Whether to Enable Process Rules, Only Works on Routerself, If You Are Not Sure, Please Choose off Which Useful in Router Environment, Depend on kmod-inet-diag"
+msgstr "是否启用进程规则，仅能匹配路由器自身进程，在路由环境下保持关闭可以提升性能，依赖 kmod-inet-diag"
 
 msgid "Enable Process Rule"
 msgstr "启用进程规则"
@@ -3381,6 +3405,15 @@ msgstr "强制覆盖 DNS 查询的子网区域地址"
 msgid "Tip: Respect-rules Option Need Proxy-server-nameserver Option Must Be Setted, Auto Set to"
 msgstr "提示：使用 Respect-rules 功能时 Proxy-server-nameserver 必须配置，插件将默认将其设置为"
 
+msgid "Tip: Nameserver Option Maybe All Setted The Proxy Option, Auto Set Proxy-server-nameserver Option to"
+msgstr "提示：Nameserver 选项可能全部设置了代理选项，插件已自动设置 Proxy-server-nameserver 选项为"
+
+msgid "Tip: Proxy-server-nameserver Option Maybe All Setted The Proxy Option, Auto Set Proxy-server-nameserver Option to"
+msgstr "提示：Proxy-server-nameserver 选项可能全部设置了代理选项，插件已自动为 Proxy-server-nameserver 选项添加设置"
+
+msgid "For Avoiding Proxies Server Resolve Loop..."
+msgstr "以避免代理服务器解析回环..."
+
 msgid "Tip: Config File"
 msgstr "提示：配置文件"
 
@@ -3452,3 +3485,39 @@ msgstr "对象"
 
 msgid "Error: Network Anomaly, Suspend Unlock Detection..."
 msgstr "错误：网络异常，暂停解锁检测..."
+
+msgid "(Not Support mrs Format)"
+msgstr "(不支持 mrs 格式)"
+
+msgid "UpDate"
+msgstr "更新"
+
+msgid "Local Network"
+msgstr "内部网络地址"
+
+msgid "Error: LAN IP Address Get Error, Please Check The LAN Interface Setting or Choose the Correct Interface in the Setting!"
+msgstr "错误：LAN IP 地址获取失败，请检查 LAN 接口设置或在插件设置中选择正确的 LAN 接口名称"
+
+msgid "Warning: Skiped The Custom Rule Because Group & Proxy Not Found:"
+msgstr "警告：因未找到对应的策略组或代理，为避免启动失败，已跳过此条自定义规则的添加:"
+
+msgid "Disable quic-go GSO Support"
+msgstr "禁用 quic-go GSO 支持"
+
+msgid "Suggestion: If Encountering Issues With QUIC UDP on The Linux Kernel Version Above 6.6, Please Try to Enable."
+msgstr "建议： 如果固件 Linux 核心版本在 6.6 以上时遇到 quic-go 的 UDP 连接问题，请尝试启用。"
+
+msgid "Skip Safe Path Check"
+msgstr "跳过安全路径检查"
+
+msgid "Enable If You Want Using Files Not in /etc/openclash in You Config"
+msgstr "如果您希望在配置中使用不在 /etc/openclash 中的文件，请启用该选项"
+
+msgid "Skip Safe Path Check"
+msgstr "跳过安全路径检查"
+
+msgid "Drop The Type of DNS Responsed"
+msgstr "丢弃指定类型的 DNS 回应"
+
+msgid "Smart Group Support"
+msgstr "Smart 策略组支持"
