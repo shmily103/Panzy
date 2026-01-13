@@ -2,6 +2,7 @@
 . /usr/share/openclash/log.sh
 . /lib/functions.sh
 . /usr/share/openclash/openclash_curl.sh
+. /usr/share/openclash/uci.sh
 
    urlencode() {
       if [ "$#" -eq 1 ]; then
@@ -22,8 +23,8 @@
    set_lock
 
    RULE_FILE_NAME="$1"
-   RELEASE_BRANCH=$(uci -q get openclash.config.release_branch || echo "master")
-   github_address_mod=$(uci -q get openclash.config.github_address_mod || echo 0)
+   RELEASE_BRANCH=$(uci_get_config "release_branch" || echo "master")
+   github_address_mod=$(uci_get_config "github_address_mod" || echo 0)
    if [ -z "$(grep "$RULE_FILE_NAME" /usr/share/openclash/res/rule_providers.list 2>/dev/null)" ]; then
       DOWNLOAD_PATH=$(grep -F "$RULE_FILE_NAME" /usr/share/openclash/res/game_rules.list |awk -F ',' '{print $2}' 2>/dev/null)
       RULE_FILE_DIR="/etc/openclash/game_rules/$RULE_FILE_NAME"
@@ -44,7 +45,7 @@
    TMP_RULE_DIR="/tmp/$RULE_FILE_NAME"
    TMP_RULE_DIR_TMP="/tmp/$RULE_FILE_NAME.tmp"
    DOWNLOAD_PATH=$(urlencode "$DOWNLOAD_PATH")
-   
+
    if [ "$RULE_TYPE" = "game" ]; then
       if [ "$github_address_mod" != "0" ]; then
          if [ "$github_address_mod" == "https://cdn.jsdelivr.net/" ] || [ "$github_address_mod" == "https://fastly.jsdelivr.net/" ] || [ "$github_address_mod" == "https://testingcf.jsdelivr.net/" ]; then

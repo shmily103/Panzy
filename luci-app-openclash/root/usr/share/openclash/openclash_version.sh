@@ -1,5 +1,6 @@
 #!/bin/bash
 . /usr/share/openclash/openclash_curl.sh
+. /usr/share/openclash/uci.sh
 
 set_lock() {
    exec 869>"/tmp/lock/openclash_version.lock" 2>/dev/null
@@ -16,7 +17,7 @@ set_lock
 version_compare() {
     local current_ver="$1"
     local latest_ver="$2"
-    
+
     if echo "1.0.0" | sort -V >/dev/null 2>&1; then
         if [ "$(printf '%s\n%s\n' "$current_ver" "$latest_ver" | sort -V | head -n1)" = "$current_ver" ] && [ "$current_ver" != "$latest_ver" ]; then
             return 0
@@ -34,14 +35,14 @@ version_compare() {
 TIME=$(date "+%Y-%m-%d-%H")
 CHTIME=$(date "+%Y-%m-%d-%H" -r "/tmp/openclash_last_version" 2>/dev/null)
 DOWNLOAD_FILE="/tmp/openclash_last_version"
-RELEASE_BRANCH=$(uci -q get openclash.config.release_branch || echo "master")
+RELEASE_BRANCH=$(uci_get_config "release_branch" || echo "master")
 if [ -x "/bin/opkg" ]; then
    OP_CV=$(rm -f /var/lock/opkg.lock && opkg status luci-app-openclash 2>/dev/null |grep 'Version' |awk -F 'Version: ' '{print $2}' 2>/dev/null)
 elif [ -x "/usr/bin/apk" ]; then
    OP_CV=$(apk list luci-app-openclash 2>/dev/null|grep 'installed' | grep -oE '[0-9]+(\.[0-9]+)*' | head -1 2>/dev/null)
 fi
 OP_LV=$(sed -n 1p "$DOWNLOAD_FILE" 2>/dev/null |sed "s/^v//g" |tr -d "\n")
-github_address_mod=$(uci -q get openclash.config.github_address_mod || echo 0)
+github_address_mod=$(uci_get_config "github_address_mod" || echo 0)
 if [ -n "$1" ]; then
    github_address_mod="$1"
 fi

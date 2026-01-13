@@ -5,6 +5,7 @@
 . /usr/share/openclash/log.sh
 . /lib/functions/procd.sh
 . /usr/share/openclash/openclash_curl.sh
+. /usr/share/openclash/uci.sh
 
 set_lock() {
    exec 889>"/tmp/lock/openclash_subs.lock" 2>/dev/null
@@ -22,25 +23,15 @@ LOGTIME=$(echo $(date "+%Y-%m-%d %H:%M:%S"))
 LOG_FILE="/tmp/openclash.log"
 CFG_FILE="/tmp/yaml_sub_tmp_config.yaml"
 CRON_FILE="/etc/crontabs/root"
-CONFIG_PATH=$(uci -q get openclash.config.config_path)
-servers_update=$(uci -q get openclash.config.servers_update)
-router_self_proxy=$(uci -q get openclash.config.router_self_proxy || echo 1)
+CONFIG_PATH=$(uci_get_config "config_path")
+servers_update=$(uci_get_config "servers_update")
+router_self_proxy=$(uci_get_config "router_self_proxy" || echo 1)
 FW4=$(command -v fw4)
 CLASH="/etc/openclash/clash"
 CLASH_CONFIG="/etc/openclash"
-JOB_COUNTER_FILE="/tmp/openclash_jobs"
 restart=0
 only_download=0
 
-inc_job_counter() {
-   flock -x 999
-   local cnt=0
-   [ -f "$JOB_COUNTER_FILE" ] && cnt=$(cat "$JOB_COUNTER_FILE")
-   cnt=$((cnt+1))
-   echo "$cnt" > "$JOB_COUNTER_FILE"
-   flock -u 999
-}
-exec 999>"/tmp/lock/openclash_jobs.lock"
 inc_job_counter
 
 urlencode() {
@@ -200,7 +191,7 @@ config_cus_up()
       LOG_OUT "Config File【$name】Update Successful!"
       SLOG_CLEAN
    fi
-   
+
    rm -rf /tmp/Proxy_Group 2>/dev/null
 }
 
@@ -262,6 +253,7 @@ config_error()
    LOG_OUT "Error:【$name】Update Error, Please Try Again Later..."
    rm -rf "$CFG_FILE" 2>/dev/null
    SLOG_CLEAN
+   return 1
 }
 
 change_dns()
@@ -281,7 +273,7 @@ config_download_direct()
       sleep 3
 
       config_download
-      
+
       if [ "${PIPESTATUS[0]}" -eq 0 ] && [ -s "$CFG_FILE" ]; then
          #prevent ruby unexpected error
          sed -i -E 's/protocol-param: ([^,'"'"'"''}( *#)\n\r]+)/protocol-param: "\1"/g' "$CFG_FILE" 2>/dev/null
@@ -351,7 +343,7 @@ server_key_match()
 	       key_match="($1)"
 	    fi
    fi
-   
+
    if [ "$2" = "keyword" ]; then
       if [ -z "$key_match_param" ]; then
          key_match_param="$key_match"
@@ -400,7 +392,7 @@ sub_info_get()
    config_get "custom_template_url" "$section" "custom_template_url" ""
    config_get "de_ex_keyword" "$section" "de_ex_keyword" ""
    config_get "sub_ua" "$section" "sub_ua" "clash.meta"
-   
+
    if [ "$enabled" -eq 0 ]; then
       if [ -n "$2" ]; then
          if [ "$2" != "$CONFIG_FILE" ] && [ "$2" != "$name" ]; then
@@ -410,23 +402,23 @@ sub_info_get()
          return
       fi
    fi
-   
+
    if [ -z "$address" ]; then
       return
    fi
-   
+
    if [ "$udp" == "true" ]; then
       udp="&udp=true"
    else
       udp=""
    fi
-   
+
    if [ "$rule_provider" == "true" ]; then
       rule_provider="&expand=false&classic=true"
    else
       rule_provider=""
    fi
-   
+
    if [ -z "$name" ]; then
       name="config"
       CONFIG_FILE="/etc/openclash/config/config.yaml"
@@ -439,12 +431,12 @@ sub_info_get()
    if [ -n "$2" ] && [ "$2" != "$CONFIG_FILE" ] && [ "$2" != "$name" ]; then
       return
    fi
-   
+
    if [ ! -z "$keyword" ] || [ ! -z "$ex_keyword" ]; then
       config_list_foreach "$section" "keyword" server_key_match "keyword"
       config_list_foreach "$section" "ex_keyword" server_key_match "ex_keyword"
    fi
-   
+
    if [ -n "$de_ex_keyword" ]; then
       for i in $de_ex_keyword;
       do
@@ -455,7 +447,7 @@ sub_info_get()
         fi
       done
    fi
-         
+
    if [ "$sub_convert" -eq 0 ]; then
       subscribe_url=$address
    elif [ "$sub_convert" -eq 1 ] && [ -n "$template" ]; then
@@ -529,32 +521,5 @@ config_foreach sub_info_get "config_subscribe" "$1"
 uci -q delete openclash.config.config_update_path
 uci commit openclash
 
-dec_job_counter_and_restart() {
-   flock -x 999
-   local cnt=0
-   [ -f "$JOB_COUNTER_FILE" ] && cnt=$(cat "$JOB_COUNTER_FILE")
-   cnt=$((cnt-1))
-   [ $cnt -lt 0 ] && cnt=0
-   echo "$cnt" > "$JOB_COUNTER_FILE"
-   if [ $cnt -eq 0 ]; then
-      if [ "$restart" -eq 1 ] && [ "$(unify_ps_prevent)" -eq 0 ]; then
-         /etc/init.d/openclash restart >/dev/null 2>&1 &
-      elif [ "$restart" -eq 0 ] && [ "$(unify_ps_prevent)" -eq 0 ] && [ "$(uci -q get openclash.config.restart)" -eq 1 ]; then
-         /etc/init.d/openclash restart >/dev/null 2>&1 &
-         uci -q set openclash.config.restart=0
-         uci -q commit openclash
-      elif [ "$restart" -eq 1 ]; then
-         uci -q set openclash.config.restart=1
-         uci -q commit openclash
-      else
-         sed -i '/openclash.sh/d' $CRON_FILE 2>/dev/null
-         [ "$(uci -q get openclash.config.auto_update)" -eq 1 ] && [ "$(uci -q get openclash.config.config_auto_update_mode)" -ne 1 ] && echo "0 $(uci -q get openclash.config.auto_update_time) * * $(uci -q get openclash.config.config_update_week_time) /usr/share/openclash/openclash.sh" >> $CRON_FILE
-         /etc/init.d/cron restart
-      fi
-      rm -rf "$JOB_COUNTER_FILE" >/dev/null 2>&1
-   fi
-   flock -u 999
-}
-
-dec_job_counter_and_restart
+dec_job_counter_and_restart "$restart"
 del_lock

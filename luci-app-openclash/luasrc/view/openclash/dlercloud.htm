@@ -52,10 +52,7 @@
 
 .oc .dler-main-container {
   background: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  margin: 16px auto;
+  margin: 0 auto;
   width: 100%;
   transition: all var(--transition-fast);
 }
@@ -134,8 +131,7 @@
 }
 
 .oc .card .additional .user-card img {
-  width: 60%;
-  max-width: 90px;
+  width: 65%;
   border-radius: 50%;
   position: relative;
   top: auto;
@@ -231,7 +227,7 @@
   padding-top: 10px;
   margin: 0 0 0 -15%;
   line-height: 35px;
-  color: black;
+  color: var(--text-title) !important;
 }
 
 .oc .card .general .dler-info {
@@ -295,7 +291,7 @@
 
 .oc .card .general .dler-title {
   font-weight: bold;
-  color: #444;
+  color: var(--text-primary) !important;
   font-size: 15px;
   display: inline-block;
   width: 45%;
@@ -309,7 +305,7 @@
 }
 
 .oc .card .general .dler-result {
-  color: #444;
+  color: var(--text-secondary) !important;
   font-size: 15px;
   white-space: nowrap;
   display: inline-block;
@@ -323,7 +319,7 @@
 }
 
 .oc .card .general .dler-result2 {
-  color: #444;
+  color: var(--text-secondary) !important;
   font-size: 15px;
   white-space: nowrap;
   display: inline-block;
@@ -387,7 +383,7 @@
   margin: 0;
   font-size: 15px;
   padding: 0;
-  color: var(--text-secondary);
+  color: var(--text-secondary) !important;
   text-align: right;
   white-space: nowrap;
   overflow: hidden;
@@ -430,35 +426,30 @@
 
 @media screen and (max-width: 1200px) {
   .oc .dler-main-container {
-    margin: 11px auto;
     width: calc(100% - 32px);
   }
-  
+
   .oc .card .additional.collapsed {
     width: 140px;
   }
-  
+
   .oc .card .additional .user-card {
     width: 140px;
   }
-  
-  .oc .card .additional .user-card img {
-    max-width: 80px;
-  }
-  
+
   .oc .card .additional .more-info h1 {
     font-size: 1.8rem;
   }
-  
+
   .oc .card .additional .coords {
     font-size: 0.95rem;
   }
-  
+
   .oc .card .general {
     margin-left: 120px;
     padding-right: 8px;
   }
-  
+
   .oc .card .general .more {
     bottom: 6px;
     padding-right: 12px;
@@ -468,41 +459,36 @@
 
 @media screen and (max-width: 768px) {
   .oc .dler-main-container {
-    margin: 10px auto;
     width: 100%;
   }
-  
+
   .oc .card .additional.collapsed {
     width: 125px;
   }
-  
+
   .oc .card .additional .user-card {
     width: 125px;
   }
-  
-  .oc .card .additional .user-card img {
-    max-width: 70px;
-  }
-  
+
   .oc .card .additional .more-info h1 {
     font-size: 1.5rem;
   }
-  
+
   .oc .card .additional .coords {
     font-size: 0.8rem;
   }
-  
+
   .oc .card .general {
     margin-left: 110px;
     padding-right: 6px;
   }
-  
+
   .oc .card .general h1 {
     font-size: 24px;
     line-height: 30px;
     margin: 0;
   }
-  
+
   .oc .card .general .dler-info {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
@@ -510,34 +496,38 @@
     padding-right: 8px;
     height: 50%;
   }
-  
+
   .oc .card .general .dler-info-right {
     justify-content: flex-start;
     padding-top: 8px;
     gap: 12px;
   }
-  
+
   .oc .card .general .btn {
     width: 80px !important;
     height: 80px !important;
     font-size: 14px;
     padding: 0 !important;
   }
-  
+
   .oc .card .general .dler-title {
     font-size: 14px;
     width: 50%;
   }
-  
+
   .oc .card .general .dler-result,
   .oc .card .general .dler-result2 {
     font-size: 14px;
     width: 50%;
   }
-  
+
   .oc .card .general .more {
     bottom: 4px;
     padding-right: 10px;
+  }
+
+  .oc .card .general .more p {
+    font-size: 13px;
   }
 
 }
@@ -546,27 +536,23 @@
   .oc .center {
     padding: 8px;
   }
-  
+
   .oc .card .additional.collapsed {
     width: 115px;
   }
-  
+
   .oc .card .additional .user-card {
     width: 115px;
   }
-  
-  .oc .card .additional .user-card img {
-    max-width: 60px;
-  }
-  
+
   .oc .card .additional .more-info h1 {
     font-size: 1.3rem;
   }
-  
+
   .oc .card .additional .coords {
     font-size: 0.7rem;
   }
-  
+
   .oc .card .general {
     margin-left: 120px;
     padding-right: 4px;
@@ -575,7 +561,7 @@
   .oc .card .general .dler-info {
     height: 50%;
   }
-  
+
   .oc .card .general h1 {
     font-size: 18px;
     line-height: 26px;
@@ -592,7 +578,7 @@
     font-size: 12px;
     width: 50%;
   }
-  
+
   .oc .card .general .more {
     bottom: 2px;
     padding-right: 8px;
@@ -603,6 +589,10 @@
     height: 60px !important;
     font-size: 10px;
     padding: 0 !important;
+  }
+
+  .oc .card .general .more p {
+    font-size: 11px;
   }
 }
 </style>
@@ -647,7 +637,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="dler-info-center">
                             <div>
                                 <p>
@@ -664,7 +654,7 @@
                                 </p>
                             </div>
                         </div>
-                        
+
                         <div class="dler-info-right">
                             <div class="dler-btn-container">
                                 <input type="button" class="btn" value="<%:Checkin%>" onclick="return dler_checkin_btn(this)">
@@ -702,15 +692,10 @@
 
   document.addEventListener('DOMContentLoaded', function() {
       DarkModeDetector.init();
+      obj.classList.remove('collapsed');
+      obj.classList.add('expanded');
   });
 
-  window.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-      obj.classList.add('collapsed');
-      obj.classList.remove('expanded');
-    }, 100);
-  });
-   
   XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "dler_info")%>', null, function(x, status) {
     if (x && x.status == 200 && status.dler_info != "error") {
         dler_plan.innerHTML = status.dler_info.plan;
@@ -736,7 +721,7 @@
         show_less();
     }
   });
-    
+
   XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "openclash", "dler_info")%>', null, function(x, status) {
     if (x && x.status == 200 && status.dler_info != "error") {
         dler_plan.innerHTML = status.dler_info.plan;
@@ -767,7 +752,7 @@
         show_less();
     }
   });
-    
+
   function dler_checkin_btn(btn)
   {
     XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "dler_checkin")%>', null, function(x, status) {
@@ -789,13 +774,13 @@
       }
     });
   }
-    
+
   function web_dler()
   {
     url='https://bit.ly/32mrABp';
     window.open(url);
   }
-       
+
   function show_more()
   {
     if (obj.classList.contains('expanded')) {
@@ -819,7 +804,7 @@
       obj.classList.add('expanded');
       obj.classList.remove('collapsed');
     }
-    
+
     var rdmdl = Math.floor(Math.random() * 6) + 1;
     if (rdmdl == 1) {
       dler_it.innerHTML = '<%:Simple & trustworthy%>';

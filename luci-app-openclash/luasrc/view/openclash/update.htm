@@ -15,7 +15,8 @@
 	  	<td width="16.6%" align="left">
 			<select class="cbi-input-select" name="CORE_VERSION" id="CORE_VERSION">
 	  			<option value="linux-386"><%:linux-386%></option>
-				<option value="linux-amd64"><%:linux-amd64(x86-64)%></option>
+				<option value="linux-amd64-v1"><%:linux-amd64-v1(x86-64)%></option>
+				<option value="linux-amd64-v2"><%:linux-amd64-v2(x86-64)%></option>
 				<option value="linux-amd64-v3"><%:linux-amd64-v3(x86-64)%></option>
 				<option value="linux-armv5"><%:linux-armv5%></option>
 				<option value="linux-armv6"><%:linux-armv6%></option>
@@ -247,11 +248,11 @@
                 function compareVersions(v1, v2) {
                     var ver1 = v1.replace(/^v/, '').split('.');
                     var ver2 = v2.replace(/^v/, '').split('.');
-                    
+
                     var maxLen = Math.max(ver1.length, ver2.length);
                     while (ver1.length < maxLen) ver1.push('0');
                     while (ver2.length < maxLen) ver2.push('0');
-                    
+
                     for (var i = 0; i < maxLen; i++) {
                         var num1 = parseInt(ver1[i], 10);
                         var num2 = parseInt(ver2[i], 10);
@@ -260,7 +261,7 @@
                     }
                     return 0;
                 }
-                
+
                 if (compareVersions(oplv, status.opcv) > 0) {
                     op_lv.innerHTML = "<b style=color:green>"+oplv+" <%:<New>%></b>";
                 } else {
@@ -280,7 +281,7 @@
     }
 
     XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "update")%>', null, updateStatus);
-    
+
     XHR.poll(10, '<%=luci.dispatcher.build_url("admin", "services", "openclash", "update")%>', null, updateStatus);
 
 	function handleStartLog(x, status) {
@@ -359,7 +360,7 @@
 			}
 		});
     }
-    
+
     function ma_core_update(btn,type)
     {
     	var v = core_version.value;
@@ -392,7 +393,7 @@
     	}
       });
     }
-    
+
     function ma_op_update(btn)
     {
         btn.value    = '<%:Download%>';
@@ -423,7 +424,7 @@
         });
         return false; 
     }
-    
+
     function remove_all_core(btn)
     {
         btn.value    = '<%:Remove Core%>';
@@ -443,7 +444,7 @@
         btn.disabled = false;
         return false; 
     }
-    
+
     function backup_all_file(btn)
     {
 		btn.value    = '<%:Backup OpenClash%>';

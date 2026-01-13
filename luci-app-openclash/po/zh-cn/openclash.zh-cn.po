@@ -17,9 +17,6 @@ msgstr "技术支持"
 msgid "Overviews"
 msgstr "运行状态"
 
-msgid "Plugin Settings"
-msgstr "插件设置"
-
 msgid "Overwrite Settings"
 msgstr "覆写设置"
 
@@ -141,7 +138,7 @@ msgid "fake-ip-mix(tun mix mode)"
 msgstr "Fake-IP（TUN-混合）模式【UDP-TUN，TCP-转发】"
 
 msgid "Select Mode For OpenClash Work, Try Flush DNS Cache If Network Error"
-msgstr "选择运行模式，如客户端的网络异常请尝试清除DNS缓存"
+msgstr "选择运行模式，如客户端的网络异常请尝试清除 DNS 缓存"
 
 msgid "Proxy Mode"
 msgstr "代理模式"
@@ -240,13 +237,13 @@ msgid "Specify DNS Server"
 msgstr "指定服务器"
 
 msgid "Specify DNS Server For List, Only One IP Server Address Support"
-msgstr "指定下方列表中域名的 DNS 服务器，只支持填写一个IP地址"
+msgstr "指定下方列表中域名的 DNS 服务器，只支持填写一个 IP 地址"
 
 msgid "Domain Names In The List Do Not Return Fake-IP, One rule per line, Depend on Dnsmasq"
-msgstr "每行请只填写一个域名，列表中的域名将使用上方指定的 DNS 进行查询并返回真实IP地址，此功能依赖于 Dnsmasq"
+msgstr "每行请只填写一个域名，列表中的域名将使用上方指定的 DNS 进行查询并返回真实 IP 地址，此功能依赖于 Dnsmasq"
 
 msgid "Domain Names In The List Do Not Return Fake-IP, One rule per line"
-msgstr "每行请只填写一个域名，列表中的域名在 Fake-IP 模式下将返回真实IP地址"
+msgstr "每行请只填写一个域名，列表中的域名在 Fake-IP 模式下将返回真实 IP 地址"
 
 msgid "Domain Names In The List Use The Custom DNS Server, But Still Return Fake-IP Results, One rule per line"
 msgstr "每行请只填写一个规则，列表中的域名将使用指定的 DNS 进行查询，但 Fake-IP 模式下仍将返回保留地址"
@@ -296,8 +293,8 @@ msgstr "规则设置"
 msgid "Config Manage"
 msgstr "配置管理"
 
-msgid "Upload Config File"
-msgstr "上传配置文件"
+msgid "Add Config File"
+msgstr "添加配置文件"
 
 msgid "Upload File Type"
 msgstr "上传文件类型"
@@ -352,6 +349,9 @@ msgstr "更新时间(每天)"
 
 msgid "Update Interval(min)"
 msgstr "更新间隔(分钟)"
+
+msgid "Update Interval(hour)"
+msgstr "更新间隔(小时)"
 
 msgid "Update Mode"
 msgstr "更新模式"
@@ -435,10 +435,10 @@ msgid "Port For Dashboard Login From Public Network"
 msgstr "设置映射端口，便于从公网访问时自动登录"
 
 msgid "Public Dashboard SSL enabled"
-msgstr "管理页面公网SSL访问"
+msgstr "管理页面公网 SSL 访问"
 
 msgid "Is SSL enabled For Dashboard Login From Public Network"
-msgstr "设置公网协议是否开启了SSL，便于从公网访问时自动登录"
+msgstr "设置公网协议是否开启了 SSL，便于从公网访问时自动登录"
 
 msgid "GEO Update"
 msgstr "GEO 数据库订阅"
@@ -605,9 +605,6 @@ msgstr "当前内核版本"
 msgid "Last Core Version"
 msgstr "最新内核版本"
 
-msgid "Unknown"
-msgstr "查询失败"
-
 msgid "Check Failed"
 msgstr "查询更新失败"
 
@@ -691,7 +688,7 @@ msgid "Mix This Page's Proxies"
 msgstr "一键生成配置文件时合并本页下方的所有代理服务器信息（不区分配置文件）"
 
 msgid "Type"
-msgstr "节点类型"
+msgstr "类型"
 
 msgid "Server Alias"
 msgstr "别名（请勿重名）"
@@ -703,7 +700,7 @@ msgid "Server Port"
 msgstr "服务器端口"
 
 msgid "UDP Support"
-msgstr "UDP支持"
+msgstr "UDP 支持"
 
 msgid "Edit Server"
 msgstr "编辑服务器配置"
@@ -865,7 +862,7 @@ msgid "Group Name"
 msgstr "别名（请勿重名）"
 
 msgid "Disable UDP"
-msgstr "禁用UDP连接"
+msgstr "禁用 UDP 连接"
 
 msgid "Test URL"
 msgstr "检测地址（URL）"
@@ -891,9 +888,6 @@ msgstr "Fallback【故障切换】"
 msgid "Load-Balance"
 msgstr "Load-Balance【负载均衡】"
 
-msgid "Relay-Traffic"
-msgstr "Relay【嵌套中转】"
-
 msgid "Other Group (Support Regex)"
 msgstr "包含其他策略组（请勿重复添加，支持正则匹配）"
 
@@ -912,13 +906,16 @@ msgstr "指定策略组"
 msgid "No Need Set when Config Create, The added Proxy Groups Must Exist"
 msgstr "注意：使用一键生成配置文件功能时无需设置此项，修改配置文件前添加的策略组必须已创建"
 
-msgid "Clean Log"
+msgid "The added Dialer Proxy or Group Must Exist"
+msgstr "注意：修改配置文件前添加的策略组或者节点必须已创建"
+
+msgid "Clean"
 msgstr "清理日志"
 
-msgid "Stop Refresh Log"
+msgid "Stop Refresh"
 msgstr "停止刷新"
 
-msgid "Start Refresh Log"
+msgid "Start Refresh"
 msgstr "开始刷新"
 
 msgid "Config File"
@@ -994,7 +991,7 @@ msgid "Provider Filter"
 msgstr "代理集节点筛选"
 
 msgid "Provider URL"
-msgstr "代理集URL"
+msgstr "代理集 URL"
 
 msgid "Provider Interval(s)"
 msgstr "代理集更新间隔（s）"
@@ -1003,7 +1000,7 @@ msgid "Provider Health Check"
 msgstr "代理集状态检查"
 
 msgid "Health Check URL"
-msgstr "状态检查URL"
+msgstr "状态检查 URL"
 
 msgid "Health Check Interval(s)"
 msgstr "状态检查间隔（s）"
@@ -1066,7 +1063,7 @@ msgid "Prevent YouTube and Others To Use QUIC Transmission"
 msgstr "防止 YouTube 等使用 QUIC 导致速度不佳"
 
 msgid "REJECT UDP Traffic(Not Include bypassed regions via China IP Route setting) On Port 443"
-msgstr "禁用 443 端口 UDP 流量（绕过指定区域IP：启用或绕过中国大陆时禁用海外方向QUIC；回国模式禁用大陆方向QUIC）"
+msgstr "禁用 443 端口 UDP 流量（绕过指定区域 IP：启用或绕过中国大陆时禁用海外方向 QUIC；回国模式禁用大陆方向 QUIC）"
 
 msgid "Operation Mode"
 msgstr "模式设置"
@@ -1116,8 +1113,11 @@ msgstr "不走代理的局域网设备 Mac"
 msgid "LAN Proxied Mac List"
 msgstr "走代理的局域网设备 Mac"
 
-msgid "In The Fake-IP Mode, Only Pure IP Requests Are Supported"
-msgstr "在 Fake-IP 模式下，只支持过滤纯 IP 类型的请求"
+msgid "In The Fake-IP Mode, Only Pure IP Requests Are Supported, Please Setting Fake-IP-Filter First If You Need Domain Type Requests"
+msgstr "在 Fake-IP 模式下，只支持过滤纯 IP 类型的请求, 如果涉及域名访问请提前设置 Fake-IP-Filter"
+
+msgid "Warning: iptables DSCP module not available, please try DCSP rule by core instead, skipping DSCP rule for"
+msgstr "警告：iptables 的 DSCP 模块不可用，请尝试改用内核的 DSCP 规则，来源流量访问控制跳过设置 DSCP 规则"
 
 msgid "Rule Match Proxy Mode"
 msgstr "仅代理命中规则流量"
@@ -1165,7 +1165,7 @@ msgid "Custom Template"
 msgstr "自定义模板"
 
 msgid "Emoji"
-msgstr "添加Emoji"
+msgstr "添加 Emoji"
 
 msgid "skip-cert-verify"
 msgstr "跳过证书验证"
@@ -1203,9 +1203,6 @@ msgstr "策略类型"
 msgid "Choose The Load-Balance's Strategy Type"
 msgstr "选择负载均衡的策略类型"
 
-msgid "Choose The Smart's Strategy Type"
-msgstr "选择 Smart 策略组的初始数据收集策略类型"
-
 msgid "Uselightgbm"
 msgstr "Uselightgbm(使用模型)"
 
@@ -1222,7 +1219,7 @@ msgid "Collect Datas For Smart Group Model Training"
 msgstr "收集 Smart 策略组的连接数据，方便用来分析及模型训练"
 
 msgid "The Priority Of The Nodes, The Higher Than 1, The More Likely It Is To Be Selected, The Default Is 1, Support Regex"
-msgstr "自定义 Smart 策略组内节点的权重加成，大于1表示权重加成优先选择，小于1表示权重削减降低使用率，默认为1，支持正则"
+msgstr "自定义 Smart 策略组内节点的权重加成，大于 1 表示权重加成优先选择，小于 1 表示权重削减降低使用率，默认为 1，支持正则"
 
 msgid "Running Status"
 msgstr "运行状态"
@@ -1263,11 +1260,11 @@ msgstr "兼容"
 msgid "Mix"
 msgstr "混合"
 
-msgid "Close All Connections"
-msgstr "关闭所有链接"
+msgid "Close Connect"
+msgstr "关闭链接"
 
-msgid "Close All Connections Failed"
-msgstr "关闭所有连接失败"
+msgid "Close Connect Failed"
+msgstr "关闭连接失败"
 
 msgid "Restore Nodes Selection"
 msgstr "还原策略组节点选择"
@@ -1329,9 +1326,6 @@ msgstr "Tip: OpenClash 成功启动后请耐心等待下方网站访问检查连
 msgid "Tip: You can modify the profile on the profile page (for content that is not taken over)"
 msgstr "Tip: 您可以在配置文件页面直接修改配置文件（适用于没被接管的内容）"
 
-msgid "Tip: click the version icon above to jump to the client publishing page"
-msgstr "Tip: 点击上方版本图标可跳转到客户端发布页面"
-
 msgid "Tip: do not write configuration files? Try to create one click on the server page"
 msgstr "Tip: 不会编写配置文件？试试在【服务器与策略组管理】页面一键创建"
 
@@ -1341,29 +1335,20 @@ msgstr "Tip: 某些网站链接出现异常? 试试切换模式或者使用第�
 msgid "Tip: using the fake IP mode can get a faster access experience"
 msgstr "Tip: 使用 Fake-IP 模式可以获得更加快速的访问体验"
 
-msgid "Tip: query DNS by TLS & TCP & HTTPS can get better anti pollution effect"
-msgstr "Tip: 使用 TLS & TCP & HTTPS 方式查询DNS可以获得更好的抗污染效果"
-
-msgid "Tip: openlash will check the configuration file parameters to ensure that it works properly"
-msgstr "Tip: OpenClash 启动时会检查配置文件参数【服务器（策略）组、规则、DNS设置】以确保能够正常工作"
-
 msgid "Tip: the nameserver group must have at least one server set when using custom DNS"
-msgstr "Tip: 使用自定义DNS上游服务器时NameServer组必须设置至少一个服务器"
-
-msgid "Tip: the website access check shows the connection of the device currently logged in to the Luci page"
-msgstr "Tip: 网站访问检查展示的是当前登录LUCI页面设备的连接情况"
+msgstr "Tip: 使用自定义 DNS 上游服务器时 NameServer 组必须设置至少一个服务器"
 
 msgid "Tip: if you don not use IPv6, please turn off the DHCP service of IPv6, otherwise the connection will be abnormal"
-msgstr "Tip: 如果不使用IPv6，请关闭IPv6的DHCP服务，否则会造成连接异常"
+msgstr "Tip: 如果不使用 IPv6，请关闭 IPv6 的 DHCP 服务，否则会造成连接异常"
 
-msgid "Tip: you can update the version in the global settings page"
-msgstr "Tip: 您可以在全局设置页面进行版本更新操作"
+msgid "Tip: you can update the version in the settings page"
+msgstr "Tip: 您可以在插件设置页面进行版本更新操作"
 
 msgid "Note: if the update fails, you can manually download and upload"
 msgstr "注意：如更新失败可手动下载并上传"
 
 msgid "Note: the client may not support update, because the firmware with squashfs format will not release flash space after updating"
-msgstr "注意：客户端可能无法更新，因为squashfs格式的固件更新后不会释放闪存空间"
+msgstr "注意：客户端可能无法更新，因为 squashfs 格式的固件更新后不会释放闪存空间"
 
 msgid "Compiled Version"
 msgstr "编译版本"
@@ -1409,9 +1394,6 @@ msgstr "最新客户端版本"
 
 msgid "Download Latest Client"
 msgstr "下载最新版本客户端"
-
-msgid "Download"
-msgstr "下载到本地"
 
 msgid "Restore Default Config"
 msgstr "还原默认配置"
@@ -1491,11 +1473,14 @@ msgstr "GeoIP MMDB 数据库更新 URL"
 msgid "Custom GeoSite URL"
 msgstr "GeoSite 数据库更新 URL"
 
+msgid "Custom Geo ASN URL"
+msgstr "Geo ASN 数据库更新 URL"
+
 msgid "Custom Chnroute6 Lists URL"
-msgstr "大陆IPv6段更新 URL"
+msgstr "大陆 IPv6 段更新 URL"
 
 msgid "Custom Chnroute Lists URL"
-msgstr "大陆IP段更新 URL"
+msgstr "大陆 IP 段更新 URL"
 
 msgid "Custom GeoIP MMDB URL, Click Button Below To Refresh After Edit"
 msgstr "自定义 GeoIP MMDB 数据库的更新来源，编辑后点击下方按钮生效"
@@ -1516,7 +1501,7 @@ msgid "(Default)"
 msgstr "(默认)"
 
 msgid "(Default mmdb)"
-msgstr "(默认，全部国家且仅写入iso_code和geoname_id)"
+msgstr "(默认，全部国家且仅写入 iso_code 和 geoname_id)"
 
 msgid "(All Info mmdb)"
 msgstr "(全部国家且且包含官方全部信息数据)"
@@ -1552,7 +1537,7 @@ msgid "Restart time (every day)"
 msgstr "重启时间(每天)"
 
 msgid "DNS Port"
-msgstr "DNS监听端口"
+msgstr "DNS 监听端口"
 
 msgid "Log Size (KB)"
 msgstr "日志大小（KB）"
@@ -1715,9 +1700,6 @@ msgstr "警告：检测到启用了多个第三方规则配置，忽略后续配
 
 msgid "Download Successful, Start Preprocessing Rule File..."
 msgstr "下载成功，开始预处理规则文件..."
-
-msgid "Error: Ruby Works Abnormally, Please Check The Ruby Library Depends!"
-msgstr "错误：Ruby 依赖异常，无法校验配置文件，请确认ruby依赖工作正常后重试！"
 
 msgid "Error:"
 msgstr "错误："
@@ -1944,9 +1926,6 @@ msgstr "读取错误，配置文件"
 msgid "Abnormal!"
 msgstr "异常！"
 
-msgid "Abnormal!"
-msgstr "异常！"
-
 msgid "Deleting Old Configuration..."
 msgstr "正在删除旧配置..."
 
@@ -2002,10 +1981,13 @@ msgid "Error: Missing Porxy-Group's Name, Stop Setting The Other Rules!"
 msgstr "错误：丢失或未指定第三方规则中的部分策略组，停止继续设置第三方规则！"
 
 msgid "Tip: Detected That The nameserver DNS Option Has No Server Set, Starting To Complete..."
-msgstr "提示：检测到DNS选项下的 Nameserver 未设置服务器，开始补全..."
+msgstr "提示：检测到 DNS 选项下的 Nameserver 未设置服务器，开始补全..."
+
+msgid "Tip: Detected That The default-nameserver DNS Option Has No Server Set, Starting To Complete..."
+msgstr "提示：检测到 DNS 选项下的 Default-nameserver 未设置服务器，开始补全..."
 
 msgid "Error: Nameserver Option Must Be Setted, Stop Customing DNS Servers"
-msgstr "错误：配置文件DNS选项下的 Nameserver 必须设置服务器，已停止设置自定义DNS服务器！"
+msgstr "错误：配置文件 DNS 选项下的 Nameserver 必须设置服务器，已停止设置自定义 DNS 服务器！"
 
 msgid "Config File Does Not Exist, You Have Set Subscription Information, Ready To Download..."
 msgstr "配置文件不存在，您已设置订阅信息，准备开始下载..."
@@ -2040,11 +2022,11 @@ msgstr "错误：OpenClash 启动失败，请到日志页面查看详细错误�
 msgid "Found 53 Port Hijacked, Clean Up Firewall Rules..."
 msgstr "发现 53 端口被劫持，清理防火墙规则..."
 
-msgid "OpenClash Start Running..."
-msgstr "OpenClash 开始启动..."
+msgid "Tip: OpenClash Start Running..."
+msgstr "提示：OpenClash 开始启动..."
 
-msgid "OpenClash Restart..."
-msgstr "OpenClash 重新启动中..."
+msgid "Tip: OpenClash Restart..."
+msgstr "提示：OpenClash 重新启动中..."
 
 msgid "Step 1: Get The Configuration..."
 msgstr "第一步: 获取配置..."
@@ -2061,23 +2043,23 @@ msgstr "第三步: 快速启动模式，跳过修改配置文件..."
 msgid "Step 4: Start Running The Clash Core..."
 msgstr "第四步: 启动主程序..."
 
-msgid "Step 5: Set Dnsmasq..."
-msgstr "第五步: 设置 Dnsmasq 程序..."
+msgid "Step 5: Add Cron Rules, Start Daemons..."
+msgstr "第五步: 添加计划任务,启动进程守护程序..."
 
-msgid "Step 6: Set Firewall Rules..."
-msgstr "第六步: 设置防火墙规则..."
+msgid "Step 6: Core Status Checking and Firewall Rules Setting..."
+msgstr "第六步: 内核状态检查及防火墙规则设置..."
 
-msgid "Step 7: Add Cron Rules, Start Daemons..."
-msgstr "第七步: 添加计划任务,启动进程守护程序..."
+msgid "Tip: OpenClash Start Successful!"
+msgstr "提示：OpenClash 启动成功，请等待服务器上线！"
 
-msgid "OpenClash Start Successful!"
-msgstr "OpenClash 启动成功，请等待服务器上线！"
+msgid "Tip: Firewall Reload Successful!"
+msgstr "提示：防火墙重置成功！"
 
-msgid "Warning: OpenClash Start Successful, Please Note That Network May Abnormal With IPv6's DHCP Server"
-msgstr "警告：OpenClash 启动成功，检测到您启用了IPv6的DHCP服务，可能会造成连接异常！"
+msgid "Warning: Please Note That Network May Abnormal With IPv6's DHCP Server"
+msgstr "警告：检测到您启用了 IPv6 的 DHCP 服务，可能会造成连接异常！"
 
-msgid "OpenClash Stoping..."
-msgstr "OpenClash 开始关闭..."
+msgid "Tip: OpenClash Stoping..."
+msgstr "提示：OpenClash 开始关闭..."
 
 msgid "Step 1: Backup The Current Groups State..."
 msgstr "第一步: 备份当前策略组状态..."
@@ -2097,11 +2079,11 @@ msgstr "第五步: 重启 Dnsmasq 程序..."
 msgid "Step 6: Delete OpenClash Residue File..."
 msgstr "第六步：删除 OpenClash 残留文件..."
 
-msgid "OpenClash Already Stop!"
-msgstr "OpenClash 关闭成功！"
+msgid "Tip: OpenClash Already Stop!"
+msgstr "提示：OpenClash 已关闭！"
 
 msgid "Skip Reload OpenClash Firewall Rules Until 5 Minutes Later..."
-msgstr "5 分钟内重置已超过 3 次，跳过本次 OpenClash 防火墙规则重置..."
+msgstr "5 分钟内重置已超过限制次数，跳过本次 OpenClash 防火墙规则重置..."
 
 msgid "Reload OpenClash Firewall Rules..."
 msgstr "重置 OpenClash 防火墙规则..."
@@ -2157,14 +2139,14 @@ msgstr "3、在此页面设置您已下载的规则的对应配置文件、策�
 msgid "When setting this page, if the groups is empty, please go to the <Onekey Create> page to add"
 msgstr "本页设置时如策略组为空，请先到《一键生成》页面进行添加"
 
-msgid "Introduction to rule set usage: https://wiki.metacubex.one/config/rule-providers/content/"
-msgstr "规则集使用介绍：https://wiki.metacubex.one/config/rule-providers/content/"
+msgid "Introduction to rule set usage:"
+msgstr "规则集使用介绍："
 
-msgid "Introduction to proxy usage: https://wiki.metacubex.one/config/proxies/"
-msgstr "代理使用介绍：https://wiki.metacubex.one/config/proxies/"
+msgid "Introduction to proxy usage:"
+msgstr "代理使用介绍："
 
-msgid "Introduction to proxy-provider usage: https://wiki.metacubex.one/config/proxy-providers/"
-msgstr "代理集使用介绍：https://wiki.metacubex.one/config/proxy-providers/"
+msgid "Introduction to proxy-provider usage:"
+msgstr "代理集使用介绍："
 
 msgid "Subconverter external configuration (subscription conversion template) Description: https://github.com/tindy2013/subconverter#external-configuration-file"
 msgstr "subconverter 外部配置(订阅转换模板)说明：https://github.com/tindy2013/subconverter#external-configuration-file"
@@ -2173,13 +2155,13 @@ msgid "If you need to customize the external configuration file (subscription co
 msgstr "如需自定义外部配置文件(订阅转换模板)，请按照说明编写后上传至外部网络可访问的位置，并在使用时正确填写地址"
 
 msgid "If you have a recommended external configuration file (subscription conversion template), you can modify by following The file format of /usr/share/openclash/res/sub_ini.list and pr"
-msgstr "如您有值得推荐的外部配置文件(订阅转换模板)，可以按照 /usr/share/openclash/res/sub_ini.list 的文件格式修改后提交PR"
+msgstr "如您有值得推荐的外部配置文件(订阅转换模板)，可以按照 /usr/share/openclash/res/sub_ini.list 的文件格式修改后提交 PR"
 
 msgid "Note: To restore the default configuration, try accessing:"
 msgstr "注意: 如遇到配置丢失或者需要还原默认配置，请尝试访问地址:"
 
 msgid "Take Effect If Fallback DNS Setted, Prevent DNS Pollution"
-msgstr "只有在配置文件设置了 Fallback 组的DNS时才会生效，正确设置可以有效防止 DNS 污染"
+msgstr "只有在配置文件设置了 Fallback 组的 DNS 时才会生效，正确设置可以有效防止 DNS 污染"
 
 msgid "Error: Fallback-Filter Need fallback of DNS Been Setted, Ignore..."
 msgstr "错误：只有在配置文件设置了 Fallback 组的 DNS 时 Fallback-Filter 才会生效，跳过此项修改..."
@@ -2253,8 +2235,8 @@ msgstr "签到间隔（小时）"
 msgid "Checkin Multiple"
 msgstr "签到倍数"
 
-msgid "Multiple Must Be a Positive Integer and No More Than 50"
-msgstr "倍数必须是正整数且不大于50"
+msgid "Multiple Must Be a Positive Integer and No More Than 100"
+msgstr "倍数必须是正整数且不大于 100"
 
 msgid "Dler Cloud Checkin Successful, Result:"
 msgstr "Dler Cloud 签到成功，结果："
@@ -2276,9 +2258,6 @@ msgstr "规则没有更新"
 
 msgid "Download Timeout"
 msgstr "下载超时"
-
-msgid "Rule Project:"
-msgstr "规则项目:"
 
 msgid "Rule Project:"
 msgstr "规则项目:"
@@ -2320,16 +2299,16 @@ msgid "Error Login Info"
 msgstr "登录信息错误"
 
 msgid "Warning: Proxy is no longer used. Auto replaced by proxies"
-msgstr "警告：【Proxy】写法已不再支持，自动替换为proxies"
+msgstr "警告：【Proxy】写法已不再支持，自动替换为 proxies"
 
 msgid "Warning: Proxy Group is no longer used. Auto replaced by proxy-groups"
-msgstr "警告：【Proxy Group】写法已不再支持，自动替换为proxy-groups"
+msgstr "警告：【Proxy Group】写法已不再支持，自动替换为 proxy-groups"
 
 msgid "Warning: Rule is no longer used. Auto replaced by rules"
-msgstr "警告：【Rule】写法已不再支持，自动替换为rules"
+msgstr "警告：【Rule】写法已不再支持，自动替换为 rules"
 
 msgid "Warning: rule-provider is no longer used. Auto replaced by rule-providers"
-msgstr "警告：【rule-provider】写法已不再支持，自动替换为rule-providers"
+msgstr "警告：【rule-provider】写法已不再支持，自动替换为 rule-providers"
 
 msgid "Error: Load File Failed,"
 msgstr "错误：文件解析失败，"
@@ -2359,7 +2338,7 @@ msgid "Error: Set Custom Rules Failed,"
 msgstr "错误：设置自定义规则失败，"
 
 msgid "Error: Set BT/P2P DIRECT Rules Failed,"
-msgstr "错误：设置仅代理命中规则流量（BT/P2P直连）失败，"
+msgstr "错误：设置仅代理命中规则流量（BT/P2P 直连）失败，"
 
 msgid "Error: Set lhie1 Rules Failed,"
 msgstr "错误：设置第三方规则（lhie1）失败，"
@@ -2424,7 +2403,7 @@ msgstr "上传总量"
 msgid "Down Total"
 msgstr "下载总量"
 
-msgid "Connections"
+msgid "Connect"
 msgstr "活动连接"
 
 msgid "Ram"
@@ -2448,8 +2427,8 @@ msgstr "发生了一些错误！"
 msgid "Click to Test"
 msgstr "点击测试"
 
-msgid "Connection Test (Current Browser)"
-msgstr "连接测试（当前浏览器）"
+msgid "Connection Test"
+msgstr "连接测试"
 
 msgid "Backup File"
 msgstr "备份文件"
@@ -2632,7 +2611,7 @@ msgid "unlock test faild!"
 msgstr "解锁检测失败！"
 
 msgid ", the type of group is not select, auto select could not work!"
-msgstr "，当前策略组类型非Select，无法进行自动选择！"
+msgstr "，当前策略组类型非 Select，无法进行自动选择！"
 
 msgid "Start auto select unlock proxy..."
 msgstr "开始进行解锁节点自动选择..."
@@ -2772,9 +2751,6 @@ msgstr "正在收集数据..."
 msgid "Flushing..."
 msgstr "清理中..."
 
-msgid "Flush Fail"
-msgstr "清理失败"
-
 msgid "Flush Successful"
 msgstr "清理成功"
 
@@ -2784,8 +2760,8 @@ msgstr "清理超时"
 msgid "Flush"
 msgstr "清理"
 
-msgid "Flush Fake-IP Cache"
-msgstr "清理 Fake-IP 缓存"
+msgid "Flush DNS"
+msgstr "清理 DNS 缓存"
 
 msgid "No Specify Upload File"
 msgstr "未选择上传文件"
@@ -2841,6 +2817,9 @@ msgstr "*路由本机代理"
 msgid "Only Supported for Rule Mode"
 msgstr "仅支持规则（Rule）模式，其他模式默认分流"
 
+msgid "Rule Mode"
+msgstr "规则模式"
+
 msgid "ALL Functions In Stream Enhance Tag Will Not Work After Disable"
 msgstr "禁用后将无法使用流媒体增强标签中的所有功能"
 
@@ -2860,13 +2839,16 @@ msgid "Enable Sniffer"
 msgstr "*启用流量（域名）探测"
 
 msgid "Sniffer Will Prevent Domain Name Proxy and DNS Hijack Failure"
-msgstr "流量（域名）探测能有效防止域名分流异常和DNS劫持失败"
+msgstr "流量（域名）探测能有效防止域名分流异常和 DNS 劫持失败"
 
 msgid "Override All Dns Query"
-msgstr "启用后将尽可能的覆盖DNS查询到的域名"
+msgstr "启用后将尽可能的覆盖 DNS 查询到的域名"
 
 msgid "Meta Settings"
 msgstr "Meta 设置"
+
+msgid "Smart Settings"
+msgstr "Smart 设置"
 
 msgid "Geodata Loader Mode"
 msgstr "Geodata 数据加载方式"
@@ -2917,7 +2899,7 @@ msgid "Note: If the connection is abnormal, please follow the steps on this page
 msgstr "注意: 连接异常时请按照此页步骤先进行检查"
 
 msgid "Note: If you need to perform client access control in Fake-IP mode, please change the DNS hijacking mode to firewall forwarding"
-msgstr "注意: Fake-IP 模式下如需要进行客户端访问控制，请将DNS劫持模式改为防火墙转发"
+msgstr "注意: Fake-IP 模式下如需要进行客户端访问控制，请将 DNS 劫持模式改为防火墙转发"
 
 msgid "Click to the page"
 msgstr "点击前往"
@@ -3020,9 +3002,6 @@ msgstr "更新失败"
 
 msgid "Update Successful"
 msgstr "更新成功"
-
-msgid "Switch Failed"
-msgstr "切换失败"
 
 msgid "Switch Successful"
 msgstr "切换成功"
@@ -3186,14 +3165,11 @@ msgstr "提示：DNS 劫持模式为防火墙转发..."
 msgid "Tip: DNS Hijacking is Disabled..."
 msgstr "提示：DNS 劫持未开启..."
 
-msgid "Fake-IP Range (IPv4 Cidr)"
-msgstr "Fake-IP 地址范围 (IPv4 Cidr)"
+msgid "Fake-IP Range"
+msgstr "Fake-IP 地址范围"
 
-msgid "Set Fake-IP Range (IPv4 Cidr)"
-msgstr "设置 Fake-IP 地址范围 (IPv4 Cidr)"
-
-msgid "IPv6 Settings"
-msgstr "IPv6 设置"
+msgid "Set Fake-IP Range"
+msgstr "设置 Fake-IP 地址范围"
 
 msgid "IPv6 Settings"
 msgstr "IPv6 设置"
@@ -3216,8 +3192,8 @@ msgstr "开发者选项"
 msgid "Restore"
 msgstr "还原"
 
-msgid "DNS Test (Clash Response)"
-msgstr "DNS 测试（Clash 查询结果）"
+msgid "DNS Test"
+msgstr "DNS 测试"
 
 msgid "No Response Found!"
 msgstr "结果获取失败！"
@@ -3248,9 +3224,6 @@ msgstr "路由器模式"
 
 msgid "Browser Mode"
 msgstr "浏览器模式"
-
-msgid "Refresh"
-msgstr "刷新"
 
 msgid "Refresh"
 msgstr "刷新"
@@ -3337,7 +3310,7 @@ msgid "Change The Delay Calculation Method To Remove Extra Delays Such as Handsh
 msgstr "更换延迟计算方式，通过去除握手等额外开销来降低延迟数值"
 
 msgid "Tip: If the download fails, try setting the CDN in Overwrite Settings - General Settings - Github Address Modify Options"
-msgstr "提示：如果下载失败，您可以尝试在覆写设置 - 常规设置 - Github地址修改选项中设置CDN"
+msgstr "提示：如果下载失败，您可以尝试在覆写设置 - 常规设置 - Github 地址修改选项中设置 CDN"
 
 msgid "Used for Downloading Subscriptions, Defaults to Clash"
 msgstr "用于下载订阅时指定 UA，默认为 Clash"
@@ -3347,12 +3320,6 @@ msgstr "错误：绕过代理服务器地址设置失败，"
 
 msgid "Flush Failed"
 msgstr "清理失败"
-
-msgid "Flush Successful"
-msgstr "清理成功"
-
-msgid "Flush Timeout"
-msgstr "清理超时"
 
 msgid "Respect Rules"
 msgstr "遵循规则"
@@ -3705,11 +3672,11 @@ msgstr "订阅链接"
 msgid "Click to select file or drag and drop"
 msgstr "点击选择文件或拖拽上传"
 
-msgid "Support YAML files, max size 10MB"
-msgstr "支持 YAML 文件，最大 10MB"
-
 msgid "Support YAML file, max size 10MB"
 msgstr "支持 YAML 文件，最大 10MB"
+
+msgid "Support txt,conf files, max size 10MB"
+msgstr "支持 txt,conf 文件，最大 10MB"
 
 msgid "Subscription URL"
 msgstr "订阅地址"
@@ -3722,9 +3689,6 @@ msgstr "可选"
 
 msgid "Custom"
 msgstr "自定义"
-
-msgid "Enter custom User-Agent"
-msgstr "输入自定义 User-Agent"
 
 msgid "Config Name"
 msgstr "配置名称"
@@ -3744,11 +3708,20 @@ msgstr "取消"
 msgid "Add Config"
 msgstr "添加配置"
 
+msgid "Edit Config"
+msgstr "编辑配置"
+
+msgid "Edit Subscription"
+msgstr "编辑订阅"
+
 msgid "Ready to upload file"
 msgstr "准备上传文件"
 
 msgid "Ready to add subscription"
 msgstr "准备添加订阅"
+
+msgid "Ready to edit subscription"
+msgstr "准备编辑订阅"
 
 msgid "File selected:"
 msgstr "已选择文件："
@@ -3798,23 +3771,32 @@ msgstr "配置名称包含无效字符"
 msgid "Adding subscription..."
 msgstr "添加订阅中..."
 
+msgid "Updating subscription..."
+msgstr "修改订阅中..."
+
 msgid "Failed to download subscription config"
 msgstr "订阅配置下载失败"
 
 msgid "Failed to add subscription"
 msgstr "添加订阅失败"
 
+msgid "Failed to update subscription"
+msgstr "修改订阅失败"
+
 msgid "Subscription added successfully"
 msgstr "订阅添加成功"
+
+msgid "Subscription updated successfully"
+msgstr "订阅修改成功"
+
+msgid "Failed to get subscribe data"
+msgstr "获取订阅信息失败"
 
 msgid "Process failed"
 msgstr "处理失败"
 
 msgid "Close"
 msgstr "关闭"
-
-msgid "File Edit"
-msgstr "文件编辑"
 
 msgid "Loading..."
 msgstr "加载中..."
@@ -3863,9 +3845,6 @@ msgstr "配置文件加载失败"
 
 msgid "Load failed"
 msgstr "加载失败"
-
-msgid "Saving..."
-msgstr "保存中..."
 
 msgid "Config file content is empty"
 msgstr "配置文件内容为空"
@@ -3966,9 +3945,6 @@ msgstr "重启内核失败"
 msgid "Invalid config file selected"
 msgstr "选择的配置文件无效"
 
-msgid "Config uploader not ready, please try again"
-msgstr "配置上传未就绪，请重试"
-
 msgid "Config editor not ready, please try again"
 msgstr "配置编辑未就绪，请重试"
 
@@ -3978,14 +3954,11 @@ msgstr "发现新版本"
 msgid "Failed to get subscription config"
 msgstr "获取订阅配置失败"
 
-msgid "Failed to download subscription config"
-msgstr "下载订阅配置失败"
-
 msgid "Expire Date"
 msgstr "到期时间"
 
-msgid "Use RAW address download"
-msgstr "使用原始地址下载"
+msgid "RAW address"
+msgstr "原始地址"
 
 msgid "Enter custom User-Agent"
 msgstr "输入自定义 User-Agent"
@@ -4049,3 +4022,222 @@ msgstr "运行配置"
 
 msgid "Runtime config (read only)"
 msgstr "运行配置（只读）"
+
+msgid "Start Downloading LightGBM Model..."
+msgstr "开始下载 LightGBM 模型..."
+
+msgid "LightGBM Model Download Success, Check Updated..."
+msgstr "LightGBM 模型下载成功，检查是否有更新..."
+
+msgid "LightGBM Model Has Been Updated, Starting To Replace The Old Version..."
+msgstr "LightGBM 模型有更新，正在替换旧版本..."
+
+msgid "LightGBM Model Update Successful!"
+msgstr "LightGBM 模型更新成功！"
+
+msgid "Updated LightGBM Model No Change, Do Nothing..."
+msgstr "LightGBM 模型没有更新，停止继续操作..."
+
+msgid "LightGBM Model Update Error, Please Try Again Later..."
+msgstr "LightGBM 模型更新失败，请检查网络或稍后再试..."
+
+msgid "Smart Auto Switch"
+msgstr "Smart 策略自动切换"
+
+msgid "Auto Switch Url-test and Load-balance Group to Smart Group"
+msgstr "自动切换 Url-test、Load-balance 策略组到 Smart 策略组"
+
+msgid "Enable LightGBM Model"
+msgstr "启用 LightGBM 模型"
+
+msgid "Use LightGBM Model To Predict Weight"
+msgstr "使用 LightGBM 模型来预测权重"
+
+msgid "Auto Update LightGBM Model"
+msgstr "自动更新模型"
+
+msgid "Custom Model URL"
+msgstr "自定义模型更新 URL"
+
+msgid "Update Model"
+msgstr "更新模型"
+
+msgid "Custom LightGBM Model URL, Click Button Below To Refresh After Edit"
+msgstr "自定义模型的更新来源，编辑后点击下方按钮生效"
+
+msgid "Colletct Training Data"
+msgstr "收集训练数据"
+
+msgid "Data Colletct File Size (MB)"
+msgstr "数据收集文件大小（MB）"
+
+msgid "Limit The File Size of Collected Data, The Default is 100MB"
+msgstr "限制数据收集文件大小，默认为 100MB"
+
+msgid "Data Colletct Rate"
+msgstr "数据收集采样率"
+
+msgid "Data Acquisition Rate, Desirable Values are 0-1, The Default is 1"
+msgstr "指定数据收集时的采样率，值为 0-1 之间的数字，默认为 1"
+
+msgid "Error: Setting Smart Auto Switch Failed,"
+msgstr "错误：Smart 策略组自动切换失败，"
+
+msgid "Flush Smart Cache"
+msgstr "清理 Smart 缓存"
+
+msgid "Current Version:"
+msgstr "当前版本:"
+
+msgid "Light Version"
+msgstr "轻量版"
+
+msgid "Middle Version"
+msgstr "中等版"
+
+msgid "Large Version"
+msgstr "完整版"
+
+msgid "Add New File"
+msgstr "添加新文件"
+
+msgid "Local File"
+msgstr "本地文件"
+
+msgid "Refresh Subscription"
+msgstr "刷新订阅"
+
+msgid "Refreshing subscription..."
+msgstr "正在刷新订阅..."
+
+msgid "Subscription refreshed successfully"
+msgstr "订阅刷新成功"
+
+msgid "Subscription refresh failed"
+msgstr "订阅刷新失败"
+
+msgid "Edit Subscription Info"
+msgstr "编辑订阅信息"
+
+msgid "Are you sure you want to delete this file and its subscription info?"
+msgstr "确定要删除该文件及其订阅信息吗？"
+
+msgid "Add Overwrite Module"
+msgstr "添加覆写模块"
+
+msgid "Ready to add file"
+msgstr "准备添加文件"
+
+msgid "openclash_custom_overwrite.sh already exists and cannot be added again"
+msgstr "openclash_custom_overwrite.sh 已存在，不能重复添加"
+
+msgid "Created successfully"
+msgstr "新建成功"
+
+msgid "Please enter subscription URL"
+msgstr "请输入订阅 URL"
+
+msgid "Invalid subscription URL format, only single HTTP/HTTPS link is supported"
+msgstr "无效的订阅 URL 格式，仅支持单一 HTTP/HTTPS 链接"
+
+msgid "Downloading subscription content..."
+msgstr "正在下载订阅内容..."
+
+msgid "Download completed"
+msgstr "下载完成"
+
+msgid "Failed to save subscription info:"
+msgstr "订阅信息保存失败:"
+
+msgid "Ready to edit"
+msgstr "准备编辑"
+
+msgid "Subscription saved successfully"
+msgstr "订阅保存成功"
+
+msgid "Failed to save subscription"
+msgstr "订阅保存失败"
+
+msgid "Environment variable"
+msgstr "环境变量"
+
+msgid "Warning: DOWNLOAD FILE no target in"
+msgstr "警告：文件下载未指定目标参数"
+
+msgid "Error: DOWNLOAD FILE failed for"
+msgstr "错误：文件下载失败"
+
+msgid "Warning: skip General key not allowed"
+msgstr "警告：跳过不支持的参数"
+
+msgid "Warning: skip General key type error"
+msgstr "警告：跳过值类型错误的参数"
+
+msgid "Warning: skip invalid Overwrite command"
+msgstr "警告：跳过不支持的覆写命令"
+
+msgid "Tip: Processing Overwrite Module"
+msgstr "提示：执行覆写模块"
+
+msgid "Tip: Load Overwrite Script"
+msgstr "提示：加载覆写命令"
+
+msgid "Tip: DOWNLOAD FILE for"
+msgstr "提示：执行文件下载"
+
+msgid "Tip: Add Cron for"
+msgstr "提示：添加计划任务"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Delete failed"
+msgstr "删除失败"
+
+msgid "Overwrite Module Edit"
+msgstr "覆写模块编辑"
+
+msgid "Nodes Weight Priority, <1 Means Lower Priority, >1 Means Higher Priority, The Default is 1, Pattern Support Regex and String"
+msgstr "节点权重加成，<1 表示较低优先级，>1 表示较高优先级，默认为 1，匹配模式支持 Regex 和字符串"
+
+msgid "Edit Module Info"
+msgstr "编辑模块信息"
+
+msgid "Subscription"
+msgstr "订阅"
+
+msgid "Overwrite Module"
+msgstr "覆写模块"
+
+msgid "module not found, please check your system depends if something abnormal!"
+msgstr "模块未找到，如遇到异常请检查您的固件依赖！"
+
+msgid "Select Nodes Force Lookup and Use Target ASN Info First For More Stable Experience"
+msgstr "选择节点时强制查找并优先使用目标的 ASN 信息，以获得更稳定的体验"
+
+msgid "Prefer-ASN"
+msgstr "ASN 优先"
+
+msgid "Light Theme"
+msgstr "浅色主题"
+
+msgid "Dark Theme"
+msgstr "暗色主题"
+
+msgid "Auto Theme"
+msgstr "自适应主题"
+
+msgid "Set Subscription Info URL"
+msgstr "设置订阅信息来源地址"
+
+msgid "Enter URLs, one per line, use #name=example end for specifing display name"
+msgstr "输入订阅信息来源地址，多个地址请每行一个，在最后可以使用 #name=example 指定名字"
+
+msgid "Set to Default"
+msgstr "设为默认"
+
+msgid "Are you sure you want to delete this panel?"
+msgstr "确定要删除此面板吗？"
+
+msgid "Default"
+msgstr "默认"

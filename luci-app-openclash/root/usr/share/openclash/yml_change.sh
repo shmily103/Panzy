@@ -1,22 +1,25 @@
 #!/bin/sh
 . /usr/share/openclash/ruby.sh
 . /usr/share/openclash/log.sh
+. /usr/share/openclash/uci.sh
 . /lib/functions.sh
 
 LOG_FILE="/tmp/openclash.log"
 CONFIG_FILE="$5"
 
-config_load openclash
-
-config_get custom_fakeip_filter "config" "custom_fakeip_filter" 0
-config_get custom_name_policy "config" "custom_name_policy" 0
-config_get custom_host "config" "custom_host" 0
-config_get enable_custom_dns "config" "enable_custom_dns" 0
-config_get append_wan_dns "config" "append_wan_dns" 0
-config_get custom_fallback_filter "config" "custom_fallback_filter" 0
-config_get china_ip_route "config" "china_ip_route" 0
-config_get china_ip6_route "config" "china_ip6_route" 0
-config_get enable_redirect_dns "config" "enable_redirect_dns" 1
+custom_fakeip_filter=$(uci_get_config "custom_fakeip_filter" || echo 0)
+custom_name_policy=$(uci_get_config "custom_name_policy" || echo 0)
+custom_host=$(uci_get_config "custom_host" || echo 0)
+enable_custom_dns=$(uci_get_config "enable_custom_dns" || echo 0)
+append_wan_dns=$(uci_get_config "append_wan_dns" || echo 0)
+custom_fallback_filter=$(uci_get_config "custom_fallback_filter" || echo 0)
+china_ip_route=$(uci_get_config "china_ip_route" || echo 0)
+china_ip6_route=$(uci_get_config "china_ip6_route" || echo 0)
+enable_redirect_dns=$(uci_get_config "enable_redirect_dns" || echo 1)
+fake_ip_filter_mode=${34}
+default_dashboard=$(uci_get_config "default_dashboard" || echo "metacubexd")
+yacd_type=$(uci_get_config "yacd_type" || echo "Official")
+dashboard_type=$(uci_get_config "dashboard_type" || echo "Official")
 
 [ "$china_ip_route" -ne 0 ] && [ "$china_ip_route" -ne 1 ] && [ "$china_ip_route" -ne 2 ] && china_ip_route=0
 [ "$china_ip6_route" -ne 0 ] && [ "$china_ip6_route" -ne 1 ] && [ "$china_ip6_route" -ne 2 ] && china_ip6_route=0
@@ -31,15 +34,25 @@ fi
 if [ "$1" = "fake-ip" ] && [ "$enable_redirect_dns" != "2" ]; then
    TMP_FILTER_FILE="/tmp/yaml_openclash_fake_filter_include"
    > "$TMP_FILTER_FILE"
-
+   
    process_pass_list() {
       [ ! -f "$1" ] && return
-      awk '
+      awk -v mode="$fake_ip_filter_mode" '
          !/^$/ && !/^#/ {
-            if ($0 ~ /^\+?\./ || $0 ~ /^\*\./) {
-               print $0
-            } else {
-               print "+."$0
+            # 跳过IPv4和IPv6地址
+            if ($0 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/ || $0 ~ /:/) {
+               next
+            }
+            if (mode == "blacklist") {
+               if ($0 ~ /^\+?\./ || $0 ~ /^\*\./) {
+                  print $0
+               } else {
+                  print "+."$0
+               }
+            } else if (mode == "rule") {
+               domain = $0
+               sub(/^[\+\*\.]+/, "", domain)
+               print "DOMAIN-SUFFIX," domain ",real-ip"
             }
          }
       ' "$1" >> "$TMP_FILTER_FILE" 2>/dev/null
@@ -79,7 +92,6 @@ yml_dns_custom()
 {
    if [ "$1" = 1 ] || [ "$3" = 1 ]; then
       sys_dns_append "$3" "$4"
-      config_load "openclash"
       config_foreach yml_dns_get "dns_servers" "$2"
    fi
 }
@@ -165,13 +177,13 @@ yml_dns_get()
 {
    local section="$1" regex='^([0-9a-fA-F]{0,4}:){1,7}[0-9a-fA-F]{0,4}$'
    local enabled port type ip group dns_type dns_address interface specific_group node_resolve http3 ecs_subnet ecs_override
-   
+
    config_get_bool "enabled" "$section" "enabled" "1"
    [ "$enabled" = "0" ] && return
 
    config_get "ip" "$section" "ip" ""
    [ -z "$ip" ] && return
-   
+
    config_get "port" "$section" "port" ""
    config_get "type" "$section" "type" ""
    config_get "group" "$section" "group" ""
@@ -231,7 +243,7 @@ yml_dns_get()
          params="$params$1"
       fi
    }
-   
+
    append_param "$specific_group_param"
    append_param "$interface_param"
    append_param "$http3_param"
@@ -279,6 +291,7 @@ yml_dns_get()
    esac
 }
 
+config_load "openclash"
 config_foreach yml_auth_get "authentication"
 yml_dns_custom "$enable_custom_dns" "$5" "$append_wan_dns" "${16}"
 
@@ -295,7 +308,7 @@ def merge_list_from_file(dns_hash, key, file_path)
    return unless File.exist?(file_path)
    lines = File.readlines(file_path).map { |l| l.gsub(/#.*$/, '').strip }.reject(&:empty?)
    return if lines.empty?
-   (dns_hash[key] ||= []).concat(lines).uniq!
+   (dns_hash[key] ||= []).unshift(*lines).uniq!
 end
 
 
@@ -345,6 +358,15 @@ geo_custom_url = '${38}'
 geoip_custom_url = '${39}'
 geosite_custom_url = '${40}'
 geoasn_custom_url = '${41}'
+lgbm_auto_update = '${42}' == '1'
+lgbm_custom_url = '${43}'
+lgbm_update_interval = '${44}'
+smart_collect = '${45}' == '1'
+smart_collect_size = '${46}'
+fake_ip_range6 = '${47}'
+default_dashboard = '$default_dashboard'
+yacd_type = '$yacd_type'
+dashboard_type = '$dashboard_type'
 
 enable_custom_dns = '$enable_custom_dns' == '1'
 append_wan_dns = '$append_wan_dns' == '1'
@@ -372,8 +394,25 @@ threads << Thread.new do
       Value['secret'] = secret
       Value['bind-address'] = '*'
       Value['external-ui'] = '/usr/share/openclash/ui'
-      Value['external-ui-name'] = 'metacubexd'
-      Value.delete('external-ui-url')
+      Value['external-ui-name'] = default_dashboard
+      case default_dashboard
+      when 'dashboard'
+        if dashboard_type == 'Official'
+          Value['external-ui-url'] = 'https://codeload.github.com/ayanamist/clash-dashboard/zip/refs/heads/gh-pages'
+        else
+          Value['external-ui-url'] = 'https://codeload.github.com/MetaCubeX/Razord-meta/zip/refs/heads/gh-pages'
+        end
+      when 'yacd'
+        if yacd_type == 'Official'
+          Value['external-ui-url'] = 'https://codeload.github.com/haishanh/yacd/zip/refs/heads/gh-pages'
+        else
+          Value['external-ui-url'] = 'https://codeload.github.com/MetaCubeX/Yacd-meta/zip/refs/heads/gh-pages'
+        end
+      when 'metacubexd'
+        Value['external-ui-url'] = 'https://codeload.github.com/MetaCubeX/metacubexd/zip/refs/heads/gh-pages'
+      when 'zashboard'
+        Value['external-ui-url'] = 'https://codeload.github.com/Zephyruso/zashboard/zip/refs/heads/gh-pages-cdn-fonts'
+      end
       if !Value.key?('keep-alive-interval') && !Value.key?('keep-alive-idle')
          Value['keep-alive-interval'] = 15
          Value['keep-alive-idle'] = 600
@@ -386,10 +425,21 @@ threads << Thread.new do
       Value['unified-delay'] = true if unified_delay
       Value['find-process-mode'] = find_process_mode if find_process_mode != '0'
       Value['global-client-fingerprint'] = global_client_fingerprint if global_client_fingerprint != '0'
+
       (Value['experimental'] ||= {})['quic-go-disable-gso'] = true if quic_gso
       if cors_origin != '0'
          (Value['external-controller-cors'] ||= {})['allow-origins'] = [cors_origin]
          Value['external-controller-cors']['allow-private-network'] = true
+      end
+
+      Value['lgbm-auto-update'] = true if lgbm_auto_update
+      if lgbm_auto_update
+         Value['lgbm-url'] = lgbm_custom_url.strip
+         Value['lgbm-update-interval'] = lgbm_update_interval.to_i
+      end
+
+      if smart_collect
+        (Value['profile'] ||= {})['smart-collector-size'] = smart_collect_size.to_f
       end
 
       Value['geox-url'] ||= {}
@@ -416,16 +466,19 @@ threads << Thread.new do
       else
          Value['dns']['enhanced-mode'] = 'fake-ip'
          Value['dns']['fake-ip-range'] = fake_ip_range
+         if Value['dns']['ipv6']
+            Value['dns']['fake-ip-range6'] = fake_ip_range6
+         end
       end
       Value['dns']['listen'] = '0.0.0.0:' + dns_listen_port
-      Value['dns']['respect-rules'] = true if respect_rules
+      Value['dns']['respect-rules'] = respect_rules
 
       if enable_sniffer
          sniffer_config = {
             'enable' => true, 'override-destination' => true,
             'sniff' => {'QUIC' => {'ports' => [443]}, 'TLS' => {'ports' => [443, 8443]}, 'HTTP' => {'ports' => [80, '8080-8880'], 'override-destination' => true}},
             'force-domain' => ['+.netflix.com', '+.nflxvideo.net', '+.amazonaws.com', '+.media.dssott.com'],
-            'skip-domain' => ['+.apple.com', 'Mijia Cloud', 'dlg.io.mi.com', '+.oray.com', '+.sunlogin.net', '+.push.apple.com']
+            'skip-domain' => ['Mijia Cloud', 'dlg.io.mi.com', '+.oray.com', '+.sunlogin.net', '+.push.apple.com']
          }
          sniffer_config['force-dns-mapping'] = true if fake_ip_mode == 'redir-host'
          sniffer_config['parse-pure-ip'] = true if sniffer_parse_pure_ip
@@ -433,6 +486,8 @@ threads << Thread.new do
          if append_sniffer_config && (custom_sniffer = safe_load_yaml('/etc/openclash/custom/openclash_custom_sniffer.yaml'))
             Value['sniffer'].merge!(custom_sniffer['sniffer']) if custom_sniffer && custom_sniffer['sniffer']
          end
+      else
+         Value['sniffer']['enable'] = false if Value.key?('sniffer')
       end
 
       if en_mode_tun != '0' || ['2', '3'].include?(tun_device_setting)
@@ -458,6 +513,12 @@ threads << Thread.new do
          Value.delete('routing-mark')
       end
       Value.delete('auto-redir')
+
+      (Value['ntp'] ||= {})['enable'] = true
+      Value['ntp']['server'] = 'time.apple.com' if !Value['ntp'].key?('server')
+      Value['ntp']['port'] = 123 if !Value['ntp'].key?('port')
+      Value['ntp']['interval'] = 30 if !Value['ntp'].key?('interval')
+      Value['ntp']['write-to-system'] = true if !Value['ntp'].key?('write-to-system')
 
    rescue Exception => e
       YAML.LOG('Error: Set General Failed,【%s】' % [e.message])
@@ -566,19 +627,23 @@ threads << Thread.new do
       if fake_ip_mode == 'fake-ip' && (china_ip_route || china_ip6_route)
          filter_mode = Value.dig('dns', 'fake-ip-filter-mode')
          filters = Value.dig('dns', 'fake-ip-filter') || []
+         deleted_filters = filters.select { |f| f =~ /(geosite:?|rule-set:?).*(@cn|:cn|,cn|:china)/i }
          if filter_mode == 'blacklist' || filter_mode.nil?
-            unless filters.include?('geosite:cn')
+            if !deleted_filters.any?
                (Value['dns']['fake-ip-filter'] ||= []) << 'geosite:cn'
                YAML.LOG('Tip: Because Need Ensure Bypassing IP Option Work, Added The Fake-IP-Filter Rule【geosite:cn】...')
             end
          else
-            deleted_filters = filters.select { |f| f =~ /(geosite:?).*(@cn|:cn|,cn|:china)/ }
             if deleted_filters.any?
                Value['dns']['fake-ip-filter'] -= deleted_filters
                deleted_filters.each do |f|
                   YAML.LOG('Tip: Because Need Ensure Bypassing IP Option Work, Deleted The Fake-IP-Filter Rule【%s】...' % [f])
                end
             end
+         end
+         if filter_mode == 'rule'
+            (Value['dns']['fake-ip-filter'] ||= []).unshift('GEOSITE,cn,real-ip')
+            YAML.LOG('Tip: Because Need Ensure Bypassing IP Option Work, Added The Fake-IP-Filter Rule【GEOSITE,cn,real-ip】...')
          end
       end
    rescue Exception => e
@@ -609,7 +674,7 @@ end
 threads << Thread.new do
    begin
       if (auth_config = safe_load_yaml('/tmp/yaml_openclash_auth'))
-         (Value['authentication'] ||= []).concat(auth_config).uniq!
+         Value['authentication'] = auth_config
       end
    rescue Exception => e
       YAML.LOG('Error: Set authentication Failed,【%s】' % [e.message])
@@ -665,8 +730,13 @@ begin
       Value['dns']['fallback'] ||= ['https://dns.cloudflare.com/dns-query', 'https://dns.google/dns-query']
    end
 
+   if Value['dns'].key?('default-nameserver') && Value['dns']['default-nameserver'].to_a.empty?
+      YAML.LOG('Tip: Detected That The default-nameserver DNS Option Has No Server Set, Starting To Complete...')
+      Value['dns']['default-nameserver'] = ['114.114.114.114', '119.29.29.29', '8.8.8.8', '1.1.1.1']
+   end
+
    # proxy-server-nameserver
-   local_exclude = (%x{ls -l /sys/class/net/ |awk '{print \$9}'  2>&1}.each_line.map(&:strip) + ['h3=', 'skip-cert-verify=', 'ecs=', 'ecs-override='] + ['utun', 'tailscale0', 'docker0', 'tun163', 'br-lan', 'mihomo']).uniq.join('|')
+   local_exclude = (%x{ls -l /sys/class/net/ |awk '{print \$9}'  2>&1}.each_line.map(&:strip) + ['h3=', 'skip-cert-verify=', 'ecs=', 'ecs-override=', 'disable-ipv6=', 'disable-ipv4='] + ['utun', 'tailscale0', 'docker0', 'tun163', 'br-lan', 'mihomo']).uniq.join('|')
    proxied_server_reg = /^[^#&]+#(?:(?:#{local_exclude})[^&]*&)*(?:(?!(?:#{local_exclude}))[^&]+)/
    default_proxy_servers = ['114.114.114.114', '119.29.29.29', '8.8.8.8', '1.1.1.1']
 

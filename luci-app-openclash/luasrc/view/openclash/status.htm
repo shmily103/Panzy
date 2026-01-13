@@ -25,15 +25,15 @@
     --radius-lg: 8px;
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
-    
+
     --control-height: 32px;
-    --card-padding: 8px 5px;
+    --card-padding: 6px 8px;
     --gap-size: 10px;
-    
+
     --row-1-height: 160px;
     --row-2-height: 140px;
     --row-3-height: 140px;
-    --row-4-height: 250px;
+    --row-4-height: 280px;
 }
 
 .oc[data-darkmode="true"] {
@@ -173,6 +173,7 @@
     max-width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
+    border-radius: var(--radius-lg);
 }
 
 .oc .main-cards-container {
@@ -180,13 +181,29 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: minmax(60px, auto) 1fr;
     gap: 10px;
-    margin: 16px auto;
+    margin: 0 auto;
     align-items: start;
     max-width: 100%;
     width: 100%;
     box-sizing: border-box;
     overflow-x: auto;
     overflow-y: visible;
+}
+
+.oc .announcement-card {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    background: var(--bg-white);
+    display: flex;
+    align-items: stretch;
+    margin: 0;
+    padding: 12px;
 }
 
 .oc .main-card {
@@ -280,7 +297,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     padding: 10px 6px;
     min-height: 0;
 }
@@ -296,7 +313,7 @@
 .oc .card-title {
     font-size: clamp(10px, 2.5vw, 14px);
     font-weight: 600;
-    color: var(--text-secondary);
+    color: var(--text-title);
     letter-spacing: 0.5px;
     margin-bottom: 10px;
     display: flex;
@@ -386,7 +403,7 @@
 .oc .core-main-controls {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between !important;
     gap: 10px;
     flex: 0 0 auto;
     min-height: var(--control-height);
@@ -478,7 +495,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    max-width: 155px;
+    max-width: 160px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -525,7 +542,8 @@
     width: 100%;
     height: var(--control-height);
     padding: 5px 12px;
-    border: 1px solid var(--border-light);
+    border: 1px solid var(--border-light) !important;
+    background-color: var(--bg-white) !important;
     border-radius: var(--radius-sm);
     background: var(--bg-white);
     color: var(--text-primary);
@@ -609,7 +627,7 @@
 
 .oc .cbi-button-option {
     flex: 1 1 0;
-    padding: 5px 5px;
+    padding: 5px 10px;
     font-size: 12px;
     font-weight: 500;
     color: var(--text-secondary);
@@ -639,7 +657,7 @@
 
 .oc .value-indicator {
     font-weight: 500;
-    padding: 10px 12px;
+    padding: 6px 6px;
     border-radius: var(--radius-sm);
     display: inline-flex;
     align-items: center;
@@ -696,7 +714,7 @@
 }
 
 .oc .dashboard-btn {
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 500 !important;
     color: white !important;
     cursor: pointer !important;
@@ -715,9 +733,11 @@
     flex: 1 !important;
     height: 42px !important;
     outline: none !important;
-    padding: 2px 1px !important;
+    padding: 2px 2px !important;
     min-width: 45px;
     margin: 0 !important;
+    word-break: normal;
+    overflow-wrap: break-word;
 }
 
 .oc .dashboard-btn:hover {
@@ -730,6 +750,8 @@
     color: var(--text-secondary);
     text-align: center;
     position: relative;
+    white-space: nowrap;
+    margin-top: 15px;
 }
 
 .oc .stat-label::after {
@@ -745,14 +767,15 @@
 
 .oc .stat-value {
     font-family: var(--font-family-mono);
-    font-size: clamp(8px, 2.2vw, 13px);
+    font-size: clamp(9px, 2.2vw, 12px);
     font-weight: 600;
     color: var(--success-color);
     text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: clip;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
     margin-top: 5px;
+    min-height: 38px;
 }
 
 .oc .plugin-toggle-container {
@@ -811,23 +834,26 @@
     transform: translateX(22px);
 }
 
-.oc #logo_btn {
+.oc #logo_btn,
+.oc #edit_overwrite {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: flex-start !important;
     width: auto !important;
-    padding: 4px 8px !important;
+    padding: 2px 6px !important;
     gap: 6px !important;
     font-size: 12px !important;
 }
 
-.oc #logo_btn .logo-text {
+.oc #logo_btn .logo-text,
+.oc #edit_overwrite .btn-text {
     font-size: 11px;
     color: var(--text-secondary);
     font-weight: 500;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 12px !important;
 }
 
 .oc #logo_btn .mihomo-link {
@@ -852,6 +878,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 180px;
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-fast);
     position: relative;
@@ -893,12 +920,13 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin: auto 0;
 }
 
 .oc .subscription-progress-bar {
     background: var(--bg-gray);
     border-radius: 4px;
-    height: 10px;
+    height: 12px;
     position: relative;
     overflow: hidden;
 }
@@ -921,6 +949,17 @@
     background: var(--error-color);
 }
 
+.oc .subscription-info-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+}
+
 .oc .subscription-info-text {
     font-size: 13px;
     color: var(--text-secondary);
@@ -929,6 +968,69 @@
     overflow: hidden;
     white-space: nowrap;
     display: block;
+}
+
+/* Multiple Providers Grid Layout */
+.oc .subscription-providers-grid {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    max-width: 100%;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+    user-select: none;
+}
+
+.oc .subscription-providers-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.oc .subscription-providers-grid.dragging {
+    cursor: grabbing;
+}
+
+.oc .subscription-providers-grid[data-count="1"] {
+    overflow-x: hidden;
+}
+
+.oc .subscription-providers-grid[data-count="2"],
+.oc .subscription-providers-grid[data-count="3"] {
+    overflow-x: hidden;
+}
+
+.oc .provider-card {
+    background: transparent;
+    padding: 0;
+    transition: all 0.2s ease;
+    min-width: calc(33.333% - 8px);
+    flex: 0 0 calc(33.333% - 8px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* For 1-2 providers, allow them to fill available space */
+.oc .subscription-providers-grid[data-count="1"] .provider-card {
+    min-width: 100%;
+    flex: 1 1 100%;
+}
+
+.oc .subscription-providers-grid[data-count="2"] .provider-card {
+    min-width: calc(50% - 6px);
+    flex: 1 1 calc(50% - 6px);
+}
+
+/* For 3+ providers, fixed 33.333% width */
+/* data-count="3" uses the base rule: flex: 0 0 calc(33.333% - 8px) */
+
+/* Dark mode support for provider cards */
+.oc[data-darkmode="true"] .provider-card {
+    background: transparent;
 }
 
 .oc .subscription-loading,
@@ -996,7 +1098,7 @@
 .oc .config-file-name {
     font-size: 20px;
     font-weight: 600;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     flex: 1 1 0%;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -1103,6 +1205,7 @@
     justify-self: center;
     align-self: center;
     box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .oc .announcement-content {
@@ -1174,6 +1277,10 @@
     transform: scaleX(-1);
 }
 
+.oc .hidden {
+    display: none !important;
+}
+
 @media screen and (max-width: 1200px) {
     .oc .main-cards-container {
         grid-template-columns: 1fr;
@@ -1181,17 +1288,22 @@
         max-width: 95%;
         width: 95%;
     }
-    
+
     .oc .announcement-banner {
         grid-column: 1;
         width: 80%;
         max-width: 95%;
     }
-    
+
+    .oc .announcement-card {
+        grid-column: 1;
+        width: 100%;
+        max-width: 100%;
+    }
+
     .oc .main-card {
         grid-column: 1;
         grid-template-rows: auto auto auto auto;
-        margin-bottom: 14px;
         max-width: 100%;
         width: 100%;
     }
@@ -1200,7 +1312,7 @@
         grid-column: 1;
         grid-row: 2;
     }
-    
+
     .oc .main-card:last-of-type {
         grid-column: 1;
         grid-row: 3;
@@ -1218,17 +1330,17 @@
         min-width: 200px;
         flex: 1;
     }
-    
+
     .oc .config-select {
         min-width: 200px;
         font-size: 14px;
     }
-    
+
     .oc .config-select option {
         font-size: 14px;
         max-width: 100%;
     }
-    
+
     .oc .card-row:nth-child(1),
     .oc .card-row:nth-child(2),
     .oc .card-row:nth-child(3),
@@ -1277,14 +1389,14 @@
 
     .oc .value-indicator {
         font-size: 11px;
-        padding: 8px 10px;
+        padding: 5px 5px;
     }
 
     .oc .cbi-button-option {
         padding: 6px 6px;
         font-size: 11px;
     }
-    
+
     .oc .card-row:nth-child(1),
     .oc .card-row:nth-child(2),
     .oc .card-row:nth-child(3),
@@ -1307,12 +1419,12 @@
         font-size: 13px;
         padding: 4px 10px;
     }
-    
+
     .oc .config-select option {
         font-size: 13px;
         padding: 6px 10px;
     }
-    
+
     .oc .config-selector::after {
         right: 10px;
         border-left: 3px solid transparent;
@@ -1323,7 +1435,7 @@
     .oc .config-subscription-info {
         margin-left: 12px;
     }
-    
+
     .oc .subscription-info-container {
         padding: 8px;
     }
@@ -1342,14 +1454,22 @@
         align-items: stretch;
         gap: 8px;
     }
-    
+
     .oc .config-file-bottom .card-actions {
         justify-content: center;
         gap: 5px;
     }
-    
+
     .oc .subscription-info-text {
         font-size: 10px;
+    }
+
+    .oc .subscription-info-title {
+        font-size: 13px;
+    }
+
+    .oc .subscription-progress-bar {
+        height: 10px;
     }
 
     .oc .file-info {
@@ -1366,7 +1486,7 @@
         font-size: 14px !important;
         padding: 0 24px !important;
     }
-    
+
     .oc .config-file-empty-message {
         font-size: 14px;
     }
@@ -1412,13 +1532,13 @@
     }
 
     .oc .version-display {
-        max-width: 80px;
+        max-width: 100px;
         font-size: 9px;
         padding: 1px 4px;
     }
 
     .oc .dashboard-btn {
-        font-size: 8px !important;
+        font-size: 9px !important;
         height: 25px !important;
     }
 
@@ -1443,7 +1563,7 @@
         align-items: stretch;
         gap: 12px;
     }
-    
+
     .oc .config-subscription-info {
         margin-left: 0;
         justify-content: center;
@@ -1452,7 +1572,7 @@
     .oc .subscription-info-header {
         gap: 6px;
     }
-    
+
     .oc .file-info {
         gap: 4px;
         font-size: 8px;
@@ -1462,7 +1582,7 @@
         flex-direction: row;
         gap: 8px;
     }
-    
+
     .oc .card-row:nth-child(1),
     .oc .card-row:nth-child(2),
     .oc .card-row:nth-child(3),
@@ -1474,18 +1594,18 @@
         min-width: 110px;
         flex: 1;
     }
-    
+
     .oc .config-select {
         min-width: 110px;
         font-size: 12px;
         padding: 4px 8px;
     }
-    
+
     .oc .config-select option {
         font-size: 12px;
         padding: 5px 8px;
     }
-    
+
     .oc .config-selector::after {
         right: 8px;
     }
@@ -1496,7 +1616,7 @@
     }
 
     .oc .value-indicator {
-        padding: 5px 5px;
+        padding: 4px 4px;
         min-width: 50px;
         height: 28px;
     }
@@ -1510,11 +1630,15 @@
     }
 
     .oc .stat-value {
-        font-size: 8px;
+        min-height: 30px;
     }
 
     .oc .subscription-info-text {
         font-size: 10px;
+    }
+
+    .oc .subscription-info-title {
+        font-size: 13px;
     }
 
     .oc .config-file-name {
@@ -1528,7 +1652,6 @@
 
     .oc .sub-card.stat-item {
         padding: 8px 4px;
-        gap: 6px;
     }
 
     .oc .card-content {
@@ -1545,6 +1668,7 @@
     }
 
     .oc .core-control-buttons {
+        max-width: 120px;
         gap: 6px;
     }
 
@@ -1553,7 +1677,8 @@
         min-height: 24px;
     }
 
-    .oc #logo_btn .logo-text {
+    .oc #logo_btn .logo-text,
+    .oc #edit_overwrite .btn-text {
         font-size: 8px;
     }
 
@@ -1571,12 +1696,12 @@
         font-size: 13px !important;
         padding: 0 20px !important;
     }
-    
+
     .oc .config-file-empty-state {
         padding: 30px 15px;
         gap: 15px;
     }
-    
+
     .oc .config-file-empty-message {
         font-size: 13px;
     }
@@ -1585,7 +1710,8 @@
 </head>
 <%
     local uci = require("luci.model.uci").cursor()
-    local RELEASE_BRANCH = uci:get("openclash", "config", "release_branch")
+    local fs = require "luci.openclash"
+    local RELEASE_BRANCH = fs.uci_get_config("config", "release_branch")
     local random = tostring(os.time()):reverse():sub(1, 9)
 %>
 <fieldset class="cbi-section">
@@ -1594,12 +1720,14 @@
         <td colspan="4">
             <div class="oc">
                 <div class="main-cards-container">
-                    <div id="announcement-banner" class="announcement-banner">
-                        <div class="megaphone-container"></div>
-                        <svg id="megaphone" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 256 256">
-                            <path d="M228.54,86.66l-176.06-54A16,16,0,0,0,32,48V192a16,16,0,0,0,16,16,16,16,0,0,0,4.52-.65L136,181.73V192a16,16,0,0,0,16,16h32a16,16,0,0,0,16-16v-29.9l28.54-8.75A16.09,16.09,0,0,0,240,138V102A16.09,16.09,0,0,0,228.54,86.66ZM136,165,48,192V48l88,27Zm48,27H152V176.82L184,167Zm40-54-.11,0L152,160.08V79.92l71.89,22,.11,0v36Z"></path>
-                        </svg>
-                        <div id="announcement-content" class="announcement-content"></div>
+                    <div class="announcement-card">
+                        <div id="announcement-banner" class="announcement-banner">
+                            <div class="megaphone-container"></div>
+                            <svg id="megaphone" xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 256 256">
+                                <path d="M228.54,86.66l-176.06-54A16,16,0,0,0,32,48V192a16,16,0,0,0,16,16,16,16,0,0,0,4.52-.65L136,181.73V192a16,16,0,0,0,16,16h32a16,16,0,0,0,16-16v-29.9l28.54-8.75A16.09,16.09,0,0,0,240,138V102A16.09,16.09,0,0,0,228.54,86.66ZM136,165,48,192V48l88,27Zm48,27H152V176.82L184,167Zm40-54-.11,0L152,160.08V79.92l71.89,22,.11,0v36Z"></path>
+                            </svg>
+                            <div id="announcement-content" class="announcement-content"></div>
+                        </div>
                     </div>
                     <div class="main-card">
                         <!-- Row 1: Running Status -->
@@ -1629,14 +1757,40 @@
                                         <button type="button" class="icon-btn action-btn" id="restart_core" title="<%:Restart%>" onclick="return restartCore()">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
                                         </button>
-                                        <button type="button" class="icon-btn action-btn" id="edit_overwrite" title="<%:Overwrite%>" onclick="return editOverwrite()">
+                                        <button type="button" class="icon-btn action-btn" id="edit_overwrite" title="<%:Overwrite Module%>" onclick="return editOverwrite()">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256">
-                                            <path d="M12,111l112,64a8,8,0,0,0,7.94,0l112-64a8,8,0,0,0,0-13.9l-112-64a8,8,0,0,0-7.94,0l-112,64A8,8,0,0,0,12,111ZM128,49.21,223.87,104,128,158.79,32.13,104ZM246.94,140A8,8,0,0,1,244,151L132,215a8,8,0,0,1-7.94,0L12,151A8,8,0,0,1,20,137.05l108,61.74,108-61.74A8,8,0,0,1,246.94,140Z"></path>
-                                        </svg>
-                                    </button>
+                                                <path d="M12,111l112,64a8,8,0,0,0,7.94,0l112-64a8,8,0,0,0,0-13.9l-112-64a8,8,0,0,0-7.94,0l-112,64A8,8,0,0,0,12,111ZM128,49.21,223.87,104,128,158.79,32.13,104ZM246.94,140A8,8,0,0,1,244,151L132,215a8,8,0,0,1-7.94,0L12,151A8,8,0,0,1,20,137.05l108,61.74,108-61.74A8,8,0,0,1,246.94,140Z"></path>
+                                            </svg>
+                                            <span class="btn-text"><%:Overwrite Module%></span>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="card-actions">
+                                    <button type="button" class="icon-btn theme-toggle-btn" id="theme-toggle" onclick="toggleThemeMode()">
+                                        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <title><%:Light Theme%></title>
+                                            <circle cx="12" cy="12" r="5"></circle>
+                                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                        </svg>
+                                        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none">
+                                            <title><%:Dark Theme%></title>
+                                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                        </svg>
+                                        <svg id="auto-icon" width="14" height="14" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="4" style="display: none">
+                                            <title><%:Auto Theme%></title>
+                                            <path d="M24 44C29.9601 44 26.3359 35.136 30 31C33.1264 27.4709 44 29.0856 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z"/>
+                                            <path d="M28 17C29.6569 17 31 15.6569 31 14C31 12.3431 29.6569 11 28 11C26.3431 11 25 12.3431 25 14C25 15.6569 26.3431 17 28 17Z"/>
+                                            <path d="M16 21C17.6569 21 19 19.6569 19 18C19 16.3431 17.6569 15 16 15C14.3431 15 13 16.3431 13 18C13 19.6569 14.3431 21 16 21Z"/>
+                                            <path d="M17 34C18.6569 34 20 32.6569 20 31C20 29.3431 18.6569 28 17 28C15.3431 28 14 29.3431 14 31C14 32.6569 15.3431 34 17 34Z"/>
+                                        </svg>
+                                    </button>
                                     <button type="button" class="icon-btn action-btn" id="go_wiki" title="<%:Wiki%>" onclick="return wikipage()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg></button>
                                     <button type="button" class="icon-btn action-btn" id="go_tutorials" title="<%:Tutorials%>" onclick="return gitbookpage()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></button>
                                     <button type="button" class="icon-btn action-btn" id="go_star" title="<%:Star%>" onclick="return homepage()"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></button>
@@ -1658,7 +1812,7 @@
                                     <div class="card-value"><span id="_mode" class="value-indicator"><%:Collecting data...%></span></div>
                                     <div class="card-controls">
                                         <div id="radio-ru-mode" class="cbi-button-group" style="display: inline-flex;">
-                                            <input type="radio" id="normal" name="radios-ru" value="" checked onclick="return switch_run_mode(this.value)"/><label for="normal" id="run_normal" class="cbi-button-option"><%:Compat%></label>
+                                            <input type="radio" id="normal" name="radios-ru" value="" onclick="return switch_run_mode(this.value)"/><label for="normal" id="run_normal" class="cbi-button-option"><%:Compat%></label>
                                             <input type="radio" id="tun" name="radios-ru" value="-tun" onclick="return switch_run_mode(this.value)"/><label for="tun" class="cbi-button-option"><%:TUN%></label>
                                             <input type="radio" id="mix" name="radios-ru" value="-mix" onclick="return switch_run_mode(this.value)"/><label for="mix" class="cbi-button-option"><%:Mix%></label>
                                         </div>
@@ -1670,7 +1824,7 @@
                                 <div class="card-content">
                                     <div class="card-controls">
                                         <div id="radio-mode" class="cbi-button-group" style="display: inline-flex;">
-                                            <input type="radio" id="rule" name="radios" value="rule" checked onclick="return switch_rule_mode(this.value)"/><label for="rule" class="cbi-button-option"><%:Rule%></label>
+                                            <input type="radio" id="rule" name="radios" value="rule" onclick="return switch_rule_mode(this.value)"/><label for="rule" class="cbi-button-option"><%:Rule%></label>
                                             <input type="radio" id="global" name="radios" value="global" onclick="return switch_rule_mode(this.value)"/><label for="global" class="cbi-button-option"><%:Global%></label>
                                             <input type="radio" id="direct" name="radios" value="direct" onclick="return switch_rule_mode(this.value)"/><label for="direct" class="cbi-button-option"><%:Direct%></label>
                                         </div>
@@ -1758,9 +1912,11 @@
                                                         </svg>
                                                     </button>
                                                     <button type="button" class="icon-btn action-btn" id="config-subscription-url" title="<%:Specify URL%>" onclick="return setSubscriptionUrl()">
-                                                        <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M18.2838 43.1713C14.9327 42.1736 11.9498 40.3213 9.58787 37.867C10.469 36.8227 11 35.4734 11 34.0001C11 30.6864 8.31371 28.0001 5 28.0001C4.79955 28.0001 4.60139 28.01 4.40599 28.0292C4.13979 26.7277 4 25.3803 4 24.0001C4 21.9095 4.32077 19.8938 4.91579 17.9995C4.94381 17.9999 4.97188 18.0001 5 18.0001C8.31371 18.0001 11 15.3138 11 12.0001C11 11.0488 10.7786 10.1493 10.3846 9.35011C12.6975 7.1995 15.5205 5.59002 18.6521 4.72314C19.6444 6.66819 21.6667 8.00013 24 8.00013C26.3333 8.00013 28.3556 6.66819 29.3479 4.72314C32.4795 5.59002 35.3025 7.1995 37.6154 9.35011C37.2214 10.1493 37 11.0488 37 12.0001C37 15.3138 39.6863 18.0001 43 18.0001C43.0281 18.0001 43.0562 17.9999 43.0842 17.9995C43.6792 19.8938 44 21.9095 44 24.0001C44 25.3803 43.8602 26.7277 43.594 28.0292C43.3986 28.01 43.2005 28.0001 43 28.0001C39.6863 28.0001 37 30.6864 37 34.0001C37 35.4734 37.531 36.8227 38.4121 37.867C36.0502 40.3213 33.0673 42.1736 29.7162 43.1713C28.9428 40.752 26.676 39.0001 24 39.0001C21.324 39.0001 19.0572 40.752 18.2838 43.1713Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-                                                            <path d="M24 31C27.866 31 31 27.866 31 24C31 20.134 27.866 17 24 17C20.134 17 17 20.134 17 24C17 27.866 20.134 31 24 31Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+                                                        <svg width="14" height="14" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4">
+                                                            <path d="M4 6H44V36H29L24 41L19 36H4V6Z"/>
+                                                            <path d="M23 21H25.0025" />
+                                                            <path d="M33.001 21H34.9999"/>
+                                                            <path d="M13.001 21H14.9999"/>
                                                         </svg>
                                                     </button>
                                                 </div>
@@ -1776,10 +1932,10 @@
                                                 <polyline points="17,8 12,3 7,8"></polyline>
                                                 <line x1="12" y1="3" x2="12" y2="15"></line>
                                             </svg>
-                                            <%:Upload Config File%>
+                                            <%:Add Config File%>
                                         </button>
                                     </div>
-                                    
+
                                     <div class="config-file-bottom">
                                         <div class="config-selector">
                                             <select id="config_file_select" class="config-select"><option value=""><%:Collecting data...%></option></select>
@@ -1788,6 +1944,7 @@
                                             <button type="button" class="icon-btn action-btn" id="switch_config" title="<%:SwiTch%>" onclick="return switchConfig()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg></button>
                                             <button type="button" class="icon-btn action-btn" id="update_config" title="<%:Update%>" onclick="return updateConfig()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M21 21v-5h-5"></path></svg></button>
                                             <button type="button" class="icon-btn action-btn" id="edit_config" title="<%:Edit%>" onclick="return editConfig()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+                                            <button type="button" class="icon-btn action-btn" id="edit_subscribe" title="<%:Edit Subscription%>" onclick="return editSubscribe()"><svg width="14" height="14" viewBox="0 0 48 48" fill="none"><path d="M18.2838 43.1713C14.9327 42.1736 11.9498 40.3213 9.58787 37.867C10.469 36.8227 11 35.4734 11 34.0001C11 30.6864 8.31371 28.0001 5 28.0001C4.79955 28.0001 4.60139 28.01 4.40599 28.0292C4.13979 26.7277 4 25.3803 4 24.0001C4 21.9095 4.32077 19.8938 4.91579 17.9995C4.94381 17.9999 4.97188 18.0001 5 18.0001C8.31371 18.0001 11 15.3138 11 12.0001C11 11.0488 10.7786 10.1493 10.3846 9.35011C12.6975 7.1995 15.5205 5.59002 18.6521 4.72314C19.6444 6.66819 21.6667 8.00013 24 8.00013C26.3333 8.00013 28.3556 6.66819 29.3479 4.72314C32.4795 5.59002 35.3025 7.1995 37.6154 9.35011C37.2214 10.1493 37 11.0488 37 12.0001C37 15.3138 39.6863 18.0001 43 18.0001C43.0281 18.0001 43.0562 17.9999 43.0842 17.9995C43.6792 19.8938 44 21.9095 44 24.0001C44 25.3803 43.8602 26.7277 43.594 28.0292C43.3986 28.01 43.2005 28.0001 43 28.0001C39.6863 28.0001 37 30.6864 37 34.0001C37 35.4734 37.531 36.8227 38.4121 37.867C36.0502 40.3213 33.0673 42.1736 29.7162 43.1713C28.9428 40.752 26.676 39.0001 24 39.0001C21.324 39.0001 19.0572 40.752 18.2838 43.1713Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M24 31C27.866 31 31 27.866 31 24C31 20.134 27.866 17 24 17C20.134 17 17 20.134 17 24C17 27.866 20.134 31 24 31Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/></svg></button>
                                             <button type="button" class="icon-btn action-btn" id="upload_config" title="<%:Add%>" onclick="return uploadConfig()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
                                         </div>
                                     </div>
@@ -1846,7 +2003,7 @@
                                 <div class="quick-actions-buttons">
                                     <button class="dashboard-btn" id="_close_all_connection_btn"><%:Collecting data...%></button>
                                     <button class="dashboard-btn" id="_reload_firewall_btn"><%:Collecting data...%></button>
-                                    <button class="dashboard-btn" id="_flush_fakeip_cache_btn"><%:Collecting data...%></button>
+                                    <button class="dashboard-btn" id="_flush_dns_cache_btn"><%:Collecting data...%></button>
                                     <button class="dashboard-btn" id="_one_key_update_btn"><%:Collecting data...%></button>
                                 </div>
                             </div>
@@ -1858,10 +2015,10 @@
                             <div class="sub-card stat-item"><span class="stat-label"><%:Down%></span><span id="download_" class="stat-value">0 KB/S</span></div>
                             <div class="sub-card stat-item"><span class="stat-label"><%:Up Total%></span><span id="uploadtotal_" class="stat-value">0 KB</span></div>
                             <div class="sub-card stat-item"><span class="stat-label"><%:Down Total%></span><span id="downloadtotal_" class="stat-value">0 KB</span></div>
-                            <div class="sub-card stat-item"><span class="stat-label"><%:Connections%></span><span id="connect_t" class="stat-value">0</span></div>
+                            <div class="sub-card stat-item"><span class="stat-label"><%:Connect%></span><span id="connect_t" class="stat-value">0</span></div>
                             <div class="sub-card stat-item"><span class="stat-label"><%:Ram%></span><span id="mem_t" class="stat-value">0 KB</span></div>
                             <div class="sub-card stat-item"><span class="stat-label"><%:CPU%></span><span id="cpu_t" class="stat-value">0 %</span></div>
-                            <div class="sub-card stat-item"><span class="stat-label"><%:Load Avg%></span><span id="load_a" class="stat-value">0</span></div>
+                            <div class="sub-card stat-item"><span class="stat-label"><%:Load Avg%></span><span id="load_a" class="stat-value">0 %</span></div>
                         </div>
                     </div>
                 </div>
@@ -1885,7 +2042,7 @@
         close_all_connection: document.getElementById('_close_all_connection'),
         reload_firewall: document.getElementById('_reload_firewall'),
         one_key_update: document.getElementById('_one_key_update'),
-        flush_fakeip_cache: document.getElementById('_flush_fakeip_cache'),
+        flush_dns_cache: document.getElementById('_flush_dns_cache'),
         radio_mode: document.getElementById('radio-mode'),
         radio: document.getElementsByName("radios"),
         radio_ru: document.getElementsByName("radios-ru"),
@@ -1919,15 +2076,22 @@
         init: function() {
             this.applyDarkMode();
         },
-        
+
         applyDarkMode: function() {
             var ocContainers = document.querySelectorAll('.oc');
             if (!ocContainers.length) return;
-            
-            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            var isDarkBg = this.isDarkBackground(document.body);
-            var shouldUseDark = prefersDark || isDarkBg;
-            
+
+            var theme = localStorage.getItem('oc-theme') || 'auto';
+            var shouldUseDark;
+
+            if (theme === 'light') {
+                shouldUseDark = false;
+            } else if (theme === 'dark') {
+                shouldUseDark = true;
+            } else {
+                shouldUseDark = isDarkBackground(document.body);
+            }
+
             ocContainers.forEach(function(ocContainer) {
                 if (shouldUseDark) {
                     ocContainer.setAttribute('data-darkmode', 'true');
@@ -1935,46 +2099,22 @@
                     ocContainer.removeAttribute('data-darkmode');
                 }
             });
-        },
-        
-        isDarkBackground: function(element) {
-            try {
-                var style = window.getComputedStyle(element);
-                var bgColor = style.backgroundColor;
-                
-                if (!bgColor || bgColor === 'transparent' || bgColor === 'rgba(0, 0, 0, 0)') {
-                    var parent = element.parentElement;
-                    if (parent && parent !== element) {
-                        return this.isDarkBackground(parent);
-                    }
-                    return false;
-                }
-                
-                var r, g, b;
-                
-                if (/rgba?\(/.test(bgColor)) {
-                    var rgb = bgColor.match(/[\d.]+/g);
-                    r = parseFloat(rgb[0]);
-                    g = parseFloat(rgb[1]);
-                    b = parseFloat(rgb[2]);
-                } else if (/#/.test(bgColor)) {
-                    if (bgColor.length === 4) {
-                        r = parseInt(bgColor[1] + bgColor[1], 16);
-                        g = parseInt(bgColor[2] + bgColor[2], 16);
-                        b = parseInt(bgColor[3] + bgColor[3], 16);
-                    } else if (bgColor.length === 7) {
-                        r = parseInt(bgColor.slice(1, 3), 16);
-                        g = parseInt(bgColor.slice(3, 5), 16);
-                        b = parseInt(bgColor.slice(5, 7), 16);
-                    }
+
+            var sunIcon = document.getElementById('sun-icon');
+            var moonIcon = document.getElementById('moon-icon');
+            var autoIcon = document.getElementById('auto-icon');
+            if (sunIcon && moonIcon && autoIcon) {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'none';
+                autoIcon.style.display = 'none';
+
+                if (theme === 'light') {
+                    sunIcon.style.display = 'inline';
+                } else if (theme === 'dark') {
+                    moonIcon.style.display = 'inline';
                 } else {
-                    return false;
+                    autoIcon.style.display = 'inline';
                 }
-                
-                var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-                return luminance < 128;
-            } catch (e) {
-                return false;
             }
         }
     };
@@ -1986,7 +2126,7 @@
         request_cache: {},
         cache_ttl: 5000,
         pending_requests: new Map(),
-        
+
         _cachedXHR: function(url, params, callback, force) {
             var cacheKey = params ? url + JSON.stringify(params) : url;
             var now = Date.now();
@@ -2005,7 +2145,7 @@
                 }, 0);
                 return;
             }
-            
+
             if (!force && cacheExists && isCacheStale) {
                 setTimeout(function() {
                     callback({ status: 200, fromCache: true, stale: true }, StateManager.request_cache[cacheKey]);
@@ -2040,23 +2180,23 @@
         cachedXHRGetWithParams: function(url, params, callback, force) {
             this._cachedXHR(url, params, callback, force);
         },
-        
+
         clearCache: function(url, params) {
             var cacheKey = params ? url + JSON.stringify(params) : url;
             delete this.request_cache[cacheKey];
             delete this.last_request_time[cacheKey];
         },
-        
+
         clearAllCache: function() {
             this.request_cache = {};
             this.last_request_time = {};
         },
-        
+
         hasCache: function(url, params) {
             var cacheKey = params ? url + JSON.stringify(params) : url;
             return !!this.request_cache[cacheKey];
         },
-        
+
         getCacheAge: function(url, params) {
             var cacheKey = params ? url + JSON.stringify(params) : url;
             if (!this.last_request_time[cacheKey]) {
@@ -2064,13 +2204,12 @@
             }
             return Date.now() - this.last_request_time[cacheKey];
         },
-        
+
         setCacheTTL: function(ttl) {
             this.cache_ttl = ttl;
         },
-        
+
         batchUpdateDOM: function(updates) {
-            var fragment = document.createDocumentFragment();
             for (var i = 0; i < updates.length; i++) {
                 var update = updates[i];
                 if (update.element && update.content !== undefined) {
@@ -2078,12 +2217,12 @@
                 }
             }
         },
-        
+
         cachedXHRGetWithRetry: function(url, params, callback, force, maxRetries) {
             maxRetries = maxRetries || 3;
             var retryCount = 0;
             var self = this;
-            
+
             function attemptRequest() {
                 self.cachedXHRGetWithParams(url, params, function(x, data) {
                     if (x && x.status == 200) {
@@ -2096,7 +2235,7 @@
                     }
                 }, force && retryCount === 0);
             }
-            
+
             attemptRequest();
         }
     };
@@ -2357,7 +2496,8 @@
         currentConfig: '',
         currentConfigIndex: -1,
         selectElement: null,
-        
+        rawCurrentConfig: '',
+
         init: function() {
             this.selectElement = document.getElementById('config_file_select');
             if (this.selectElement) {
@@ -2365,16 +2505,16 @@
                 this.setupEventListeners();
             }
         },
-        
+
         setupEventListeners: function() {
             if (this.selectElement) {
                 this.selectElement.addEventListener('change', this.onConfigChange.bind(this));
             }
         },
-        
+
         loadConfigFileList: function() {
             this.updateSelectOptions([{value: '', text: '<%:Collecting data...%>', disabled: true}]);
-            
+
             StateManager.cachedXHRGet('<%=luci.dispatcher.build_url("admin", "services", "openclash", "config_file_list")%>', function(x, data) {
                 if (x && x.status == 200) {
                     ConfigFileManager.handleConfigListResponse(data);
@@ -2383,33 +2523,35 @@
                 }
             }, true);
         },
-        
+
         handleConfigListResponse: function(data) {
             try {
                 var configFiles = [];
                 var currentConfigFile = '';
                 var currentFileInfo = null;
-                
+
                 if (data.config_files && Array.isArray(data.config_files)) {
                     configFiles = data.config_files;
-                } else if (data.files && Array.isArray(data.files)) {
-                    configFiles = data.files;
+                    configFiles.sort(function(a, b) {
+                        var nameA = typeof a === 'string' ? a : (a.name || a.filename || a.path || a);
+                        var nameB = typeof b === 'string' ? b : (b.name || b.filename || b.path || b);
+                        return nameA.localeCompare(nameB);
+                    });
                 } else {
-                    configFiles = data.config_list || [];
+                    configFiles = [];
                 }
-                
+
                 if (data.current_config) {
                     currentConfigFile = data.current_config;
-                } else if (data.current) {
-                    currentConfigFile = data.current;
                 }
-                
+
+                this.rawCurrentConfig = currentConfigFile;
                 this.configList = configFiles;
                 this.currentConfig = currentConfigFile;
                 this.currentConfigIndex = -1;
 
                 this.toggleEmptyState(configFiles.length === 0);
-                
+
                 this.updateConfigSelect(configFiles, currentConfigFile);
 
                 if (configFiles.length > 0) {
@@ -2417,7 +2559,7 @@
                         for (var i = 0; i < configFiles.length; i++) {
                             var file = configFiles[i];
                             var filePath = typeof file === 'string' ? file : (file.path || file.filepath || file);
-                            
+
                             if (filePath === currentConfigFile) {
                                 this.currentConfigIndex = i;
                                 if (typeof file === 'object' && file.mtime && file.size) {
@@ -2430,9 +2572,9 @@
                             }
                         }
                     }
-                    
+
                     this.updateSubscriptionDisplay(currentConfigFile, currentFileInfo);
-                    
+
                     if (currentConfigFile && SubscriptionManager.currentConfigFile !== currentConfigFile) {
                         SubscriptionManager.currentConfigFile = currentConfigFile;
                         SubscriptionManager.getSubscriptionInfo();
@@ -2441,28 +2583,40 @@
                     this.hideSubscriptionDisplay();
                     SubscriptionManager.currentConfigFile = '';
                 }
-                
+
                 this.updateNavigationArrows();
-                
+
+                if (this._retryGetConfigList) {
+                    clearInterval(this._retryGetConfigList);
+                    this._retryGetConfigList = null;
+                }
+
             } catch (e) {
                 this.handleConfigListError();
             }
         },
-        
+
         handleConfigListError: function() {
             this.updateSelectOptions([
                 {value: '', text: '<%:Failed to load config files%>', disabled: true}
             ]);
-            
+
             this.toggleEmptyState(true);
             this.hideSubscriptionDisplay();
+
+            if (!this._retryGetConfigList) {
+                var self = this;
+                this._retryGetConfigList = setInterval(function() {
+                    self.loadConfigFileList();
+                }, 5000);
+            }
         },
 
         toggleEmptyState: function(isEmpty) {
             var emptyStateElement = document.getElementById('config-file-empty-state');
             var configFileBottom = document.querySelector('.config-file-bottom');
             var configFileContent = document.querySelector('.config-file-content');
-            
+
             if (isEmpty) {
                 if (emptyStateElement) {
                     emptyStateElement.style.display = 'flex';
@@ -2486,17 +2640,17 @@
                 }
             }
         },
-        
+
         hideSubscriptionDisplay: function() {
             var subscriptionDisplay = document.getElementById('subscription-info-display');
             if (subscriptionDisplay) {
                 subscriptionDisplay.style.display = 'none';
             }
         },
-        
+
         updateConfigSelect: function(configFiles, currentConfig) {
             var options = [];
-            
+
             if (!configFiles || configFiles.length === 0) {
                 options.push({
                     value: '',
@@ -2509,10 +2663,10 @@
                     text: '<%:Please select a config file%>',
                     disabled: false
                 });
-                
+
                 configFiles.forEach(function(file) {
                     var fileName, filePath;
-                    
+
                     if (typeof file === 'string') {
                         fileName = file;
                         filePath = file;
@@ -2520,9 +2674,9 @@
                         fileName = file.name || file.filename || file.path || file;
                         filePath = file.path || file.filepath || file.name || file;
                     }
-                    
+
                     var displayName = fileName;
-                    
+
                     options.push({
                         value: filePath,
                         text: displayName,
@@ -2531,22 +2685,22 @@
                     });
                 });
             }
-            
+
             this.updateSelectOptions(options);
         },
-        
+
         updateSelectOptions: function(options) {
             if (!this.selectElement) return;
-            
+
             this.selectElement.innerHTML = '';
-            
+
             options.forEach(function(option) {
                 var optionElement = document.createElement('option');
                 optionElement.value = option.value;
                 optionElement.textContent = option.text;
                 optionElement.disabled = option.disabled || false;
                 optionElement.selected = option.selected || false;
-                
+
                 this.selectElement.appendChild(optionElement);
             }, this);
         },
@@ -2556,37 +2710,44 @@
             var configNameElement = document.getElementById('current-config-name');
             var fileModifyTimeElement = document.getElementById('file-modify-time');
             var detailsSection = document.getElementById('subscription-info-details');
-            
+
             if (!container) return;
-            
+
             if (this.configList.length === 0) {
                 container.style.display = 'none';
                 return;
             }
-            
+
             if (!configFile) {
                 container.style.display = 'none';
                 return;
             }
-            
+
             var configFileContent = document.querySelector('.config-file-content');
             if (configFileContent && configFileContent.classList.contains('empty-state')) {
                 container.style.display = 'none';
                 return;
             }
-            
+
             container.style.display = 'flex';
 
             if (configNameElement) {
                 var displayName = this.formatDisplayName(configFile);
-                configNameElement.textContent = displayName;
+                if (configFile === this.rawCurrentConfig) {
+                    configNameElement.innerHTML =
+                        '<svg width="0.6em" height="0.6em" viewBox="0 0 24 24" fill="var(--primary-color)" style="vertical-align:middle;margin-right:0.2em;margin-bottom:0.2em;">' +
+                        '<circle cx="12" cy="12" r="8" fill="var(--primary-color)"/>' +
+                        '</svg>' + displayName;
+                } else {
+                    configNameElement.textContent = displayName;
+                }
                 if (configNameElement.scrollWidth > configNameElement.clientWidth) {
                     configNameElement.title = displayName;
                 } else {
                     configNameElement.title = '';
                 }
             }
-            
+
             if (fileInfo) {
                 if (fileModifyTimeElement) {
                     var modifyTime = this.formatUnixTime(fileInfo.mtime);
@@ -2597,7 +2758,7 @@
                         fileModifyTimeElement.title = '';
                     }
                 }
-                
+
                 if (detailsSection) {
                     detailsSection.style.display = 'flex';
                 }
@@ -2605,7 +2766,7 @@
                 if (fileModifyTimeElement) {
                     fileModifyTimeElement.textContent = '<%:Update Time%> --';
                 }
-                
+
                 if (detailsSection) {
                     detailsSection.style.display = 'none';
                 }
@@ -2616,7 +2777,7 @@
             if (!unixTimestamp || unixTimestamp === 0) {
                 return '--';
             }
-            
+
             try {
                 var date = new Date(unixTimestamp * 1000);
                 var year = date.getFullYear();
@@ -2625,7 +2786,7 @@
                 var hour = String(date.getHours()).padStart(2, '0');
                 var minute = String(date.getMinutes()).padStart(2, '0');
                 var second = String(date.getSeconds()).padStart(2, '0');
-                
+
                 return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
             } catch (e) {
                 return '--';
@@ -2634,51 +2795,51 @@
 
         formatFileSize: function(bytes) {
             if (!bytes || bytes === 0) return '--';
-            
+
             var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
             var i = Math.floor(Math.log(bytes) / Math.log(1024));
-            
+
             if (i === 0) {
                 return bytes + ' ' + sizes[i];
             }
-            
+
             return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
         },
-        
+
         formatDisplayName: function(fileName) {
             if (!fileName) return '<%:Unknown%>';
-            
+
             var name = fileName.split('/').pop().split('\\').pop();
-            
+
             //name = name.replace(/\.(yaml|yml)$/i, '');
-            
+
             if (name.length > 30) {
                 name = name.substring(0, 27) + '...';
             }
-            
+
             return name;
         },
-        
+
         onConfigChange: function(event) {
             var selectedValue = event.target.value;
-            
+
             if (selectedValue) {
                 this.currentConfig = selectedValue;
-                
+
                 for (var i = 0; i < this.configList.length; i++) {
                     var file = this.configList[i];
                     var filePath = typeof file === 'string' ? file : (file.path || file.filepath || file);
-                    
+
                     if (filePath === selectedValue) {
                         this.currentConfigIndex = i;
                         break;
                     }
                 }
-                
+
                 var selectedFileInfo = this.getConfigFileInfo(selectedValue);
                 this.updateSubscriptionDisplay(selectedValue, selectedFileInfo);
                 this.updateNavigationArrows();
-                
+
                 if (SubscriptionManager.currentConfigFile !== selectedValue) {
                     SubscriptionManager.currentConfigFile = selectedValue;
                     var detailsSection = document.getElementById('subscription-info-details');
@@ -2701,7 +2862,7 @@
             for (var i = 0; i < this.configList.length; i++) {
                 var file = this.configList[i];
                 var filePath = typeof file === 'string' ? file : (file.path || file.filepath || file);
-                
+
                 if (filePath === selectedValue) {
                     if (typeof file === 'object' && file.mtime && file.size) {
                         selectedFileInfo = {
@@ -2714,54 +2875,54 @@
             }
             return selectedFileInfo;
         },
-        
+
         updateNavigationArrows: function() {
             var prevArrow = document.getElementById('subscription-prev-arrow');
             var nextArrow = document.getElementById('subscription-next-arrow');
-            
+
             if (!prevArrow || !nextArrow) return;
-            
+
             var hasMultipleConfigs = this.configList.length > 1;
             var currentIndex = this.currentConfigIndex;
-            
+
             if (!hasMultipleConfigs || currentIndex === -1) {
                 prevArrow.style.display = 'none';
                 nextArrow.style.display = 'none';
                 return;
             }
-            
+
             prevArrow.style.display = 'block';
             nextArrow.style.display = 'block';
-            
+
             prevArrow.classList.remove('disabled');
             nextArrow.classList.remove('disabled');
         },
-        
+
         switchToConfigByIndex: function(index) {
             if (this.configList.length === 0) {
                 return false;
             }
-            
+
             if (index < 0) {
                 index = this.configList.length - 1; 
             } else if (index >= this.configList.length) {
                 index = 0;
             }
-            
+
             var file = this.configList[index];
             var filePath = typeof file === 'string' ? file : (file.path || file.filepath || file);
-            
+
             if (this.selectElement) {
                 this.selectElement.value = filePath;
             }
-            
+
             this.currentConfig = filePath;
             this.currentConfigIndex = index;
-            
+
             var fileInfo = this.getConfigFileInfo(filePath);
             this.updateSubscriptionDisplay(filePath, fileInfo);
             this.updateNavigationArrows();
-            
+
             if (SubscriptionManager.currentConfigFile !== filePath) {
                 SubscriptionManager.currentConfigFile = filePath;
                 var detailsSection = document.getElementById('subscription-info-details');
@@ -2770,18 +2931,18 @@
                 }
                 SubscriptionManager.getSubscriptionInfo();
             }
-            
+
             return true;
         },
-        
+
         refreshConfigList: function() {
             this.loadConfigFileList();
         },
-        
+
         getCurrentConfig: function() {
             return this.currentConfig;
         },
-        
+
         getSelectedConfig: function() {
             return this.selectElement ? this.selectElement.value : '';
         }
@@ -2790,20 +2951,20 @@
     var SubscriptionManager = {
         currentConfigFile: '',
         retryCount: 0,
-        maxRetries: 3,
+        maxRetries: 5,
         updateTimer: null,
         isInitialized: false,
-        
+
         init: function() {
             if (this.isInitialized) return;
             this.isInitialized = true;
-            
+
             setTimeout(function() {
                 SubscriptionManager.loadSubscriptionInfo();
                 SubscriptionManager.startAutoUpdate();
             }, 500);
         },
-        
+
         loadSubscriptionInfo: function() {
             var currentConfig = ConfigFileManager.getCurrentConfig() || ConfigFileManager.getSelectedConfig();
             if (currentConfig && currentConfig !== this.currentConfigFile) {
@@ -2811,21 +2972,21 @@
                 this.getSubscriptionInfo();
             }
         },
-        
+
         getSubscriptionInfo: function() {
             if (ConfigFileManager.configList.length === 0) {
                 return;
             }
-            
+
             if (!this.currentConfigFile) return;
-            
+
             var requestConfigFile = this.currentConfigFile;
             var filename = this.extractFilename(this.currentConfigFile);
             if (!filename) return;
-            
+
             var cachedData = localStorage.getItem('sub_info_' + filename);
             var shouldFetchNew = true;
-            
+
             if (cachedData) {
                 try {
                     var parsedData = JSON.parse(cachedData);
@@ -2839,13 +3000,13 @@
                             this.showNoInfo();
                         }
                     }
-                    
+
                     if (parsedData.get_time) {
                         var currentTime = Math.floor(Date.now() / 1000);
                         var cacheTime = parseInt(parsedData.get_time);
                         var timeDiff = currentTime - cacheTime;
                         var halfHourInSeconds = 30 * 60;
-                        
+
                         if (timeDiff <= halfHourInSeconds) {
                             shouldFetchNew = false;
                         }
@@ -2854,8 +3015,12 @@
                     shouldFetchNew = true;
                 }
             }
-            
+
             if (shouldFetchNew) {
+                if (!cachedData) {
+                    this.showLoading();
+                }
+
                 StateManager.cachedXHRGetWithParams('<%=luci.dispatcher.build_url("admin", "services", "openclash", "sub_info_get")%>', {filename: filename}, function(x, status) {
                     if (SubscriptionManager.currentConfigFile !== requestConfigFile) {
                         return;
@@ -2874,18 +3039,16 @@
                 }, true);
             }
         },
-        
+
         displaySubscriptionInfo: function(data) {
             if (ConfigFileManager.configList.length === 0) {
                 return;
             }
-            
+
             var container = document.getElementById('subscription-info-display');
             var progressSection = document.getElementById('subscription-progress-section');
             var detailsSection = document.getElementById('subscription-info-details');
-            var progressFill = document.getElementById('subscription-progress-fill');
-            var infoText = document.getElementById('subscription-info-text');
-            
+
             if (!container) return;
 
             var configFileContent = document.querySelector('.config-file-content');
@@ -2894,112 +3057,255 @@
             }
 
             container.style.display = 'flex';
-            
+
             if (data && data.sub_info && data.sub_info !== "No Sub Info Found") {
-                if (progressSection) {
-                    progressSection.style.display = 'flex';
-                }
-                
-                if (!progressFill || !infoText) return;
-                
-                var percent = data.percent || 0;
-                var used = data.surplus || data.used || '0 B';
-                var total = data.total || '0 B';
-                var expire = data.expire || '';
-                var daysLeft = data.day_left || 0;
-                
-                progressFill.style.width = percent + '%';
-                progressFill.className = 'subscription-progress-fill ' + 
-                    (percent >= 50 ? 'high' : (percent >= 20 ? 'medium' : 'low'));
-                
-                var infoString = used + ' / ' + total + ' (' + percent + '%)';
-                if (expire && daysLeft > 0) {
-                    infoString += ' • ' + '<%:Remaining%> ' + daysLeft + ' <%:days%>';
-                    infoString += ' • ' + '<%:Expire Date%>: ' + expire;
-                }
-                
-                infoText.textContent = infoString;
-                if (infoText.scrollWidth > infoText.clientWidth) {
-                    infoText.title = infoString;
+                if (data.providers && Array.isArray(data.providers) && data.providers.length > 0) {
+                    if (data.providers.length > 1 || data.providers[0].provider_name) {
+                        this.displayMultipleProviders(data.providers, progressSection);
+                    } else {
+                        this.displaySingleProvider(data.providers[0], progressSection);
+                    }
                 } else {
-                    infoText.title = '';
-                }
-                
-            } else {
-                if (progressSection) {
                     progressSection.style.display = 'none';
                 }
+            } else {
+                progressSection.style.display = 'none';
             }
-            
+
             if (detailsSection) {
                 detailsSection.style.display = 'flex';
             }
         },
-        
+
+        displaySingleProvider: function(provider, progressSection) {
+            if (!progressSection) return;
+
+            progressSection.innerHTML = '';
+            progressSection.style.display = 'flex';
+            progressSection.className = 'subscription-progress';
+
+            var progressBar = document.createElement('div');
+            progressBar.className = 'subscription-progress-bar';
+
+            progressFill = document.createElement('div');
+            progressFill.className = 'subscription-progress-fill';
+            progressBar.appendChild(progressFill);
+
+            infoText = document.createElement('div');
+            infoText.className = 'subscription-info-text';
+
+            progressSection.appendChild(progressBar);
+            progressSection.appendChild(infoText);
+
+            var percent = parseFloat(provider.percent) || 0;
+            var used = String(provider.surplus || provider.used || '0 B');
+            var total = String(provider.total || '0 B');
+            var expire = String(provider.expire || '');
+            var daysLeft = parseInt(provider.day_left, 10);
+            if (isNaN(daysLeft)) daysLeft = 0;
+
+            progressFill.style.width = percent + '%';
+            progressFill.className = 'subscription-progress-fill ' +
+                (percent >= 50 ? 'high' : (percent >= 20 ? 'medium' : 'low'));
+
+            var infoString = used + ' / ' + total + ' (' + percent + '%)';
+            var tooltipString = infoString;
+            if (expire && expire !== 'null' && daysLeft > 0) {
+                infoString += ' • ' + expire + ' (<%:Remaining%> ' + daysLeft + ' <%:days%>)';
+                tooltipString += '\n' + expire + ' (<%:Remaining%> ' + daysLeft + ' <%:days%>)';
+            }
+
+            infoText.textContent = infoString;
+            infoText.title = tooltipString;
+        },
+
+        displayMultipleProviders: function(providers, progressSection) {
+            if (!progressSection) return;
+
+            var displayProviders = providers;
+            var providerCount = displayProviders.length;
+
+            progressSection.innerHTML = '';
+            progressSection.style.display = 'flex';
+            progressSection.className = 'subscription-providers-grid';
+            progressSection.setAttribute('data-count', providerCount);
+
+            displayProviders.forEach(function(provider) {
+                var card = document.createElement('div');
+                card.className = 'provider-card';
+
+                var cardName = document.createElement('div');
+                var providerName = String(provider.provider_name || 'Unknown');
+                cardName.className = 'subscription-info-title';
+                cardName.textContent = providerName;
+                cardName.title = providerName;
+                card.appendChild(cardName);
+
+                var progressBar = document.createElement('div');
+                progressBar.className = 'subscription-progress-bar';
+
+                var progressFill = document.createElement('div');
+                var percent = parseFloat(provider.percent) || 0;
+                progressFill.style.width = percent + '%';
+                progressFill.className = 'subscription-progress-fill ' +
+                    (percent >= 50 ? 'high' : (percent >= 20 ? 'medium' : 'low'));
+
+                progressBar.appendChild(progressFill);
+                card.appendChild(progressBar);
+
+                var infoText = document.createElement('div');
+                infoText.className = 'subscription-info-text';
+
+                var used = String(provider.used || '0 B');
+                var total = String(provider.total || 'N/A');
+                var expire = String(provider.expire || '');
+                var daysLeft = parseInt(provider.day_left, 10);
+                if (isNaN(daysLeft)) daysLeft = 0;
+
+                var infoString = used + ' / ' + total + ' (' + percent + '%)';
+                if (expire && expire !== 'null' && daysLeft > 0) {
+                    infoString += ' • ' + expire + ' (<%:Remaining%> ' + daysLeft + ' <%:days%>)';
+                }
+
+                var tooltipString = used + ' / ' + total + ' (' + percent + '%)';
+                if (expire && expire !== 'null' && daysLeft > 0) {
+                    tooltipString += '\n' + expire + ' (<%:Remaining%> ' + daysLeft + ' <%:days%>)';
+                }
+
+                infoText.textContent = infoString;
+                infoText.title = tooltipString;
+
+                card.appendChild(infoText);
+                progressSection.appendChild(card);
+            });
+
+            if (providerCount > 3) {
+                this.initDragScroll(progressSection);
+            }
+        },
+
+        initDragScroll: function(element) {
+            var isDragging = false;
+            var startX;
+            var scrollLeft;
+            var hasMoved = false;
+
+            var onMouseDown = function(e) {
+                if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+                    return;
+                }
+
+                isDragging = true;
+                hasMoved = false;
+                startX = e.pageX - element.offsetLeft;
+                scrollLeft = element.scrollLeft;
+                element.classList.add('dragging');
+            };
+
+            var onMouseMove = function(e) {
+                if (!isDragging) return;
+
+                var x = e.pageX - element.offsetLeft;
+                var walk = (x - startX) * 1.5;
+
+                if (Math.abs(walk) > 5) {
+                    hasMoved = true;
+                    e.preventDefault();
+                    element.scrollLeft = scrollLeft - walk;
+                }
+            };
+
+            var onMouseUp = function() {
+                isDragging = false;
+                element.classList.remove('dragging');
+            };
+
+            var onMouseLeave = function() {
+                if (isDragging) {
+                    isDragging = false;
+                    element.classList.remove('dragging');
+                }
+            };
+
+            element.addEventListener('mousedown', onMouseDown);
+            element.addEventListener('mousemove', onMouseMove);
+            element.addEventListener('mouseup', onMouseUp);
+            element.addEventListener('mouseleave', onMouseLeave);
+
+            element.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+            });
+        },
+
         showNoInfo: function() {
             if (ConfigFileManager.configList.length === 0) {
                 return;
             }
-            
+
             var container = document.getElementById('subscription-info-display');
             var progressSection = document.getElementById('subscription-progress-section');
             var detailsSection = document.getElementById('subscription-info-details');
-            
+
             if (!container) return;
-            
+
             var configFileContent = document.querySelector('.config-file-content');
             if (configFileContent && configFileContent.classList.contains('empty-state')) {
                 return;
             }
-            
+
             container.style.display = 'flex';
-            
+
             if (progressSection) {
-                progressSection.style.display = 'none';
+                progressSection.innerHTML = '<div class="subscription-no-info"><%:No Sub Info Found%></div>';
+                progressSection.style.display = 'flex';
+                progressSection.className = 'subscription-progress';
             }
-            
+
             if (detailsSection) {
                 var fileModifyTimeElement = document.getElementById('file-modify-time');
-                
+
                 var hasFileInfo = false;
                 if (fileModifyTimeElement) {
                     var modifyTimeText = fileModifyTimeElement.textContent || '';
                     hasFileInfo = !modifyTimeText.includes('--');
                 }
-                
+
                 detailsSection.style.display = hasFileInfo ? 'flex' : 'none';
             }
         },
-        
-        showError: function() {
+
+        showLoading: function() {
             if (ConfigFileManager.configList.length === 0) {
                 return;
             }
-            
+
             var container = document.getElementById('subscription-info-display');
             var progressSection = document.getElementById('subscription-progress-section');
             var detailsSection = document.getElementById('subscription-info-details');
-            
+
             if (!container) return;
-            
+
             var configFileContent = document.querySelector('.config-file-content');
             if (configFileContent && configFileContent.classList.contains('empty-state')) {
                 return;
             }
-            
+
             container.style.display = 'flex';
-            
+
             if (progressSection) {
-                progressSection.style.display = 'none';
+                progressSection.innerHTML = '<div class="subscription-loading"><%:Collecting data...%></div>';
+                progressSection.style.display = 'flex';
+                progressSection.className = 'subscription-progress';
             }
+
             if (detailsSection) {
                 detailsSection.style.display = 'none';
             }
         },
-        
+
         handleError: function() {
             if (this.retryCount >= this.maxRetries) {
-                this.showError();
+                this.showNoInfo();
                 this.retryCount = 0;
                 if (this.currentConfigFile) {
                     localStorage.removeItem('sub_info_' + this.extractFilename(this.currentConfigFile));
@@ -3008,35 +3314,35 @@
                 this.retryCount++;
                 setTimeout(function() {
                     SubscriptionManager.getSubscriptionInfo();
-                }, 2000);
+                }, 5000);
             }
         },
-        
+
         extractFilename: function(path) {
             if (!path) return '';
             var parts = path.split('/');
             var filename = parts[parts.length - 1];
-            
+
             if (filename.endsWith('.yaml')) {
                 filename = filename.slice(0, -5);
             } else if (filename.endsWith('.yml')) {
                 filename = filename.slice(0, -4);
             }
-            
+
             return filename;
         },
-        
+
         startAutoUpdate: function() {
             if (this.updateTimer) {
                 clearTimeout(this.updateTimer);
             }
-            
+
             this.updateTimer = setTimeout(function() {
                 SubscriptionManager.getSubscriptionInfo();
                 SubscriptionManager.startAutoUpdate();
             }, 60000 * 15);
         },
-        
+
         stopAutoUpdate: function() {
             if (this.updateTimer) {
                 clearTimeout(this.updateTimer);
@@ -3045,10 +3351,126 @@
         }
     };
 
+    var SubscriptionUrlSetter = {
+        filename: '',
+
+        show: function(filename) {
+            this.filename = filename;
+            var overlay = document.getElementById('subscription-url-overlay');
+            var textarea = document.getElementById('subscription-url-textarea');
+            if (overlay && textarea) {
+                textarea.value = '';
+                overlay.style.display = 'flex';
+                textarea.focus();
+                this.bindEvents();
+                this.loadUrls();
+            }
+        },
+
+        hide: function() {
+            var overlay = document.getElementById('subscription-url-overlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+            this.unbindEvents();
+        },
+
+        bindEvents: function() {
+            var self = this;
+            var textarea = document.getElementById('subscription-url-textarea');
+            var overlay = document.getElementById('subscription-url-overlay');
+
+            if (textarea) {
+                textarea.addEventListener('keydown', this.handleKeyDown.bind(this));
+            }
+            if (overlay) {
+                overlay.addEventListener('click', this.handleOverlayClick.bind(this));
+            }
+        },
+
+        unbindEvents: function() {
+            var textarea = document.getElementById('subscription-url-textarea');
+            var overlay = document.getElementById('subscription-url-overlay');
+
+            if (textarea) {
+                textarea.removeEventListener('keydown', this.handleKeyDown.bind(this));
+            }
+            if (overlay) {
+                overlay.removeEventListener('click', this.handleOverlayClick.bind(this));
+            }
+        },
+
+        handleKeyDown: function(event) {
+            if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+                this.submit();
+            } else if (event.key === 'Escape') {
+                this.hide();
+            }
+        },
+
+        handleOverlayClick: function(event) {
+            if (event.target.id === 'subscription-url-overlay') {
+                this.hide();
+            }
+        },
+
+        submit: function() {
+            var textarea = document.getElementById('subscription-url-textarea');
+            if (!textarea) return;
+
+            var urls = textarea.value.trim();
+
+            var urlList = urls.split('\n').map(function(url) {
+                return url.trim();
+            }).filter(function(url) {
+                return url !== '';
+            });
+
+            var newUrl = urlList.join('\n');
+
+            this.hide();
+
+            XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "set_subinfo_url")%>', {
+                filename: this.filename,
+                url: newUrl
+            }, function(x, status) {
+                if (x && x.status == 200 && status.info === "Success") {
+                    refreshSubscriptionInfo();
+                } else if (x && x.status == 200 && status.info === "Delete success") {
+                    refreshSubscriptionInfo();
+                } else {
+                    alert('<%:Specify subscribe infos sources url failed:%>\n' + (status.info || '<%:Unknown error%>'));
+                }
+            });
+        },
+
+        loadUrls: function() {
+            var self = this;
+            XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "get_subscribe_info_data")%>', {
+                filename: this.filename
+            }, function(x, status) {
+                if (x && x.status == 200 && status) {
+                    var textarea = document.getElementById('subscription-url-textarea');
+                    if (textarea) {
+                        var urls = '';
+                        if (status.url) {
+                            if (typeof status.url === 'string') {
+                                urls = status.url;
+                            } else if (Array.isArray(status.url)) {
+                                urls = status.url.join('\n');
+                            }
+                        }
+                        textarea.value = urls;
+                    }
+                }
+            });
+        }
+    };
+
     var LogManager = {
         isPolling: false,
         pollTimer: null,
-        maxPollTime: 15000,
+        maxPollTime: 60000,
         pollInterval: 1000,
         startTime: 0,
         lastLogContent: '',
@@ -3071,12 +3493,12 @@
                 DOMCache.oclog.style.display = 'inline-flex';
                 DOMCache.oclog.innerHTML = '<b style="color:var(--warning-color)">' + (initialMessage || '<%:Processing...%>') + '</b>';
             }
-            
+
             this.isPolling = true;
             this.startTime = Date.now();
             this.lastLogContent = '';
             this.retryCount = 0;
-            
+
             var self = this;
             setTimeout(function() {
                 if (self.isPolling) {
@@ -3084,7 +3506,7 @@
                 }
             }, 2000);
         },
-        
+
         stopLogDisplay: function() {
             this.isPolling = false;
             if (this.pollTimer) {
@@ -3101,15 +3523,15 @@
                 }, 1000);
             }
         },
-        
+
         pollLog: function() {
             if (!this.isPolling) return;
-            
+
             if (Date.now() - this.startTime > this.maxPollTime) {
                 this.stopLogDisplay();
                 return;
             }
-            
+
             var self = this;
             StateManager.cachedXHRGet('<%=luci.dispatcher.build_url("admin", "services", "openclash", "startlog")%>', function(x, status) {
                 if (!self.isPolling) return;
@@ -3133,7 +3555,7 @@
                         }, 3000);
                         return;
                     }
-                    
+
                     if (logContent !== '') {
                         self.retryCount = 0;
                         self.scheduleNextPoll(self.pollInterval);
@@ -3166,12 +3588,12 @@
                 self.pollLog();
             }, delay);
         },
-        
+
         checkForErrors: function(log) {
             if (!log) return false;
             if (log.match(/level=fatal|level=error|FTL \[Config]/)) {
                 XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "del_start_log")%>', null, function(x) {});
-                
+
                 var errorMsg;
                 if (log.match(/level=(fatal|error)/)) {
                     var msgParts = log.split('msg=');
@@ -3180,32 +3602,32 @@
                     var ftlParts = log.split('FTL [Config] ');
                     errorMsg = ftlParts.length > 1 ? ftlParts[1] : log;
                 }
-                
+
                 setTimeout(function() {
                     alert('<%:OpenClash Start Failed%>:\n\n' + errorMsg);
                 }, 500);
-                
+
                 return true;
             }
             return false;
         },
-        
+
         displayLog: function(logContent) {
             if (!this.isPolling || !DOMCache.oclog) return;
-            
+
             var cleanLog = this.cleanLogContent(logContent);
             this.lastLogContent = cleanLog;
 
             var color = this.getLogColor(cleanLog);
             var displayText = this.formatLogText(cleanLog);
-            
+
             DOMCache.oclog.innerHTML = '<b style="color:' + color + '">' + displayText + '</b>';
         },
-        
+
         cleanLogContent: function(content) {
             return content ? content.replace(/[\r\n]+/g, ' ').replace('##FINISH##', '').trim() : '';
         },
-        
+
         getLogColor: function(log) {
             if (log.includes("Tip:") || log.includes("提示：")) {
                 return 'var(--warning-color)';
@@ -3221,22 +3643,22 @@
                 return 'var(--text-secondary)';
             }
         },
-        
+
         formatLogText: function(log) {
             if (!log) return '<%:Processing...%>';
-            
+
             var cleanText = log.replace(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[.\d]*Z?\s*/, '')
                             .replace(/^time="[^"]*"\s*/, '')
                             .replace(/^level=\w+\s*/, '')
                             .replace(/^msg="?([^"]*)"?\s*/, '$1');
-            
+
             if (cleanText.length > 60) {
                 cleanText = cleanText.substring(0, 57) + '...';
             }
-            
+
             return this.escapeHtml(cleanText) || '<%:Processing...%>';
         },
-        
+
         escapeHtml: function(text) {
             var div = document.createElement('div');
             div.textContent = text;
@@ -3250,14 +3672,14 @@
         retryCount: 0,
         maxRetries: 3,
         isEnabled: false,
-        
+
         start: function() {
             if (this.isEnabled) return;
             this.isEnabled = true;
             this.retryCount = 0;
             this.poll();
         },
-        
+
         stop: function() {
             this.isEnabled = false;
             if (this.pollTimer) {
@@ -3265,10 +3687,10 @@
                 this.pollTimer = null;
             }
         },
-        
+
         poll: function() {
             if (!this.isEnabled) return;
-            
+
             var self = this;
             StateManager.cachedXHRGet('<%=luci.dispatcher.build_url("admin", "services", "openclash", "toolbar_show_sys")%>', function(x, status) {
                 if (x && x.status == 200 && x.responseText != "") {
@@ -3276,14 +3698,14 @@
                     var cpuColor = status.cpu <= 50 ? "var(--success-color)" : (status.cpu <= 80 ? "var(--warning-color)" : "var(--error-color)");
                     var cpuValue = status.cpu <= 100 ? status.cpu + " %" : "0 %";
                     document.getElementById("cpu_t").innerHTML = "<font style=\"color:"+cpuColor+"\">"+cpuValue+"</font>";
-                    
+
                     var loadValue = parseFloat(status.load_avg) || 0;
-                    var loadColor = loadValue <= 1.0 ? "var(--success-color)" : (loadValue <= 2.0 ? "var(--warning-color)" : "var(--error-color)");
-                    document.getElementById("load_a").innerHTML = "<font style=\"color:"+loadColor+"\">"+status.load_avg+"</font>";
+                    var loadColor = loadValue <= 50 ? "var(--success-color)" : (loadValue <= 80 ? "var(--warning-color)" : "var(--error-color)");
+                    document.getElementById("load_a").innerHTML = "<font style=\"color:"+loadColor+"\">"+status.load_avg+" %</font>";
                 } else {
                     self.handleError();
                 }
-                
+
                 if (self.isEnabled) {
                     self.pollTimer = setTimeout(function() {
                         self.poll();
@@ -3291,17 +3713,17 @@
                 }
             }, true);
         },
-        
+
         handleError: function() {
             this.retryCount++;
-            
+
             if (this.retryCount >= this.maxRetries) {
                 document.getElementById("cpu_t").innerHTML = "<font style=\"color:var(--success-color)\">0 %</font>";
-                document.getElementById("load_a").innerHTML = "<font style=\"color:var(--success-color)\">0</font>";
+                document.getElementById("load_a").innerHTML = "<font style=\"color:var(--success-color)\">0 %</font>";
                 this.retryCount = 0;
             }
         },
-        
+
         setPollInterval: function(interval) {
             this.pollInterval = interval;
         }
@@ -3313,14 +3735,14 @@
         retryCount: 0,
         maxRetries: 3,
         isEnabled: false,
-        
+
         start: function() {
             if (this.isEnabled) return;
             this.isEnabled = true;
             this.retryCount = 0;
             this.poll();
         },
-        
+
         stop: function() {
             this.isEnabled = false;
             if (this.pollTimer) {
@@ -3328,10 +3750,10 @@
                 this.pollTimer = null;
             }
         },
-        
+
         poll: function() {
             if (!this.isEnabled) return;
-            
+
             var self = this;
             StateManager.cachedXHRGet('<%=luci.dispatcher.build_url("admin", "services", "openclash", "toolbar_show")%>', function(x, status) {
                 if (x && x.status == 200 && x.responseText != "") {
@@ -3340,7 +3762,7 @@
                 } else {
                     self.handleError();
                 }
-                
+
                 if (self.isEnabled) {
                     self.pollTimer = setTimeout(function() {
                         self.poll();
@@ -3348,7 +3770,7 @@
                 }
             }, true);
         },
-        
+
         updateNetworkStats: function(status) {
             var updates = [
                 {element: document.getElementById("upload_"), content: "<font style=\"color:var(--success-color)\">"+status.up+"</font>"},
@@ -3358,23 +3780,23 @@
                 {element: document.getElementById("mem_t"), content: "<font style=\"color:var(--success-color)\">"+status.mem+"</font>"},
                 {element: document.getElementById("connect_t"), content: "<font style=\"color:var(--success-color)\">"+status.connections+"</font>"}
             ];
-            
+
             if (!SystemStatusManager.isEnabled) {
                 var cpuColor = status.cpu <= 50 ? "var(--success-color)" : (status.cpu <= 80 ? "var(--warning-color)" : "var(--error-color)");
                 var cpuValue = status.cpu <= 100 ? status.cpu + " %" : "0 %";
                 updates.push({element: document.getElementById("cpu_t"), content: "<font style=\"color:"+cpuColor+"\">"+cpuValue+"</font>"});
-                
+
                 var loadValue = parseFloat(status.load_avg) || 0;
-                var loadColor = loadValue <= 1.0 ? "var(--success-color)" : (loadValue <= 2.0 ? "var(--warning-color)" : "var(--error-color)");
-                updates.push({element: document.getElementById("load_a"), content: "<font style=\"color:"+loadColor+"\">"+status.load_avg+"</font>"});
+                var loadColor = loadValue <= 50 ? "var(--success-color)" : (loadValue <= 80 ? "var(--warning-color)" : "var(--error-color)");
+                updates.push({element: document.getElementById("load_a"), content: "<font style=\"color:"+loadColor+"\">"+status.load_avg+" %</font>"});
             }
-            
+
             StateManager.batchUpdateDOM(updates);
         },
-        
+
         handleError: function() {
             this.retryCount++;
-            
+
             if (this.retryCount >= this.maxRetries) {
                 var fallbackUpdates = [
                     {element: document.getElementById("upload_"), content: "<font style=\"color:var(--success-color)\">0 B/S</font>"},
@@ -3384,17 +3806,17 @@
                     {element: document.getElementById("mem_t"), content: "<font style=\"color:var(--success-color)\">0 KB</font>"},
                     {element: document.getElementById("connect_t"), content: "<font style=\"color:var(--success-color)\">0</font>"}
                 ];
-                
+
                 if (!SystemStatusManager.isEnabled) {
                     fallbackUpdates.push({element: document.getElementById("cpu_t"), content: "<font style=\"color:var(--success-color)\">0 %</font>"});
-                    fallbackUpdates.push({element: document.getElementById("load_a"), content: "<font style=\"color:var(--success-color)\">0</font>"});
+                    fallbackUpdates.push({element: document.getElementById("load_a"), content: "<font style=\"color:var(--success-color)\">0 %</font>"});
                 }
-                
+
                 StateManager.batchUpdateDOM(fallbackUpdates);
                 this.retryCount = 0;
             }
         },
-        
+
         setPollInterval: function(interval) {
             this.pollInterval = interval;
         }
@@ -3403,18 +3825,18 @@
     var SettingsManager = {
         pendingOperations: new Set(),
         pausedPolls: new Set(),
-        
+
         pausePoll: function(pollName, duration) {
             this.pausedPolls.add(pollName);
             setTimeout(() => {
                 this.pausedPolls.delete(pollName);
             }, duration || 3000);
         },
-        
+
         isPollPaused: function(pollName) {
             return this.pausedPolls.has(pollName);
         },
-        
+
         updateUIState: function(setting, value) {
             setTimeout(() => {
                 function setCheckedAndDisabled(elements, checkedIndex) {
@@ -3490,7 +3912,7 @@
                 }
             }, 10);
         },
-        
+
         switchSetting: function(setting, value, endpoint, additionalParams) {
             var operationKey = setting + '_' + value;
 
@@ -3585,7 +4007,7 @@
 
             return false;
         },
-        
+
         getErrorMessage: function(setting) {
             var messages = {
                 'meta_sniffer': '<%:Sniffer setting failed%>',
@@ -3605,41 +4027,38 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         DarkModeDetector.init();
-        
-        setTimeout(function() {
-            ConfigFileManager.init();
-        }, 200);
-        
+        ConfigFileManager.init();
+
         setTimeout(function() {
             SubscriptionManager.init();
-        }, 200);
+        }, 300);
 
         setTimeout(function() {
             check_core();
-        }, 800);
+        }, 1000);
 
         setTimeout(function() {
             loadAnnouncement();
         }, 2000);
     });
 
-    XHR.poll(3, '<%=luci.dispatcher.build_url("admin", "services", "openclash", "status")%>', null, function(x, status) {
+    XHR.poll(5, '<%=luci.dispatcher.build_url("admin", "services", "openclash", "status")%>', null, function(x, status) {
         if (x && x.status == 200) {
             var updates = [];
-        
+
             if (!pluginToggleUserAction) {
                 updates.push({
                     element: DOMCache.clash,
                     content: status.clash ? '<b style=color:var(--success-color)>' + status.core_type +'&nbsp;<%:Running%></b>' : '<b style=color:var(--error-color)><%:Not Running%></b>'
                 });
-                
+
                 updatePluginToggleState(status.clash);
             }
 
 			get_run_mode();
             get_rule_mode();
             get_oc_settings();
-            
+
             var webContent = status.clash ? '<input type="button" class="dashboard-btn" value="<%:Yacd%>" onclick="return ycad_dashboard(this)"/>' : '<input type="button" class="dashboard-btn" value="<%:Yacd%>" onclick="event.preventDefault(); event.stopPropagation(); return false;"/>';
             updates.push({element: DOMCache.web, content: webContent});
 
@@ -3652,26 +4071,41 @@
             var webzContent = status.clash ? '<input type="button" class="dashboard-btn" value="<%:Zashboard%>" onclick="return net_zashboard(this)"/>' : '<input type="button" class="dashboard-btn" value="<%:Zashboard%>" onclick="event.preventDefault(); event.stopPropagation(); return false;"/>';
             updates.push({element: DOMCache.webz, content: webzContent});
 
-
-            var closeConnContent = status.clash ? '<input type="button" class="dashboard-btn" value="<%:Close All Connections%>" onclick="return b_close_all_connection(this)"/>' : '<input type="button" class="dashboard-btn" value="<%:Close All Connections%>" onclick="event.preventDefault(); event.stopPropagation(); return false;"/>';
+            var closeConnContent = status.clash ? '<input type="button" class="dashboard-btn" value="<%:Close Connect%>" onclick="return b_close_all_connection(this)"/>' : '<input type="button" class="dashboard-btn" value="<%:Close Connect%>" onclick="event.preventDefault(); event.stopPropagation(); return false;"/>';
             updates.push({element: document.getElementById('_close_all_connection_btn'), content: closeConnContent});
 
             var reloadFwContent = status.clash ? '<input type="button" class="dashboard-btn" value="<%:Reload Firewall%>" onclick="return b_reload_firewall(this)"/>' : '<input type="button" class="dashboard-btn" value="<%:Reload Firewall%>" onclick="event.preventDefault(); event.stopPropagation(); return false;"/>';
             updates.push({element: document.getElementById('_reload_firewall_btn'), content: reloadFwContent});
 
-            var flushCacheContent = status.clash ? '<input type="button" class="dashboard-btn" value="<%:Flush Fake-IP Cache%>" onclick="return b_flush_fakeip_cache(this)"/>' : '<input type="button" class="dashboard-btn" value="<%:Flush Fake-IP Cache%>" onclick="event.preventDefault(); event.stopPropagation(); return false;"/>';
-            updates.push({element: document.getElementById('_flush_fakeip_cache_btn'), content: flushCacheContent});
+            var flushCacheContent = status.clash ? '<input type="button" class="dashboard-btn" value="<%:Flush DNS%>" onclick="return b_flush_dns_cache(this)"/>' : '<input type="button" class="dashboard-btn" value="<%:Flush DNS Cache%>" onclick="event.preventDefault(); event.stopPropagation(); return false;"/>';
+            updates.push({element: document.getElementById('_flush_dns_cache_btn'), content: flushCacheContent});
 
             var oneKeyUpdateContent = '<input type="button" class="dashboard-btn" value="<%:Check Update%>" onclick="return all_one_key_update(this)"/>';
             updates.push({element: document.getElementById('_one_key_update_btn'), content: oneKeyUpdateContent});
 
             StateManager.batchUpdateDOM(updates);
 
+            if (!status.yacd) {
+                DOMCache.web.classList.add('hidden');
+            }
+
+            if (!status.dashboard) {
+                DOMCache.webo.classList.add('hidden');
+            }
+
+            if (!status.metacubexd) {
+                DOMCache.webm.classList.add('hidden');
+            }
+
+            if (!status.zashboard) {
+                DOMCache.webz.classList.add('hidden');
+            }
+
             StateManager.current_status = status;
-            
+
             if (status.daip) {
                 var daipContent, dapoContent;
-                
+
                 if (status.daip && window.location.hostname == status.daip) {
                     dapoContent = status.cn_port ? ":"+status.cn_port : "";
                     daipContent = status.daip ? "<b style=color:var(--success-color)>"+status.daip+dapoContent+"</b>" : "<b style=color:var(--error-color)>"+"<%:Not Set%>"+"</b>";
@@ -3682,7 +4116,7 @@
                     dapoContent = status.cn_port ? ":"+status.cn_port : "";
                     daipContent = status.daip ? "<b style=color:var(--success-color)>"+status.daip+dapoContent+"</b>" : "<b style=color:var(--error-color)>"+"<%:Not Set%>"+"</b>";
                 }
-                
+
                 DOMCache.daip.innerHTML = daipContent;   
 
                 StateManager.cachedXHRGet('<%=luci.dispatcher.build_url("admin", "services", "openclash", "proxy_info")%>', function(x, proxy_info) {
@@ -3696,12 +4130,6 @@
                         DOMCache.mix_proxy.innerHTML = "<b style=color:var(--error-color)><%:Not Available%></b>";
                     }
                 });
-                
-                DOMCache.copy_secret.style.display = "inline";
-                DOMCache.copy_address.style.display = "inline";
-                DOMCache.copy_mix_address.style.display = "inline";
-                DOMCache.copy_mix_secret.style.display = "inline";
-                DOMCache.copy_pac_config.style.display = "inline";
             } else {
                 DOMCache.daip.innerHTML = "<b style=color:var(--error-color)><%:Not Available%></b>";
                 StateManager.cached_proxy_info = null;
@@ -3712,7 +4140,7 @@
                 DOMCache.copy_mix_secret.style.display = "none";
                 DOMCache.copy_pac_config.style.display = "none";
             }
-            
+
             if (status.clash && status.daip) {
                 if (!WSManager.hasActiveConnections()) {
                     if (!WSManager._ws_error || WSManager._ws_retry < 3) {
@@ -3726,7 +4154,7 @@
                     if (NetworkStatsManager && NetworkStatsManager.isEnabled) {
                         NetworkStatsManager.stop();
                     }
-                    
+
                     if (SystemStatusManager && !SystemStatusManager.isEnabled) {
                         SystemStatusManager.start();
                     }
@@ -3750,10 +4178,10 @@
         if (!status || !status.clash || !status.daip) {
             return false;
         }
-        
+
         var protocol = getWebSocketProtocol(status);
         var token = status.dase;
-        
+
         var connections = [
             {
                 type: 'traffic',
@@ -3771,19 +4199,19 @@
                 handler: ws_mmessage
             }
         ];
-        
+
         connections.forEach(function(conn) {
             var url = protocol + conn.endpoint + (token ? '?token=' + token : '');
             WSManager.createConnection(conn.type, url, conn.handler);
         });
-        
+
         return true;
     }
 
     function getWebSocketProtocol(status) {
         var protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
         var host, port;
-        
+
         if (status.daip && window.location.hostname === status.daip) {
             host = status.daip;
             port = status.cn_port;
@@ -3795,40 +4223,36 @@
             host = status.daip;
             port = status.cn_port;
         }
-        
+
         return protocol + host + ":" + port;
     }
 
     function loadAnnouncement() {
         var userLang = navigator.language || navigator.userLanguage; 
         var isChineseUser = userLang.indexOf('zh') === 0;
-        
+
         var tips = [
             '<%:Tip: You can modify the profile on the profile page (for content that is not taken over)%>',
-            '<%:Tip: click the version icon above to jump to the client publishing page%>',
             '<%:Tip: do not write configuration files? Try to create one click on the server page%>',
             '<%:Tip: some website are abnormal? Try switching modes or using third-party rules%>',
             '<%:Tip: using the fake IP mode can get a faster access experience%>',
-            '<%:Tip: query DNS by TLS & TCP & HTTPS can get better anti pollution effect%>',
-            '<%:Tip: openlash will check the configuration file parameters to ensure that it works properly%>',
             '<%:Tip: the nameserver group must have at least one server set when using custom DNS%>',
-            '<%:Tip: the website access check shows the connection of the device currently logged in to the Luci page%>',
             '<%:Tip: after started, please wait patiently until the connection is normal%>',
             '<%:Tip: if you don not use IPv6, please turn off the DHCP service of IPv6, otherwise the connection will be abnormal%>',
-            '<%:Tip: you can update the version in the global settings page%>',
+            '<%:Tip: you can update the version in the settings page%>',
             '<%:Note: It is not recommended to enable IPv6 and related services for routing. Most of the network connection problems reported so far are related to it%>',
             '<%:Note: Turning on secure DNS in the browser will cause abnormal shunting, please be careful to turn it off%>',
             '<%:Note: Some software will modify the device HOSTS, which will cause abnormal shunt, please pay attention to check%>',
             '<%:Note: The default proxy routes local traffic, BT, PT download, etc., please use Redir-Host mode as much as possible and pay attention to traffic avoidance%>'
         ];
-        
+
         function calculateAnimationDuration(bannerWidth, contentWidth) {
             var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
             var refreshRate = window.screen && window.screen.refreshRate ? window.screen.refreshRate : 60;
             if (refreshRate <= 0) refreshRate = 60;
-            
+
             if (refreshRate > 480) refreshRate = 480;
-            
+
             var baseDuration;
             if (screenWidth <= 575) {
                 baseDuration = 12000;
@@ -3839,27 +4263,27 @@
             } else {
                 baseDuration = 9000;
             }
-            
+
             var refreshRateMultiplier = 1;
             if (refreshRate > 60) {
                 refreshRateMultiplier = 1 + (refreshRate - 60) / 240;
             }
-            
+
             var duration = baseDuration * refreshRateMultiplier;
-            
+
             return Math.max(4000, Math.min(duration, 18000));
         }
-        
+
         function updateScrollAnimation(banner, content, duration) {
             var bannerWidth = banner.offsetWidth;
             var contentWidth = content.offsetWidth;
             var scrollDistance = -(contentWidth + bannerWidth);
-            
+
             banner.style.setProperty('--scroll-distance', scrollDistance + 'px');
-            
+
             content.style.animationDuration = duration + 'ms';
         }
-        
+
         function getRandomTips(count) {
             var shuffled = tips.slice();
             for (var i = shuffled.length - 1; i > 0; i--) {
@@ -3870,11 +4294,11 @@
             }
             return shuffled.slice(0, count);
         }
-        
+
         function updateIcon(isRandomTips) {
             var megaphoneElement = document.getElementById('megaphone');
             if (!megaphoneElement) return;
-            
+
             if (isRandomTips) {
                 megaphoneElement.innerHTML = '<path d="M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z" stroke-width="2"></path>';
                 megaphoneElement.setAttribute('viewBox', '0 0 256 256');
@@ -3884,22 +4308,22 @@
                 megaphoneElement.setAttribute('viewBox', '0 0 256 256');
             }
         }
-        
+
         StateManager.cachedXHRGet('<%=luci.dispatcher.build_url("admin", "services", "openclash", "announcement")%>', function(x, status) {
             var banner = document.getElementById('announcement-banner');
             var content = document.getElementById('announcement-content');
             var announcements = [];
             var isRandomTips = false;
-            
+
             if (!banner || !content) return;
-            
+
             if (x && x.status == 200 && status.content) {
                 try {
                     var contentData = status.content;
                     if (typeof contentData === 'string') {
                         contentData = JSON.parse(contentData);
                     }
-                    
+
                     if (Array.isArray(contentData)) {
                         if (contentData.length > 0 && (contentData[0].zh || contentData[0].en)) {
                             contentData.forEach(function(item) {
@@ -3925,20 +4349,20 @@
                     }
                 }
             }
-            
+
             if (announcements.length === 0) {
                 announcements = getRandomTips(3);
                 isRandomTips = true;
             }
-            
+
             updateIcon(isRandomTips);
             banner.style.display = 'block';
-            
+
             var currentIndex = 0;
             var isHovered = false;
             var pauseTimeout = null;
             var nextAnimationTimeout = null;
-            
+
             banner.addEventListener('mouseenter', function() { 
                 isHovered = true;
                 content.classList.add('paused');
@@ -3947,7 +4371,7 @@
                 isHovered = false;
                 content.classList.remove('paused');
             });
-            
+
             var resizeTimeout;
             window.addEventListener('resize', function() {
                 clearTimeout(resizeTimeout);
@@ -3958,50 +4382,50 @@
                     }
                 }, 250);
             });
-            
+
             function startScrollAnimation() {
                 if (nextAnimationTimeout) {
                     clearTimeout(nextAnimationTimeout);
                     nextAnimationTimeout = null;
                 }
-                
+
                 content.textContent = announcements[currentIndex];
-                
+
                 setTimeout(function() {
                     var duration = calculateAnimationDuration(banner.offsetWidth, content.offsetWidth);
                     updateScrollAnimation(banner, content, duration);
-                    
+
                     content.classList.remove('scrolling');
                     content.offsetHeight;
                     content.classList.add('scrolling');
-                    
+
                     var onAnimationEnd = function(e) {
                         if (e.target === content && e.animationName === 'announceScroll') {
                             content.removeEventListener('animationend', onAnimationEnd);
-                            
+
                             pauseTimeout = setTimeout(function() {
                                 if (!isHovered) {
                                     currentIndex = (currentIndex + 1) % announcements.length;
-                                    
+
                                     if (isRandomTips && currentIndex === 0) {
                                         announcements = getRandomTips(3);
                                     }
-                                    
+
                                     startScrollAnimation();
                                 }
                             }, 2000);
                         }
                     };
-                    
+
                     content.addEventListener('animationend', onAnimationEnd);
-                    
+
                 }, 50);
             }
-            
+
             setTimeout(function() {
                 startScrollAnimation();
             }, 300);
-            
+
             window.addEventListener('beforeunload', function() {
                 if (pauseTimeout) clearTimeout(pauseTimeout);
                 if (nextAnimationTimeout) clearTimeout(nextAnimationTimeout);
@@ -4013,27 +4437,9 @@
         if (SettingsManager.isPollPaused('rule_mode')) {
             return;
         }
-        
+
         StateManager.cachedXHRGet('<%=luci.dispatcher.build_url("admin", "services", "openclash", "rule_mode")%>', function(x, status) {
             if (x && x.status == 200 && status.mode != "") {
-                if (status.core_type == "TUN" && DOMCache.radio.length != 4) {
-                    script_radio = document.createElement("input");
-                    script_radio.setAttribute("type", "radio");
-                    script_radio.setAttribute("id", "script");
-                    script_radio.setAttribute("name", "radios");
-                    script_radio.setAttribute("value", "script");
-                    script_radio.setAttribute("onclick", "javascript:return switch_rule_mode(this.value);");
-                    script_radio_label = document.createElement("label");
-                    script_radio_label.setAttribute("for", "script");
-                    script_radio_label.setAttribute("class", "cbi-button-option");
-                    script_radio_label.innerHTML = "Script";
-                    DOMCache.radio_mode.appendChild(script_radio);
-                    DOMCache.radio_mode.appendChild(script_radio_label);
-                } else if (status.core_type != "TUN" && DOMCache.radio.length == 4) {
-                    DOMCache.radio_mode.removeChild(script_radio);
-                    DOMCache.radio_mode.removeChild(script_radio_label);
-                }
-                
                 if (!SettingsManager.pendingOperations.has('rule_mode_' + status.mode)) {
                     for (var i = 0; i < DOMCache.radio.length; i++) {
                         if (DOMCache.radio[i].value == status.mode && !DOMCache.radio[i].checked) {
@@ -4053,12 +4459,12 @@
             '<%=luci.dispatcher.build_url("admin", "services", "openclash", "switch_rule_mode")%>'
         );
     }
-    
+
     function get_run_mode() {
         if (SettingsManager.isPollPaused('run_mode')) {
             return;
         }
-        
+
         StateManager.cachedXHRGet('<%=luci.dispatcher.build_url("admin", "services", "openclash", "get_run_mode")%>', function(x, status) {
             if (x && x.status == 200 && status.mode) {
                 if (status.mode == "fake-ip" || status.mode == "fake-ip-tun" || status.mode == "fake-ip-mix") {
@@ -4068,10 +4474,10 @@
                     DOMCache.mode.innerHTML = "<b style=color:var(--success-color)><%:Redir-Host%></b>";
                     DOMCache.radio_run_normal.innerHTML = "<%:Compat%>";
                 }
-                
+
                 var expectedValue = status["mode"].split("-")[2] == undefined ? "" : ("-" + status["mode"].split("-")[2]);
                 var operationKey = 'run_mode_' + status.mode;
-                
+
                 if (!SettingsManager.pendingOperations.has(operationKey)) {
                     for (var i = 0; i < DOMCache.radio_ru.length; i++) {
                         if (DOMCache.radio_ru[i].value == expectedValue && !DOMCache.radio_ru[i].checked) {
@@ -4098,10 +4504,10 @@
             window.location.href = url;
         }
     }
-     
+
     function ws_terror() {
         WSManager._ws_error = true;
-        
+
         NetworkStatsManager.start();
     }
 
@@ -4122,7 +4528,7 @@
         uploadElement.innerHTML = data.up ? "<font style=\"color:var(--success-color)\">"+bytesToSize(data.up)+"/S</font>" : "<font style=\"color:var(--success-color)\">0 B/S</font>";
         downloadElement.innerHTML = data.down ? "<font style=\"color:var(--success-color)\">"+bytesToSize(data.down)+"/S</font>" : "<font style=\"color:var(--success-color)\">0 B/S</font>";
     }
-    
+
     function ws_cmessage(event) {
         var dataObj = event && event.data !== undefined ? event.data : event;
         var data;
@@ -4192,18 +4598,18 @@
             return false; 
         };
     }
-      
+
     var all_one_key_update = debounceButton(function(btn) {
         btn.value = '<%:Check Update%>';
         btn.disabled = false;
         select_git_cdn();
         return false;
     });
-    
-    var b_flush_fakeip_cache = debounceButton(function(btn) {
+
+    var b_flush_dns_cache = debounceButton(function(btn) {
         btn.disabled = true;
         btn.value = '<%:Flushing...%> ';
-        XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash","flush_fakeip_cache")%>', null, function(x, status) {
+        XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash","flush_dns_cache")%>', null, function(x, status) {
             if (x && x.status == 200) {
                 btn.value = (status.flush_status == "0" || status.flush_status != "") ? '<%:Flush Failed%>' : '<%:Flush Successful%>';
             } else {
@@ -4213,7 +4619,7 @@
         btn.disabled = false;
         return false;
     });
-    
+
     var b_reload_firewall = debounceButton(function(btn) {
         btn.disabled = true;
         btn.value = '<%:Reloading...%>';
@@ -4230,88 +4636,116 @@
         btn.value = '<%:Reloading...%>';
         XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "close_all_connection")%>', null, function(x, status) {
             btn.disabled = false;
-            btn.value = (x && x.status == 200) ? '<%:Close All Connections%>' : '<%:Close All Connections Failed%>';
+            btn.value = (x && x.status == 200) ? '<%:Close Connect%>' : '<%:Close Connect Failed%>';
         });
         return false;
     });
-        
+
     function net_zashboard(btn) {
-        XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "status")%>', null, function(x, status) {
-            btn.disabled = true;
-            btn.value = '<%:Zashboard%>';
-            var url9;
-            if (status.daip && window.location.hostname == status.daip) {
-                url9 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/zashboard/#/setup?hostname=' + window.location.hostname + '&port=' + status.cn_port + '&secret=' + status.dase;
-            } else if (status.daip && window.location.hostname != status.daip && status.db_foward_domain && status.db_foward_port) {
-                var ui_proto = status.db_forward_ssl == 0 ? 'http://' : 'https://';
-                url9 = ui_proto + status.db_foward_domain + ':' + status.db_foward_port + '/ui/zashboard/#/setup?hostname=' + status.db_foward_domain + '&port=' + status.db_foward_port + '&secret=' + status.dase;
-            } else {
-                url9 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/zashboard/#/';
-            }
-            winOpen(url9);
-        });
+        if (StateManager.current_status) {
+            var status = StateManager.current_status;
+        } else {
+            setTimeout(function() {
+                net_zashboard(btn)
+            }, 1000);
+            return false;
+        }
+
+        btn.disabled = true;
+        btn.value = '<%:Zashboard%>';
+        var url9;
+        if (status.daip && window.location.hostname == status.daip) {
+            url9 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/zashboard/#/setup?hostname=' + window.location.hostname + '&port=' + status.cn_port + '&secret=' + status.dase;
+        } else if (status.daip && window.location.hostname != status.daip && status.db_foward_domain && status.db_foward_port) {
+            var ui_proto = status.db_forward_ssl == 0 ? 'http://' : 'https://';
+            url9 = ui_proto + status.db_foward_domain + ':' + status.db_foward_port + '/ui/zashboard/#/setup?hostname=' + status.db_foward_domain + '&port=' + status.db_foward_port + '&secret=' + status.dase;
+        } else {
+            url9 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/zashboard/#/';
+        }
+        winOpen(url9);
         return false;
     }
 
     function meta_dashboard(btn) {
-        XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "status")%>', null, function(x, status) {
-            btn.disabled = true;
-            btn.value = '<%:Metacubexd%>';
-            var url9;
-            if (status.daip && window.location.hostname == status.daip) {
-                url9 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/metacubexd/#/setup?hostname=' + window.location.hostname + '&port=' + status.cn_port + '&secret=' + status.dase;
-            } else if (status.daip && window.location.hostname != status.daip && status.db_foward_domain && status.db_foward_port) {
-                var ui_proto = status.db_forward_ssl == 0 ? 'http://' : 'https://';
-                url9 = ui_proto + status.db_foward_domain + ':' + status.db_foward_port + '/ui/metacubexd/#/setup?hostname=' + status.db_foward_domain + '&port=' + status.db_foward_port + '&secret=' + status.dase;
-            } else {
-                url9 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/metacubexd/#/';
-            }
-            winOpen(url9);
-        });
+        if (StateManager.current_status) {
+            var status = StateManager.current_status;
+        } else {
+            setTimeout(function() {
+                meta_dashboard(btn)
+            }, 1000);
+            return false;
+        }
+
+        btn.disabled = true;
+        btn.value = '<%:Metacubexd%>';
+        var url9;
+        if (status.daip && window.location.hostname == status.daip) {
+            url9 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/metacubexd/#/setup?hostname=' + window.location.hostname + '&port=' + status.cn_port + '&secret=' + status.dase;
+        } else if (status.daip && window.location.hostname != status.daip && status.db_foward_domain && status.db_foward_port) {
+            var ui_proto = status.db_forward_ssl == 0 ? 'http://' : 'https://';
+            url9 = ui_proto + status.db_foward_domain + ':' + status.db_foward_port + '/ui/metacubexd/#/setup?hostname=' + status.db_foward_domain + '&port=' + status.db_foward_port + '&secret=' + status.dase;
+        } else {
+            url9 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/metacubexd/#/';
+        }
+        winOpen(url9);
         return false;
     }
 
     function ycad_dashboard(btn) {
-        XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "status")%>', null, function(x, status) {
-            btn.disabled = true;
-            btn.value = '<%:Yacd%>';
-            var url1;
-            if (status.daip && window.location.hostname == status.daip) {
-                url1 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/yacd/?hostname=' + window.location.hostname + '&port=' + status.cn_port + '&secret=' + status.dase;
-            } else if (status.daip && window.location.hostname != status.daip && status.db_foward_domain && status.db_foward_port) {
-                var ui_proto = status.db_forward_ssl == 0 ? 'http://' : 'https://';
-                url1 = ui_proto + status.db_foward_domain + ':' + status.db_foward_port + '/ui/yacd/?hostname=' + status.db_foward_domain + '&port=' + status.db_foward_port + '&secret=' + status.dase;
-            } else {
-                url1 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/yacd/';
-            }
-            winOpen(url1);
-        });
+        if (StateManager.current_status) {
+            var status = StateManager.current_status;
+        } else {
+            setTimeout(function() {
+                ycad_dashboard(btn)
+            }, 1000);
+            return false;
+        }
+
+        btn.disabled = true;
+        btn.value = '<%:Yacd%>';
+        var url1;
+        if (status.daip && window.location.hostname == status.daip) {
+            url1 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/yacd/?hostname=' + window.location.hostname + '&port=' + status.cn_port + '&secret=' + status.dase;
+        } else if (status.daip && window.location.hostname != status.daip && status.db_foward_domain && status.db_foward_port) {
+            var ui_proto = status.db_forward_ssl == 0 ? 'http://' : 'https://';
+            url1 = ui_proto + status.db_foward_domain + ':' + status.db_foward_port + '/ui/yacd/?hostname=' + status.db_foward_domain + '&port=' + status.db_foward_port + '&secret=' + status.dase;
+        } else {
+            url1 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/yacd/';
+        }
+        winOpen(url1);
         return false;
     }
-    
+
     function net_dashboard(btn) {
-        XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "status")%>', null, function(x, status) {
-            btn.disabled = true;
-            btn.value = '<%:Dashboard%>';
-            var url2;
-            if (status.daip && window.location.hostname == status.daip) {
-                url2 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/dashboard/#/?host=' + window.location.hostname + '&port=' + status.cn_port + '&secret=' + status.dase;
-            } else if (status.daip && window.location.hostname != status.daip && status.db_foward_domain && status.db_foward_port) {
-                var ui_proto = status.db_forward_ssl == 0 ? 'http://' : 'https://';
-                url2 = ui_proto + status.db_foward_domain + ':' + status.db_foward_port + '/ui/dashboard/#/?host=' + status.db_foward_domain + '&port=' + status.db_foward_port + '&secret=' + status.dase;
-            } else {
-                url2 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/dashboard/';
-            }
-            winOpen(url2);
-        });
+        if (StateManager.current_status) {
+            var status = StateManager.current_status;
+        } else {
+            setTimeout(function() {
+                net_dashboard(btn)
+            }, 1000);
+            return false;
+        }
+
+        btn.disabled = true;
+        btn.value = '<%:Dashboard%>';
+        var url2;
+        if (status.daip && window.location.hostname == status.daip) {
+            url2 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/dashboard/#/?host=' + window.location.hostname + '&port=' + status.cn_port + '&secret=' + status.dase;
+        } else if (status.daip && window.location.hostname != status.daip && status.db_foward_domain && status.db_foward_port) {
+            var ui_proto = status.db_forward_ssl == 0 ? 'http://' : 'https://';
+            url2 = ui_proto + status.db_foward_domain + ':' + status.db_foward_port + '/ui/dashboard/#/?host=' + status.db_foward_domain + '&port=' + status.db_foward_port + '&secret=' + status.dase;
+        } else {
+            url2 = 'http://' + window.location.hostname + ':' + status.cn_port + '/ui/dashboard/';
+        }
+        winOpen(url2);
         return false;
     }
-    
+
     function homepage() {
         url3 = 'https://github.com/vernesong/OpenClash';
         winOpen(url3);
     }
-    
+
     function gitbookpage() {
         url8 = 'https://wiki.metacubex.one';
         winOpen(url8);
@@ -4321,12 +4755,12 @@
         url5 = 'https://github.com/vernesong/OpenClash/wiki';
         winOpen(url5);
     }
-    
+
     function telegrampage() {
         url6 = 'https://t.me/ctcgfw_openwrt_discuss';
         winOpen(url6);
     }
-    
+
     function sponsorpage() {
         url7 = 'https://ko-fi.com/vernesong';
         winOpen(url7);
@@ -4342,11 +4776,11 @@
             if (!v1 || !v2) return 0;
             var ver1 = v1.replace(/^v/, '').split('.');
             var ver2 = v2.replace(/^v/, '').split('.');
-            
+
             var maxLen = Math.max(ver1.length, ver2.length);
             while (ver1.length < maxLen) ver1.push('0');
             while (ver2.length < maxLen) ver2.push('0');
-            
+
             for (var i = 0; i < maxLen; i++) {
                 var num1 = parseInt(ver1[i], 10) || 0;
                 var num2 = parseInt(ver2[i], 10) || 0;
@@ -4365,7 +4799,7 @@
                     if (status.corelv && status.corelv !== "" && status.corelv !== "loading..." && status.corelv !== status.coremetacv) {
                         hasUpdate = true;
                     }
-                    
+
                     DOMCache.core_version_text.textContent = coreVersionText;
                     if (DOMCache.core_version_text.scrollWidth > DOMCache.core_version_text.clientWidth) {
                         DOMCache.core_version_text.title = coreVersionText;
@@ -4373,12 +4807,12 @@
                         DOMCache.core_version_text.title = '';
                     }
                     DOMCache.core_version_display.style.display = 'flex';
-                    
+
                     var existingDot = DOMCache.core_version_display.querySelector('.update-dot');
                     if (existingDot) {
                         existingDot.remove();
                     }
-                    
+
                     if (hasUpdate) {
                         var updateDot = document.createElement('span');
                         updateDot.className = 'update-dot';
@@ -4392,17 +4826,17 @@
                     DOMCache.core_version_display.style.display = 'none';
                     DOMCache.core_version_display.title = '';
                 }
-                
+
                 if (status.opcv && status.opcv !== "0") {
                     var pluginVersionText = status.opcv;
                     var hasUpdate = false;
-                    
+
                     if (status.oplv && status.oplv !== "" && status.oplv !== "loading...") {
                         if (compareVersions(status.oplv, status.opcv) > 0) {
                             hasUpdate = true;
                         }
                     }
-                    
+
                     DOMCache.plugin_version_text.textContent = pluginVersionText;
                     if (DOMCache.plugin_version_text.scrollWidth > DOMCache.plugin_version_text.clientWidth) {
                         DOMCache.plugin_version_text.title = pluginVersionText;
@@ -4410,12 +4844,12 @@
                         DOMCache.plugin_version_text.title = '';
                     }
                     DOMCache.plugin_version_display.style.display = 'flex';
-                    
+
                     var existingDot = DOMCache.plugin_version_display.querySelector('.update-dot');
                     if (existingDot) {
                         existingDot.remove();
                     }
-                    
+
                     if (hasUpdate) {
                         var updateDot = document.createElement('span');
                         updateDot.className = 'update-dot';
@@ -4436,7 +4870,7 @@
     function logo_error(imgobj, imgSrc) {
         imgobj.src = imgSrc;
     }
-    
+
     function imgerrorfuns(imgobj, imgSrc) {
         setTimeout(function() {
             imgobj.src = imgSrc;
@@ -4470,21 +4904,41 @@
     }
 
     function copyAddress() {
-        var status = StateManager.current_status;
-        var address;
-        
-        if (status.daip && window.location.hostname == status.daip) {
-            address = 'http://' + status.daip + ':' + (status.cn_port || '9090') + '/ui/zashboard/#/setup?hostname=' + status.daip + '&port=' + (status.cn_port || '9090') + (status.dase ? '&secret=' + status.dase : '');
-        } else if (status.daip && window.location.hostname != status.daip && status.db_foward_domain && status.db_foward_port) {
-            var ui_proto = status.db_forward_ssl == 0 ? 'http://' : 'https://';
-            address = ui_proto + status.db_foward_domain + ':' + status.db_foward_port + '/ui/zashboard/#/setup?hostname=' + status.db_foward_domain + '&port=' + status.db_foward_port + (status.dase ? '&secret=' + status.dase : '');
-        } else {
-            address = 'http://' + (status.daip || 'unknown') + ':' + (status.cn_port || '9090') + '/ui/zashboard/#/';
-        }
-        
-        copyToClipboard(address, '<%:Control panel address copied:%> ');
+        XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "dashboard_type")%>', null, function(x, status) {
+            if (x && x.status == 200) {
+                var panel = status.default_dashboard;
+                if (panel && StateManager.current_status[panel]) {
+                    var url;
+                    var currentStatus = StateManager.current_status;
+                    if (currentStatus.daip && window.location.hostname == currentStatus.daip) {
+                        url = 'http://' + window.location.hostname + ':' + currentStatus.cn_port + '/ui/' + panel;
+                    } else if (currentStatus.daip && window.location.hostname != currentStatus.daip && currentStatus.db_foward_domain && currentStatus.db_foward_port) {
+                        var ui_proto = currentStatus.db_forward_ssl == 0 ? 'http://' : 'https://';
+                        url = ui_proto + currentStatus.db_foward_domain + ':' + currentStatus.db_foward_port + '/ui/' + panel;
+                    } else {
+                        url = 'http://' + window.location.hostname + ':' + currentStatus.cn_port + '/ui/' + panel;
+                    }
+
+                    if (panel === 'zashboard' || panel === 'metacubexd') {
+                        url += '/#/setup?hostname=' + (currentStatus.daip && window.location.hostname == currentStatus.daip ? window.location.hostname : (currentStatus.db_foward_domain || window.location.hostname)) + '&port=' + (currentStatus.daip && window.location.hostname == currentStatus.daip ? currentStatus.cn_port : (currentStatus.db_foward_port || currentStatus.cn_port)) + (currentStatus.dase ? '&secret=' + currentStatus.dase : '');
+                    } else if (panel === 'yacd') {
+                        url += '/?hostname=' + (currentStatus.daip && window.location.hostname == currentStatus.daip ? window.location.hostname : (currentStatus.db_foward_domain || window.location.hostname)) + '&port=' + (currentStatus.daip && window.location.hostname == currentStatus.daip ? currentStatus.cn_port : (currentStatus.db_foward_port || currentStatus.cn_port)) + (currentStatus.dase ? '&secret=' + currentStatus.dase : '');
+                    } else if (panel === 'dashboard') {
+                        url += '/#/?host=' + (currentStatus.daip && window.location.hostname == currentStatus.daip ? window.location.hostname : (currentStatus.db_foward_domain || window.location.hostname)) + '&port=' + (currentStatus.daip && window.location.hostname == currentStatus.daip ? currentStatus.cn_port : (currentStatus.db_foward_port || currentStatus.cn_port)) + (currentStatus.dase ? '&secret=' + currentStatus.dase : '');
+                    }
+
+                    copyToClipboard(url, '<%:Control panel address copied:%> ');
+                } else {
+                    var fallbackUrl = 'http://' + (StateManager.current_status.daip || 'unknown') + ':' + (StateManager.current_status.cn_port || '9090') + '/ui/zashboard/#/';
+                    copyToClipboard(fallbackUrl, '<%:Control panel address copied:%> ');
+                }
+            } else {
+                var fallbackUrl = 'http://' + (StateManager.current_status.daip || 'unknown') + ':' + (StateManager.current_status.cn_port || '9090') + '/ui/zashboard/#/';
+                copyToClipboard(fallbackUrl, '<%:Control panel address copied:%> ');
+            }
+        });
         return false;
-    }
+        }
 
     function copySecret() {
         var secret = StateManager.current_status.dase || '';
@@ -4526,19 +4980,19 @@
         if (SettingsManager.isPollPaused('oc_settings')) {
             return;
         }
-        
+
         StateManager.cachedXHRGet('<%=luci.dispatcher.build_url("admin", "services", "openclash", "oc_settings")%>', function(x, info) {
             if (x && x.status == 200) {
                 if (!SettingsManager.pendingOperations.has('meta_sniffer_' + info.meta_sniffer)) {
                     DOMCache.meta_sniffer_on.checked = info.meta_sniffer == "1";
                     DOMCache.meta_sniffer_off.checked = info.meta_sniffer != "1";
                 }
-                
+
                 if (!SettingsManager.pendingOperations.has('respect_rules_' + info.respect_rules)) {
                     DOMCache.respect_rules_on.checked = info.respect_rules == "1";
                     DOMCache.respect_rules_off.checked = info.respect_rules != "1";
                 }
-                
+
                 if (!SettingsManager.pendingOperations.has('oversea_' + info.oversea)) {
                     if (info.oversea == "0") {
                         DOMCache.oc_setting_oversea_0.checked = true;
@@ -4599,7 +5053,7 @@
                 port: window.location.port,
                 href: window.location.href
             };
-            
+
             XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "generate_pac")%>', {
                 client_protocol: currentUrl.protocol.replace(':', ''),
                 client_hostname: currentUrl.hostname,
@@ -4642,15 +5096,15 @@
         textArea.style.left = "0";
         textArea.style.position = "fixed";
         textArea.style.opacity = "0";
-        
+
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-        
+
         try {
             var successful = document.execCommand('copy');
             document.body.removeChild(textArea);
-            
+
             if (successful) {
                 prompt(successMessage, text);
             } else {
@@ -4664,7 +5118,7 @@
 
     function togglePlugin(toggleElement) {
         var isEnabled = toggleElement.checked;
-        
+
         if (isEnabled) {
             var currentConfig = ConfigFileManager.getCurrentConfig() || ConfigFileManager.getSelectedConfig();
             if (!currentConfig) {
@@ -4678,29 +5132,29 @@
         pluginToggleUserAction = true;
         var action = isEnabled ? 'start' : 'stop';
         var initialMessage = isEnabled ? '<%:Starting...%>' : '<%:Stopping...%>';
-        
+
         LogManager.startLogDisplay(initialMessage);
-        
+
         var requestParams = { action: action };
-        
+
         if (isEnabled) {
             var currentConfig = ConfigFileManager.getCurrentConfig();
             var selectedConfig = ConfigFileManager.getSelectedConfig();
-            
+
             if (!currentConfig && selectedConfig) {
                 requestParams.config_file = configFileName;
             }
         }
-        
+
         XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "action")%>', requestParams, function(x, status) {
             if (x && x.status == 200) {
                 setTimeout(function() {
                     pluginToggleUserAction = false;
                     updatePluginToggleState(StateManager.current_status.clash || false);
-                }, 3000);
+                }, 2000);
             } else {
                 toggleElement.checked = !isEnabled;
-                
+
                 var errorMessage = isEnabled ? 
                     '<%:Failed to start OpenClash%>' : 
                     '<%:Failed to stop OpenClash%>';
@@ -4709,7 +5163,7 @@
                 if (DOMCache.clash) {
                     DOMCache.clash.innerHTML = '<b style="color:var(--error-color)"><%:Operation Failed%></b>';
                 }
-                
+
                 pluginToggleUserAction = false;
             }
             toggleElement.disabled = false;
@@ -4720,22 +5174,22 @@
         if (pluginToggleUserAction) {
             return;
         }
-        
+
         var toggleElement = document.getElementById('plugin_toggle');
         if (toggleElement) {
             toggleElement.checked = isRunning;
             toggleElement.disabled = false;
-            
+
             if (DOMCache.clash && StateManager.current_status) {
                 DOMCache.clash.innerHTML = isRunning ? 
-                    '<b style=color:var(--success-color)>' + (StateManager.current_status.core_type || 'OpenClash') +'&nbsp;<%:Running%></b>' : 
+                    '<b style=color:var(--success-color)>' + StateManager.current_status.core_type +'&nbsp;<%:Running%></b>' : 
                     '<b style=color:var(--error-color)><%:Not Running%></b>';
             }
-            
+
             if (!isRunning && StateManager.current_status && !StateManager.current_status.clash) {
                 setTimeout(function() {
                     updatePluginToggleState(StateManager.current_status.clash || false);
-                }, 3000);
+                }, 2000);
             }
         }
     }
@@ -4746,11 +5200,11 @@
             alert('<%:Please select a config file first%>');
             return false;
         }
-        
+
         pluginToggleUserAction = true;
-        
+
         LogManager.startLogDisplay('<%:Switching Config...%>');
-        
+
         XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "switch_config")%>', {
             config_file: currentConfig
         }, function(x, status) {
@@ -4759,28 +5213,28 @@
                 setTimeout(function() {
                     pluginToggleUserAction = false;
                     updatePluginToggleState(StateManager.current_status.clash || false);
-                }, 4000);
+                }, 2000);
             } else {
                 alert('<%:Failed to switch config file:%> ' + (status.message || '<%:Unknown error%>'));
-                
+
                 if (DOMCache.oclog) {
                     DOMCache.oclog.innerHTML = '<b style="color:var(--error-color)"><%:Switch Failed%></b>';
                 }
-                
+
                 pluginToggleUserAction = false;
             }
         });
 
         return false;
     }
-    
+
     function updateConfig() {
         var currentConfig = ConfigFileManager.getSelectedConfig();
         if (!currentConfig) {
             alert('<%:Please select a config file first%>');
             return false;
         }
-        
+
         var filename = SubscriptionManager.extractFilename(currentConfig);
         if (!filename) {
             alert('<%:Invalid config file selected%>');
@@ -4788,7 +5242,7 @@
         }
 
         pluginToggleUserAction = true;
-        
+
         LogManager.startLogDisplay('<%:Updating Config...%>');
 
         XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "update_config")%>', {
@@ -4797,30 +5251,30 @@
             if (x && x.status == 200) {
                 if (status.status === 'success') {
                     setTimeout(function() {
-                        
+
                         refreshSubscriptionInfo();
-                        
+
                         ConfigFileManager.refreshConfigList();
-                        
+
                         pluginToggleUserAction = false;
-                        
+
                     }, 2000);
                 } else {
                     pluginToggleUserAction = false;
-                    
+
                     if (DOMCache.oclog) {
                         DOMCache.oclog.innerHTML = '<b style="color:var(--error-color)"><%:Update Failed%></b>';
                     }
-                    
+
                     alert('<%:Failed to update config file:%> ' + (status.message || status.error || '<%:Unknown error%>'));
                 }
             } else {
                 pluginToggleUserAction = false;
-                
+
                 if (DOMCache.oclog) {
                     DOMCache.oclog.innerHTML = '<b style="color:var(--error-color)"><%:Update Failed%></b>';
                 }
-                
+
                 alert('<%:Failed to update config file, please try again later%>');
             }
         });
@@ -4836,35 +5290,36 @@
         }
 
         pluginToggleUserAction = true;
-        
+
         var toggleElement = document.getElementById('plugin_toggle');
         if (toggleElement) {
             toggleElement.disabled = true;
         }
-        
+
         LogManager.startLogDisplay('<%:Restarting...%>');
-        
+
         var requestParams = { action: 'restart' };
-        
+
         var currentConfigValue = ConfigFileManager.getCurrentConfig();
         var selectedConfig = ConfigFileManager.getSelectedConfig();
-        
+
         if (!currentConfigValue && selectedConfig) {
             requestParams.config_file = configFileName;
         }
-        
+
         XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "action")%>', requestParams, function(x, status) {
             if (x && x.status == 200) {
                 setTimeout(function() {
                     pluginToggleUserAction = false;
                     updatePluginToggleState(StateManager.current_status.clash || false);
-                }, 5000);
+                }, 2000);
+                ConfigFileManager.refreshConfigList();
             } else {
                 if (toggleElement) {
                     toggleElement.disabled = false;
                 }
                 alert('<%:Failed to restart core%>');
-                
+
                 pluginToggleUserAction = false;
             }
         });
@@ -4877,47 +5332,30 @@
             alert('<%:Please select a config file first%>');
             return false;
         }
-        
+
         SubscriptionManager.currentConfigFile = currentConfig;
         SubscriptionManager.retryCount = 0;
-        
+
         var filename = SubscriptionManager.extractFilename(currentConfig);
         localStorage.removeItem('sub_info_' + filename);
         SubscriptionManager.getSubscriptionInfo();
         return false;
     }
-    
+
     function setSubscriptionUrl() {
         var currentConfig = ConfigFileManager.getSelectedConfig();
         if (!currentConfig) {
             alert('<%:Please select a config file first%>');
             return false;
         }
-        
+
         var filename = SubscriptionManager.extractFilename(currentConfig);
         if (!filename) {
             alert('<%:Invalid config file selected%>');
             return false;
         }
-        
-        var newUrl = prompt('<%:Paste the new url of subscribe infos sources here:%>', '');
-        if (newUrl === null) {
-            return false;
-        }
-        
-        XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "set_subinfo_url")%>', {
-            filename: filename,
-            url: newUrl
-        }, function(x, status) {
-            if (x && x.status == 200 && status.info === "Success") {
-                refreshSubscriptionInfo();
-            } else if (x && x.status == 200 && status.info === "Delete success") {
-                refreshSubscriptionInfo();
-            } else {
-                alert('<%:Specify subscribe infos sources url failed:%>\n' + (status.info || '<%:Unknown error%>'));
-            }
-        });
-        
+
+        SubscriptionUrlSetter.show(filename);
         return false;
     }
 
@@ -4929,11 +5367,47 @@
                 if (typeof ConfigUploader !== 'undefined' && ConfigUploader.show) {
                     ConfigUploader.show();
                 } else {
-                    alert('<%:Config uploader not ready, please try again%>');
+                    alert('<%:Config editor not ready, please try again%>');
                 }
             }, 500);
         }
-        
+
+        return false;
+    }
+
+    function editSubscribe() {
+        var currentConfig = ConfigFileManager.getSelectedConfig();
+        if (!currentConfig) {
+            alert('<%:Please select a config file first%>');
+            return false;
+        }
+
+        var filename = SubscriptionManager.extractFilename(currentConfig);
+        if (!filename) {
+            alert('<%:Invalid config file selected%>');
+            return false;
+        }
+
+        XHR.get('<%=luci.dispatcher.build_url("admin", "services", "openclash", "get_subscribe_data")%>', {
+            filename: filename
+        }, function(x, status) {
+            if (x.status == 200) {
+                if (typeof ConfigUploader !== 'undefined' && ConfigUploader.showEditSubscribe) {
+                    ConfigUploader.showEditSubscribe(status, filename);
+                } else {
+                    setTimeout(function() {
+                        if (typeof ConfigUploader !== 'undefined' && ConfigUploader.showEditSubscribe) {
+                            ConfigUploader.showEditSubscribe(status, filename);
+                        } else {
+                            alert('<%:Config editor not ready, please try again%>');
+                        }
+                    }, 500);
+                }
+            } else {
+                alert('<%:Failed to get subscribe data%>');
+            }
+        });
+
         return false;
     }
 
@@ -4943,7 +5417,7 @@
             alert('<%:Please select a config file first%>');
             return false;
         }
-        
+
         if (typeof ConfigEditor !== 'undefined' && ConfigEditor.show) {
             ConfigEditor.show(currentConfig);
         } else {
@@ -4955,7 +5429,7 @@
                 }
             }, 500);
         }
-        
+
         return false;
     }
 
@@ -4971,7 +5445,7 @@
                 }
             }, 500);
         }
-        
+
         return false;
     }
 
@@ -4998,23 +5472,34 @@
     }
 
     function isDarkBackground(element) {
+        var cachedTheme = localStorage.getItem('oc-theme');
+        if (cachedTheme === 'dark') {
+            return true;
+        } else if (cachedTheme === 'light') {
+            return false;
+        }
+
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return true;
+        }
+
         var style = window.getComputedStyle(element);
         var bgColor = style.backgroundColor;
         let r, g, b;
         if (/rgb\(/.test(bgColor)) {
             var rgb = bgColor.match(/\d+/g);
-            r = parseInt(rgb);
-            g = parseInt(rgb);
-            b = parseInt(rgb);
+            r = parseInt(rgb[0]);
+            g = parseInt(rgb[1]);
+            b = parseInt(rgb[2]);
         } else if (/#/.test(bgColor)) {
             if (bgColor.length === 4) {
-            r = parseInt(bgColor + bgColor, 16);
-            g = parseInt(bgColor + bgColor, 16);
-            b = parseInt(bgColor + bgColor, 16);
+                r = parseInt(bgColor[1] + bgColor[1], 16);
+                g = parseInt(bgColor[2] + bgColor[2], 16);
+                b = parseInt(bgColor[3] + bgColor[3], 16);
             } else {
-            r = parseInt(bgColor.slice(1, 3), 16);
-            g = parseInt(bgColor.slice(3, 5), 16);
-            b = parseInt(bgColor.slice(5, 7), 16);
+                r = parseInt(bgColor.slice(1, 3), 16);
+                g = parseInt(bgColor.slice(3, 5), 16);
+                b = parseInt(bgColor.slice(5, 7), 16);
             }
         } else {
             return false;
@@ -5022,5 +5507,16 @@
         var luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
         return luminance < 128;
     };
+
+    function toggleThemeMode() {
+        var themes = ['light', 'dark', 'auto'];
+        var currentTheme = localStorage.getItem('oc-theme') || 'auto';
+        var currentIndex = themes.indexOf(currentTheme);
+        if (currentIndex === -1) currentIndex = 2;
+        var newIndex = (currentIndex + 1) % themes.length;
+        var newTheme = themes[newIndex];
+        localStorage.setItem('oc-theme', newTheme);
+        DarkModeDetector.init();
+    }
 //]]></script>
 </html>
