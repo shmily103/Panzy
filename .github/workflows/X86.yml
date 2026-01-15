@@ -128,7 +128,13 @@ jobs:
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make -j1 || make -j1 V=s
+        
+        # 核心修改：在执行 make 时清空 CI 相关的环境变量
+        # 这样可以绕过 Rust 强制要求 if-unchanged 的限制
+        CI="" GITHUB_ACTIONS="" make -j$(nproc) || \
+        CI="" GITHUB_ACTIONS="" make -j1 || \
+        CI="" GITHUB_ACTIONS="" make -j1 V=s
+        
         echo "status=success" >> $GITHUB_OUTPUT
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
