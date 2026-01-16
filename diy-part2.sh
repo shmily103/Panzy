@@ -29,7 +29,7 @@ sed -i 's/ssid=OpenWrt/ssid=Panzy/g' package/kernel/mac80211/files/lib/wifi/mac8
 sed -i 's/OpenWrt/Panzy/g' package/base-files/files/bin/config_generate
 
 # Modify LAN port
-sed -i 's/eth0/eth6/g' package/base-files/files/etc/board.d/99-default_network
+sed -i 's/eth0/eth1/g' package/base-files/files/etc/board.d/99-default_network
 
 # 强制将 Rust Makefile 中的 download-ci-llvm=true 改为 if-unchanged
 # sed -i 's/--set=llvm.download-ci-llvm=true/--set=llvm.download-ci-llvm=if-unchanged/g' feeds/packages/lang/rust/Makefile
