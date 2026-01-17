@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # 定义你想要的 SSID 和 密码
-UNIQUE_SSID="MyHomeNetwork"
-WIFI_PASS="88888888"
+UNIQUE_SSID="Panzy"
+WIFI_PASS="18650903217"
 
 # 计数器，用于遍历无线接口
 idx=0
