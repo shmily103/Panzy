@@ -18,6 +18,11 @@ sed -i 's/disabled=1/disabled=0/g' package/kernel/mac80211/files/lib/wifi/mac802
 sed -i 's/ssid=OpenWrt/ssid=Panzy/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
 # Modify Automount
 \cp -rf package/Panzy/mount.hotplug package/system/fstools/files
+
+mkdir -p files/etc/uci-defaults
+\cp -rf package/Panzy/config/99-custom-wifi files/etc/uci-defaults
+chmod +x files/etc/uci-defaults/99-custom-wifi
+
 # Add tools
 #mv package/Panzy/upx tools/upx
 #mv package/Panzy/ucl tools/ucl
