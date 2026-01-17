@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# 定义你想要的 SSID 和 密码
+UNIQUE_SSID="MyHomeNetwork"
+WIFI_PASS="88888888"
+
+# 计数器，用于遍历无线接口
+idx=0
+
+while true; do
+    # 检查是否存在对应的无线配置节 (default_radioX)
+    # v24.10 默认生成的接口名称通常为 default_radio0, default_radio1...
+    section="default_radio$idx"
+    
+    if ! uci get wireless.$section >/dev/null 2>&1; then
+        # 如果找不到更多接口，跳出循环
+        break
+    fi
+
+    # 获取该接口所属的物理设备，判断频段
+    device=$(uci get wireless.$section.device)
+    band=$(uci get wireless.${device}.band 2>/dev/null)
+
+    # 根据频段设置不同的 SSID 后缀（可选）
+    if [ "$band" = "5g" ]; then
+        current_ssid="${UNIQUE_SSID}_5G"
+    elif [ "$band" = "6g" ]; then
+        current_ssid="${UNIQUE_SSID}_6G"
+    else
+        current_ssid="${UNIQUE_SSID}"
+    fi
+
+    # 执行修改配置
+    uci set wireless.$section.ssid="$current_ssid"
+    uci set wireless.$section.encryption='psk2'
+    uci set wireless.$section.key="$WIFI_PASS"
+    
+    # 强制开启 WiFi（将 disabled 设为 0）
+    uci set wireless.${device}.disabled='0'
+
+    idx=$((idx + 1))
+done
+
+# 提交修改
+uci commit wireless
+
+# 退出脚本
+exit 0
