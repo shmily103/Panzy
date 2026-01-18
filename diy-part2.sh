@@ -23,6 +23,10 @@ mkdir -p files/etc/uci-defaults
 \cp -rf package/Panzy/config/99-custom-wifi files/etc/uci-defaults
 chmod +x files/etc/uci-defaults/99-custom-wifi
 
+mkdir -p files/etc/config
+\cp -rf package/Panzy/config/network files/etc/config
+chmod +x files/etc/config/network
+
 # Add tools
 #mv package/Panzy/upx tools/upx
 #mv package/Panzy/ucl tools/ucl
