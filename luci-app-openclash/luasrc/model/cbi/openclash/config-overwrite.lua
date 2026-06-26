@@ -11,7 +11,7 @@ local datatype = require "luci.cbi.datatypes"
 
 -- 优化 CBI UI（新版 LuCI 专用）
 local function optimize_cbi_ui()
-	luci.http.write([[
+	HTTP.write([[
 		<script type="text/javascript">
 			// 修正上移、下移按钮名称
 			document.querySelectorAll("input.btn.cbi-button.cbi-button-up").forEach(function(btn) {
@@ -56,7 +56,6 @@ s:tab("dns", "DNS "..translate("Settings"))
 s:tab("meta", translate("Meta Settings"))
 s:tab("smart", translate("Smart Settings"))
 s:tab("rules", translate("Rules Setting"))
-s:tab("developer", translate("Developer Settings"))
 
 ----- General Settings
 o = s:taboption("settings", ListValue, "interface_name", translate("Bind Network Interface"))
@@ -274,6 +273,29 @@ function custom_domain_dns_policy.write(self, section, value)
 	end
 end
 
+o = s:taboption("dns", Flag, "custom_proxy_server_policy", translate("Proxy-Server-Nameserver-Policy"))
+o.default = 0
+
+custom_proxy_server_dns_policy = s:taboption("dns", Value, "custom_proxy_server_dns_policy")
+custom_proxy_server_dns_policy.template = "cbi/tvalue"
+custom_proxy_server_dns_policy.description = translate("Domain Names In The List Use The Custom DNS Server, But Still Return Fake-IP Results, One rule per line")
+custom_proxy_server_dns_policy.rows = 20
+custom_proxy_server_dns_policy.wrap = "off"
+custom_proxy_server_dns_policy:depends("custom_proxy_server_policy", "1")
+
+function custom_proxy_server_dns_policy.cfgvalue(self, section)
+	return NXFS.readfile("/etc/openclash/custom/openclash_custom_proxy_server_dns_policy.list") or ""
+end
+function custom_proxy_server_dns_policy.write(self, section, value)
+	if value then
+		value = value:gsub("\r\n?", "\n")
+		local old_value = NXFS.readfile("/etc/openclash/custom/openclash_custom_proxy_server_dns_policy.list")
+		if value ~= old_value then
+			NXFS.writefile("/etc/openclash/custom/openclash_custom_proxy_server_dns_policy.list", value)
+		end
+	end
+end
+
 o = s:taboption("dns", Flag, "custom_host", translate("Hosts"))
 o.default = 0
 
@@ -306,27 +328,19 @@ o = s:taboption("meta", Flag, "enable_unified_delay", font_red..bold_on..transla
 o.description = font_red..bold_on..translate("Change The Delay Calculation Method To Remove Extra Delays Such as Handshaking")..bold_off..font_off
 o.default = "0"
 
+o = s:taboption("meta", Value, "global_ua", translate("Global User-Agent"))
+o:value("0", translate("Disable"))
+o:value("clash-verge/v2.4.5")
+o:value("clash.meta/1.19.20")
+o:value("Clash")
+o.default = "0"
+
 o = s:taboption("meta", ListValue, "find_process_mode", translate("Enable Process Rule"))
 o.description = translate("Whether to Enable Process Rules, Only Works on Routerself, If You Are Not Sure, Please Choose off Which Useful in Router Environment, Depend on kmod-inet-diag")
 o:value("0", translate("Disable"))
 o:value("off", translate("OFF　"))
 o:value("always", translate("Always　"))
 o:value("strict", translate("strict　"))
-o.default = "0"
-
-o = s:taboption("meta", ListValue, "global_client_fingerprint", translate("Client Fingerprint"))
-o.description = translate("Change The Client Fingerprint, Only Support TLS Transport in TCP/GRPC/WS/HTTP For Vless/Vmess and Trojan")
-o:value("0", translate("Disable"))
-o:value("none", translate("None　"))
-o:value("random", translate("Random"))
-o:value("chrome", translate("Chrome"))
-o:value("firefox", translate("Firefox"))
-o:value("safari", translate("Safari"))
-o:value("ios", translate("IOS"))
-o:value("android", translate("Android"))
-o:value("edge", translate("Edge"))
-o:value("360", translate("360"))
-o:value("qq", translate("QQ"))
 o.default = "0"
 
 o = s:taboption("meta", ListValue, "geodata_loader", translate("Geodata Loader Mode"))
@@ -436,10 +450,6 @@ o = s:taboption("smart", DummyValue, "flush_smart_cache", translate("Flush Smart
 o.template = "openclash/flush_smart_cache"
 
 ---- Rules Settings
-o = s:taboption("rules", Flag, "rule_source", translate("Enable Other Rules"))
-o.description = translate("Use Other Rules")
-o.default = 0
-
 o = s:taboption("rules", Flag, "enable_rule_proxy", translate("Rule Match Proxy Mode"))
 o.description = translate("Append Some Rules to Config, Allow Only Traffic Proxies that Match the Rule, Prevent BT/P2P Passing")
 o.default = 0
@@ -488,37 +498,21 @@ function custom_rules_2.write(self, section, value)
 	end
 end
 
----- developer
-o = s:taboption("developer", Value, "ymchange_custom")
-o.template = "cbi/tvalue"
-o.description = translate("Custom Config Overwrite Scripts Which Will Run After Plugin Own Completely, Please Be Careful, The Wrong Changes May Lead to Exceptions")
-o.rows = 30
-o.wrap = "off"
-
-function o.cfgvalue(self, section)
-	return NXFS.readfile("/etc/openclash/custom/openclash_custom_overwrite.sh") or ""
-end
-function o.write(self, section, value)
-	if value then
-		value = value:gsub("\r\n?", "\n")
-		local old_value = NXFS.readfile("/etc/openclash/custom/openclash_custom_overwrite.sh")
-		if value ~= old_value then
-			NXFS.writefile("/etc/openclash/custom/openclash_custom_overwrite.sh", value)
-		end
-	end
-end
-
 -- [[ Edit Custom DNS ]] --
 ds = m:section(TypedSection, "dns_servers", translate("Add Custom DNS Servers")..translate("(Take Effect After Choose Above)"))
 ds.anonymous = true
 ds.addremove = true
 ds.sortable = true
-ds.template = "openclash/tblsection_dns"
-ds.extedit = luci.dispatcher.build_url("admin/services/openclash/custom-dns-edit/%s")
-function ds.create(...)
-	local sid = TypedSection.create(...)
+ds.template = "openclash/tblsection"
+ds.extedit = DISP.build_url("admin/services/openclash/custom-dns-edit/%s")
+function ds.create(self, section)
+	local sid = TypedSection.create(self, section)
 	if sid then
-		luci.http.redirect(ds.extedit % sid)
+		local name = HTTP.formvalue("cbi.cts.tagname.".. self.config .. "." .. self.sectiontype)
+		if name and #name > 0 then
+			self.map.uci:set("openclash", sid, "group", name)
+		end
+		HTTP.redirect(ds.extedit % sid)
 		return
 	end
 end
@@ -533,9 +527,9 @@ end
 
 ---- group
 o = ds:option(ListValue, "group", translate("DNS Server Group"))
-o:value("nameserver", translate("NameServer "))
-o:value("fallback", translate("FallBack "))
-o:value("default", translate("Default-NameServer"))
+o:value("nameserver", translate("nameserver "))
+o:value("fallback", translate("fallback "))
+o:value("default", translate("default-nameserver"))
 o.default = "nameserver"
 o.rempty = false
 
@@ -564,53 +558,6 @@ o.rempty = false
 o = ds:option(Flag, "disable_ipv6", translate("Disable-IPv6"))
 o.rmempty = false
 o.default = o.disbled
-
--- [[ Other Rules Manage ]]--
-ss = m:section(TypedSection, "other_rules", translate("Other Rules Edit")..translate("(Take Effect After Choose Above)"))
-ss.anonymous = true
-ss.addremove = true
-ss.sortable = true
-ss.template = "cbi/tblsection"
-ss.extedit = luci.dispatcher.build_url("admin/services/openclash/other-rules-edit/%s")
-function ss.create(...)
-	local sid = TypedSection.create(...)
-	if sid then
-		luci.http.redirect(ss.extedit % sid)
-		return
-	end
-end
-ss.render = function(self, ...)
-	Map.render(self, ...)
-	if type(optimize_cbi_ui) == "function" then
-		optimize_cbi_ui()
-	end
-end
-
-o = ss:option(Flag, "enabled", translate("Enable"))
-o.rmempty = false
-o.default = o.enabled
-o.cfgvalue = function(...)
-	return Flag.cfgvalue(...) or "1"
-end
-
-o = ss:option(DummyValue, "config", translate("Config File"))
-function o.cfgvalue(...)
-	return Value.cfgvalue(...) or translate("None")
-end
-
-o = ss:option(DummyValue, "rule_name", translate("Other Rules Name"))
-function o.cfgvalue(...)
-	if Value.cfgvalue(...) == "lhie1" then
-		return translate("lhie1 Rules")
-	else
-		return translate("None")
-	end
-end
-
-o = ss:option(DummyValue, "Note", translate("Note"))
-function o.cfgvalue(...)
-	return Value.cfgvalue(...) or translate("None")
-end
 
 -- [[ Edit Authentication ]] --
 s = m:section(TypedSection, "authentication", translate("Set Authentication of SOCKS5/HTTP(S)"))

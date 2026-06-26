@@ -8,10 +8,17 @@ local fs = require "luci.openclash"
 local uci = require "luci.model.uci".cursor()
 local json = require "luci.jsonc"
 local datatype = require "luci.cbi.datatypes"
+local net = require "luci.model.network".init()
+local devices = {}
+for _, iface in ipairs(net:get_interfaces()) do
+	if iface:name() then
+		table.insert(devices, {name = iface:name()})
+	end
+end
 
 -- 优化 CBI UI（新版 LuCI 专用）
 local function optimize_cbi_ui()
-	luci.http.write([[
+	HTTP.write([[
 		<script type="text/javascript">
 			// 修正上移、下移按钮名称
 			document.querySelectorAll("input.btn.cbi-button.cbi-button-up").forEach(function(btn) {
@@ -72,7 +79,6 @@ s:tab("auto_restart", translate("Auto Restart"))
 s:tab("version_update", translate("Version Update"))
 s:tab("developer", translate("Developer Settings"))
 s:tab("debug", translate("Debug Logs"))
-s:tab("dlercloud", translate("Dler Cloud"))
 
 o = s:taboption("op_mode", ListValue, "en_mode", font_red..bold_on..translate("Select Mode")..bold_off..font_off)
 o.description = translate("Select Mode For OpenClash Work, Try Flush DNS Cache If Network Error")
@@ -216,7 +222,11 @@ mac_w:depends("lan_ac_mode", "1")
 
 o = s:taboption("lan_ac", DynamicList, "wan_ac_black_ips", translate("WAN Bypassed Host List"))
 o.datatype = "ipmask"
-o.description = translate("In The Fake-IP Mode, Only Pure IP Requests Are Supported")
+o.description = translate("In The Fake-IP Mode, Only Pure IP Requests Are Supported, Please Setting Fake-IP-Filter First If You Need Domain Type Requests")
+
+o = s:taboption("lan_ac", DynamicList, "wan_ac_black_ports", translate("WAN Bypassed Port List"))
+o.datatype = "or(port, portrange)"
+o.description = translate("In The Fake-IP Mode, Only Pure IP Requests Are Supported, Please Setting Fake-IP-Filter First If You Need Domain Type Requests")
 
 s2 = m:section(TypedSection, "lan_ac_traffic", translate("Lan Traffic Access List"),
 	"1. "..translate("The Traffic From The Local Specified Port Will Not Pass The Core, Try To Set When The Bypass Gateway Forwarding Fails").."; ".."2. "..translate("In The Fake-IP Mode, Only Pure IP Requests Are Supported, Please Setting Fake-IP-Filter First If You Need Domain Type Requests"))
@@ -255,18 +265,54 @@ o.placeholder = translate("5000 or 1234-2345")
 o.rmempty = true
 
 o = s2:option(ListValue, "proto", translate("Proto"))
+o:value("both", translate("Both"))
 o:value("udp", translate("UDP"))
 o:value("tcp", translate("TCP"))
-o:value("both", translate("Both"))
-o.default = "tcp"
+o.default = "both"
 o.rmempty = false
 
 o = s2:option(ListValue, "family", translate("Family"))
+o:value("both", translate("Both"))
 o:value("ipv4", translate("IPv4"))
 o:value("ipv6", translate("IPv6"))
-o:value("both", translate("Both"))
-o.default = "tcp"
+o.default = "both"
 o.rmempty = false
+
+o = s2:option(ListValue, "interface", translate("Interface"))
+o:value("")
+o.default = ""
+for _, dev in ipairs(devices) do
+	o:value(dev.name)
+end
+o.rmempty = true
+
+o = s2:option(ListValue, "user", translate("User"))
+o:value("")
+o.default = ""
+local passwd_content = NXFS.readfile("/etc/passwd")
+local users = ""
+if passwd_content then
+    for line in string.gmatch(passwd_content, "[^\n]+") do
+        if line:match("^[^#]") and line:match(":") then
+            local fields = {}
+            for field in string.gmatch(line, "([^:]+)") do
+                table.insert(fields, field)
+            end
+            if #fields >= 3 then
+                local username = fields[1]
+                local uid_str = fields[3]
+                local uid = tonumber(uid_str)
+                if uid and uid >= 0 then
+                    users = users .. uid .. ":" .. username .. "\n"
+                end
+            end
+        end
+    end
+end
+for uid, username in string.gmatch(users, "(%d+):(%S+)") do
+    o:value(uid, username)
+end
+o.rmempty = true
 
 o = s2:option(Value, "dscp", translate("DSCP"))
 o.datatype = "range(0,63)"
@@ -417,17 +463,16 @@ o.default = 1
 o = s:taboption("traffic_control", DynamicList, "intranet_allowed_wan_name", translate("WAN Interface Name"))
 o.description = translate("Select WAN Interface Name For The Intranet Allowed")
 o:depends("intranet_allowed", "1")
-local interfaces = SYS.exec("ls -l /sys/class/net/ 2>/dev/null |awk '{print $9}' 2>/dev/null")
-for interface in string.gmatch(interfaces, "%S+") do
-	o:value(interface)
+for _, dev in ipairs(devices) do
+	o:value(dev.name)
 end
 
 o = s:taboption("traffic_control", ListValue, "lan_interface_name", translate("LAN Interface Name"))
 o.description = translate("Select LAN Interface Name")
 o:value("0", translate("Disable"))
 o.default = "0"
-for interface in string.gmatch(interfaces, "%S+") do
-	o:value(interface)
+for _, dev in ipairs(devices) do
+	o:value(dev.name)
 end
 
 o = s:taboption("traffic_control", Value, "local_network_pass", translate("Local IPv4 Network Bypassed List"))
@@ -465,8 +510,8 @@ function o.write(self, section, value)
 		value = value:gsub("\r\n?", "\n")
 		local old_value = NXFS.readfile("/etc/openclash/custom/openclash_custom_chnroute_pass.list")
 		if value ~= old_value then
-				NXFS.writefile("/etc/openclash/custom/openclash_custom_chnroute_pass.list", value)
-			end
+			NXFS.writefile("/etc/openclash/custom/openclash_custom_chnroute_pass.list", value)
+		end
 	end
 end
 
@@ -840,43 +885,63 @@ o.template = "openclash/other_stream_option"
 o.value = "OpenAI"
 o:depends("stream_auto_select_openai", "1")
 
----- update Settings
-o = s:taboption("rules_update", Flag, "other_rule_auto_update", translate("Auto Update"))
-o.description = font_red..bold_on..translate("Auto Update Other Rules")..bold_off..font_off
+-- Claude
+o = s:taboption("stream_enhance", Flag, "stream_auto_select_claude", font_red..translate("Claude")..font_off)
 o.default = 0
+o:depends("stream_auto_select", "1")
 
-o = s:taboption("rules_update", ListValue, "other_rule_update_week_time", translate("Update Time (Every Week)"))
-o:depends("other_rule_auto_update", "1")
-o:value("*", translate("Every Day"))
-o:value("1", translate("Every Monday"))
-o:value("2", translate("Every Tuesday"))
-o:value("3", translate("Every Wednesday"))
-o:value("4", translate("Every Thursday"))
-o:value("5", translate("Every Friday"))
-o:value("6", translate("Every Saturday"))
-o:value("0", translate("Every Sunday"))
-o.default = "1"
+o = s:taboption("stream_enhance", Value, "stream_auto_select_group_key_claude", translate("Group Filter"))
+o.placeholder = "Claude|AI"
+o.description = translate("It Will Be Searched According To The Regex When Auto Search Group Fails")
+o:depends("stream_auto_select_claude", "1")
+o.rmempty = true
 
-o = s:taboption("rules_update", ListValue, "other_rule_update_day_time", translate("Update time (every day)"))
-o:depends("other_rule_auto_update", "1")
-for t = 0,23 do
-o:value(t, t..":00")
-end
-o.default = "0"
+o = s:taboption("stream_enhance", Value, "stream_auto_select_region_key_claude", translate("Unlock Region Filter"))
+o.placeholder = "US"
+o.description = translate("It Will Be Selected Region(Country Shortcode) According To The Regex")
+o:depends("stream_auto_select_claude", "1")
+o.rmempty = true
 
-o = s:taboption("rules_update", Button, translate("Other Rules Update")) 
-o:depends("other_rule_auto_update", "1")
-o.title = translate("Update Other Rules")
-o.inputtitle = translate("Check And Update")
-o.description = translate("Other Rules Update(Only in Use)")..", "..translate("Current Version:").." "..font_green..bold_on..translate(fs.get_resourse_mtime("/usr/share/openclash/res/lhie1.yaml"))..bold_off..font_off
-o.inputstyle = "reload"
-o.write = function()
-	m.uci:set("openclash", "config", "enable", 1)
-	m.uci:commit("openclash")
-	SYS.call("/usr/share/openclash/openclash_rule.sh >/dev/null 2>&1 &")
-	HTTP.redirect(DISP.build_url("admin", "services", "openclash"))
-end
+o = s:taboption("stream_enhance", Value, "stream_auto_select_node_key_claude", translate("Unlock Nodes Filter"))
+o.description = translate("It Will Be Selected Nodes According To The Regex")
+o:depends("stream_auto_select_claude", "1")
+o.rmempty = true
 
+o = s:taboption("stream_enhance", DummyValue, "Claude", translate("Manual Test"))
+o.rawhtml = true
+o.template = "openclash/other_stream_option"
+o.value = "Claude"
+o:depends("stream_auto_select_claude", "1")
+
+-- Gemini
+o = s:taboption("stream_enhance", Flag, "stream_auto_select_gemini", font_red..translate("Gemini")..font_off)
+o.default = 0
+o:depends("stream_auto_select", "1")
+
+o = s:taboption("stream_enhance", Value, "stream_auto_select_group_key_gemini", translate("Group Filter"))
+o.placeholder = "Gemini|AI"
+o.description = translate("It Will Be Searched According To The Regex When Auto Search Group Fails")
+o:depends("stream_auto_select_gemini", "1")
+o.rmempty = true
+
+o = s:taboption("stream_enhance", Value, "stream_auto_select_region_key_gemini", translate("Unlock Region Filter"))
+o.placeholder = "US"
+o.description = translate("It Will Be Selected Region(Country Shortcode) According To The Regex")
+o:depends("stream_auto_select_gemini", "1")
+o.rmempty = true
+
+o = s:taboption("stream_enhance", Value, "stream_auto_select_node_key_gemini", translate("Unlock Nodes Filter"))
+o.description = translate("It Will Be Selected Nodes According To The Regex")
+o:depends("stream_auto_select_gemini", "1")
+o.rmempty = true
+
+o = s:taboption("stream_enhance", DummyValue, "Gemini", translate("Manual Test"))
+o.rawhtml = true
+o.template = "openclash/other_stream_option"
+o.value = "Gemini"
+o:depends("stream_auto_select_gemini", "1")
+
+---- update Settings
 o = s:taboption("geo_update", Flag, "geo_auto_update", font_red..bold_on..translate("Auto Update GeoIP MMDB")..bold_off..font_off)
 o.default = 0
 
@@ -903,21 +968,22 @@ o = s:taboption("geo_update", Value, "geo_custom_url")
 o.title = translate("Custom GeoIP MMDB URL")
 o.rmempty = true
 o.description = translate("Custom GeoIP MMDB URL, Click Button Below To Refresh After Edit")
-o:value("https://testingcf.jsdelivr.net/gh/alecthw/mmdb_china_ip_list@release/lite/Country.mmdb", translate("Alecthw-lite-Version")..translate("(Default mmdb)"))
-o:value("https://testingcf.jsdelivr.net/gh/alecthw/mmdb_china_ip_list@release/Country.mmdb", translate("Alecthw-Version")..translate("(All Info mmdb)"))
-o:value("https://testingcf.jsdelivr.net/gh/Hackl0us/GeoIP2-CN@release/Country.mmdb", translate("Hackl0us-Version")..translate("(Only CN)"))
+o:value("https://testingcf.jsdelivr.net/gh/alecthw/mmdb_china_ip_list@release/lite/Country.mmdb", translate("Alecthw-lite-testingcf-Version")..translate("(Default mmdb)"))
+o:value("https://testingcf.jsdelivr.net/gh/alecthw/mmdb_china_ip_list@release/Country.mmdb", translate("Alecthw-testingcf-Version")..translate("(All Info mmdb)"))
+o:value("https://testingcf.jsdelivr.net/gh/Hackl0us/GeoIP2-CN@release/Country.mmdb", translate("Hackl0us-testingcf-Version")..translate("(Only CN)"))
+o:value("https://github.com/alecthw/mmdb_china_ip_list/releases/latest/download/Country-lite.mmdb", translate("Alecthw-lite-github-Version"))
 o.default = "https://testingcf.jsdelivr.net/gh/alecthw/mmdb_china_ip_list@release/lite/Country.mmdb"
 o:depends("geo_auto_update", "1")
 
 o = s:taboption("geo_update", Button, translate("GEOIP Update")) 
 o.title = translate("Update GeoIP MMDB")
-o.description = translate("Current Version:").." "..font_green..bold_on..translate(fs.get_resourse_mtime("/etc/openclash/Country.mmdb"))..bold_off..font_off
+o.description = translate("Current Version:").." "..font_green..bold_on..fs.get_resourse_mtime("/etc/openclash/Country.mmdb")..bold_off..font_off
 o.inputtitle = translate("Check And Update")
 o.inputstyle = "reload"
 o.write = function()
 	m.uci:set("openclash", "config", "enable", 1)
 	m.uci:commit("openclash")
-	SYS.call("/usr/share/openclash/openclash_ipdb.sh >/dev/null 2>&1 &")
+	SYS.call("/usr/share/openclash/openclash_geo.sh ipdb >/dev/null 2>&1 &")
 	HTTP.redirect(DISP.build_url("admin", "services", "openclash"))
 end
 
@@ -949,18 +1015,19 @@ o.rmempty = true
 o.description = translate("Custom GeoIP Dat URL, Click Button Below To Refresh After Edit")
 o:value("https://testingcf.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat", translate("Loyalsoldier-testingcf-jsdelivr-Version")..translate("(Default)"))
 o:value("https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat", translate("Loyalsoldier-fastly-jsdelivr-Version"))
+o:value("https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat", translate("Loyalsoldier-github-Version"))
 o.default = "https://testingcf.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat"
 o:depends("geoip_auto_update", "1")
 
 o = s:taboption("geo_update", Button, translate("GEOIP Dat Update")) 
 o.title = translate("Update GeoIP Dat")
-o.description = translate("Current Version:").." "..font_green..bold_on..translate(fs.get_resourse_mtime("/etc/openclash/GeoIP.dat"))..bold_off..font_off
+o.description = translate("Current Version:").." "..font_green..bold_on..fs.get_resourse_mtime("/etc/openclash/GeoIP.dat")..bold_off..font_off
 o.inputtitle = translate("Check And Update")
 o.inputstyle = "reload"
 o.write = function()
 	m.uci:set("openclash", "config", "enable", 1)
 	m.uci:commit("openclash")
-	SYS.call("/usr/share/openclash/openclash_geoip.sh >/dev/null 2>&1 &")
+	SYS.call("/usr/share/openclash/openclash_geo.sh geoip >/dev/null 2>&1 &")
 	HTTP.redirect(DISP.build_url("admin", "services", "openclash"))
 end
 
@@ -992,18 +1059,19 @@ o.rmempty = true
 o.description = translate("Custom GeoSite Data URL, Click Button Below To Refresh After Edit")
 o:value("https://testingcf.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat", translate("Loyalsoldier-testingcf-jsdelivr-Version")..translate("(Default)"))
 o:value("https://fastly.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat", translate("Loyalsoldier-fastly-jsdelivr-Version"))
+o:value("https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat", translate("Loyalsoldier-github-Version"))
 o.default = "https://testingcf.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat"
 o:depends("geosite_auto_update", "1")
 
 o = s:taboption("geo_update", Button, translate("GEOSITE Update")) 
 o.title = translate("Update GeoSite Database")
-o.description = translate("Current Version:").." "..font_green..bold_on..translate(fs.get_resourse_mtime("/etc/openclash/GeoSite.dat"))..bold_off..font_off
+o.description = translate("Current Version:").." "..font_green..bold_on..fs.get_resourse_mtime("/etc/openclash/GeoSite.dat")..bold_off..font_off
 o.inputtitle = translate("Check And Update")
 o.inputstyle = "reload"
 o.write = function()
 	m.uci:set("openclash", "config", "enable", 1)
 	m.uci:commit("openclash")
-	SYS.call("/usr/share/openclash/openclash_geosite.sh >/dev/null 2>&1 &")
+	SYS.call("/usr/share/openclash/openclash_geo.sh geosite >/dev/null 2>&1 &")
 	HTTP.redirect(DISP.build_url("admin", "services", "openclash"))
 end
 
@@ -1035,18 +1103,19 @@ o.rmempty = true
 o.description = translate("Custom Geo ASN Data URL, Click Button Below To Refresh After Edit")
 o:value("https://testingcf.jsdelivr.net/gh/xishang0128/geoip@release/GeoLite2-ASN.mmdb", translate("xishang0128-testingcf-jsdelivr-Version")..translate("(Default)"))
 o:value("https://fastly.jsdelivr.net/gh/xishang0128/geoip@release/GeoLite2-ASN.mmdb", translate("xishang0128-fastly-jsdelivr-Version"))
+o:value("https://github.com/xishang0128/geoip/releases/latest/download/GeoLite2-ASN.mmdb", translate("xishang0128-github-Version"))
 o.default = "https://testingcf.jsdelivr.net/gh/xishang0128/geoip@release/GeoLite2-ASN.mmdb"
 o:depends("geoasn_auto_update", "1")
 
 o = s:taboption("geo_update", Button, translate("ASN Update")) 	
 o.title = translate("Update Geo ASN Database")
-o.description = translate("Current Version:").." "..font_green..bold_on..translate(fs.get_resourse_mtime("/etc/openclash/ASN.mmdb"))..bold_off..font_off
+o.description = translate("Current Version:").." "..font_green..bold_on..fs.get_resourse_mtime("/etc/openclash/ASN.mmdb")..bold_off..font_off
 o.inputtitle = translate("Check And Update")
 o.inputstyle = "reload"
 o.write = function()
 	m.uci:set("openclash", "config", "enable", 1)
 	m.uci:commit("openclash")
-	SYS.call("/usr/share/openclash/openclash_geoasn.sh >/dev/null 2>&1 &")
+	SYS.call("/usr/share/openclash/openclash_geo.sh geoasn >/dev/null 2>&1 &")
 	HTTP.redirect(DISP.build_url("admin", "services", "openclash"))
 end
 
@@ -1079,6 +1148,7 @@ o:value("https://ispip.clang.cn/all_cn.txt", translate("Clang-CN")..translate("(
 o:value("https://ispip.clang.cn/all_cn_cidr.txt", translate("Clang-CN-CIDR"))
 o:value("https://fastly.jsdelivr.net/gh/Hackl0us/GeoIP2-CN@release/CN-ip-cidr.txt", translate("Hackl0us-CN-CIDR-fastly-jsdelivr"))
 o:value("https://testingcf.jsdelivr.net/gh/Hackl0us/GeoIP2-CN@release/CN-ip-cidr.txt", translate("Hackl0us-CN-CIDR-testingcf-jsdelivr"))
+o:value("https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt", translate("Loyalsoldier-github-Version"))
 o.default = "https://ispip.clang.cn/all_cn.txt"
 
 o = s:taboption("chnr_update", Value, "chnr6_custom_url")
@@ -1090,6 +1160,7 @@ o.default = "https://ispip.clang.cn/all_cn_ipv6.txt"
 
 o = s:taboption("chnr_update", Button, translate("Chnroute Lists Update")) 
 o.title = translate("Update Chnroute Lists")
+o.description = translate("Current Version:").." "..font_green..bold_on.. "IPv4 ("..fs.get_resourse_mtime("/etc/openclash/china_ip_route.ipset")..")"..bold_off..font_off.." "..font_green..bold_on.. "& IPv6 ("..fs.get_resourse_mtime("/etc/openclash/china_ip6_route.ipset")..")"..bold_off..font_off
 o.inputtitle = translate("Check And Update")
 o.inputstyle = "reload"
 o.write = function()
@@ -1297,54 +1368,6 @@ end
 ---- debug
 o = s:taboption("debug", DummyValue, "", nil)
 o.template = "openclash/debug"
-
----- dlercloud
-o = s:taboption("dlercloud", Value, "dler_email")
-o.title = translate("Account Email Address")
-o.rmempty = true
-
-o = s:taboption("dlercloud", Value, "dler_passwd")
-o.title = translate("Account Password")
-o.password = true
-o.rmempty = true
-
-if fs.uci_get_config("config", "dler_token") then
-	o = s:taboption("dlercloud", Flag, "dler_checkin")
-	o.title = translate("Checkin")
-	o.default = 0
-	o.rmempty = true
-end
-
-o = s:taboption("dlercloud", Value, "dler_checkin_interval")
-o.title = translate("Checkin Interval (hour)")
-o:depends("dler_checkin", "1")
-o.default = "1"
-o.rmempty = true
-
-o = s:taboption("dlercloud", Value, "dler_checkin_multiple")
-o.title = translate("Checkin Multiple")
-o.datatype = "uinteger"
-o.default = "1"
-o:depends("dler_checkin", "1")
-o.rmempty = true
-o.description = font_green..bold_on..translate("Multiple Must Be a Positive Integer and No More Than 100")..bold_off..font_off
-function o.validate(self, value)
-	if tonumber(value) < 1 then
-		return "1"
-	end
-	if tonumber(value) > 100 then
-		return "100"
-	end
-	return value
-end
-
-o = s:taboption("dlercloud", DummyValue, "dler_login", translate("Account Login"))
-o.template = "openclash/dler_login"
-if fs.uci_get_config("config", "dler_token") then
-	o.value = font_green..bold_on..translate("Account logged in")..bold_off..font_off
-else
-	o.value = font_red..bold_on..translate("Account not logged in")..bold_off..font_off
-end
 
 local t = {
 	{Commit, Apply}

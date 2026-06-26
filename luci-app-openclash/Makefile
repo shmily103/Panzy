@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-openclash
-PKG_VERSION:=0.47.047
+PKG_VERSION:=0.47.097
 PKG_MAINTAINER:=vernesong <https://github.com/vernesong/OpenClash>
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -61,7 +61,6 @@ define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)/root/etc/openclash/config
 	mkdir -p $(PKG_BUILD_DIR)/root/etc/openclash/rule_provider
 	mkdir -p $(PKG_BUILD_DIR)/root/etc/openclash/proxy_provider
-	mkdir -p $(PKG_BUILD_DIR)/root/etc/openclash/backup
 	mkdir -p $(PKG_BUILD_DIR)/root/etc/openclash/core
 	mkdir -p $(PKG_BUILD_DIR)/root/usr/share/openclash/backup/overwrite
 	cp -f "$(PKG_BUILD_DIR)/root/etc/config/openclash" "$(PKG_BUILD_DIR)/root/usr/share/openclash/backup/openclash" >/dev/null 2>&1
@@ -71,6 +70,7 @@ define Build/Prepare
 	cp -f "$(PKG_BUILD_DIR)/root/etc/openclash/custom/openclash_custom_fake_filter.list" "$(PKG_BUILD_DIR)/root/usr/share/openclash/backup/openclash_custom_fake_filter.list" >/dev/null 2>&1
 	cp -f "$(PKG_BUILD_DIR)/root/etc/openclash/custom/openclash_custom_domain_dns.list" "$(PKG_BUILD_DIR)/root/usr/share/openclash/backup/openclash_custom_domain_dns.list" >/dev/null 2>&1
 	cp -f "$(PKG_BUILD_DIR)/root/etc/openclash/custom/openclash_custom_domain_dns_policy.list" "$(PKG_BUILD_DIR)/root/usr/share/openclash/backup/openclash_custom_domain_dns_policy.list" >/dev/null 2>&1
+	cp -f "$(PKG_BUILD_DIR)/root/etc/openclash/custom/openclash_custom_proxy_server_dns_policy.list" "$(PKG_BUILD_DIR)/root/usr/share/openclash/backup/openclash_custom_proxy_server_dns_policy.list" >/dev/null 2>&1
 	cp -f "$(PKG_BUILD_DIR)/root/etc/openclash/custom/openclash_custom_fallback_filter.yaml" "$(PKG_BUILD_DIR)/root/usr/share/openclash/backup/openclash_custom_fallback_filter.yaml" >/dev/null 2>&1
 	cp -f "$(PKG_BUILD_DIR)/root/etc/openclash/custom/openclash_custom_sniffer.yaml" "$(PKG_BUILD_DIR)/root/usr/share/openclash/backup/openclash_custom_sniffer.yaml" >/dev/null 2>&1
 	cp -f "$(PKG_BUILD_DIR)/root/etc/openclash/custom/openclash_custom_localnetwork_ipv4.list" "$(PKG_BUILD_DIR)/root/usr/share/openclash/backup/openclash_custom_localnetwork_ipv4.list" >/dev/null 2>&1
@@ -97,8 +97,7 @@ define Package/$(PKG_NAME)/preinst
 	if [ -f "/etc/config/openclash" ] && [ ! -f "/tmp/openclash.bak" ]; then
 		cp -f "/etc/config/openclash" "/tmp/openclash.bak" >/dev/null 2>&1
 		cp -rf "/etc/openclash" "/tmp/openclash" >/dev/null 2>&1
-		cp -rf "/usr/share/openclash/ui/yacd" "/tmp/openclash_yacd" >/dev/null 2>&1
-		cp -rf "/usr/share/openclash/ui/dashboard" "/tmp/openclash_dashboard" >/dev/null 2>&1
+		cp -rf "/usr/share/openclash/ui" "/tmp/openclash_ui" >/dev/null 2>&1
 		cp -rf "/www/luci-static/resources/openclash/pac" "/tmp/pac" >/dev/null 2>&1
 	fi
 	exit 0
@@ -111,14 +110,11 @@ endef
 
 define Package/$(PKG_NAME)/prerm
 #!/bin/sh
-	uci -q set openclash.config.enable=0
-	uci -q commit openclash
 	[ -n "$(pidof clash)" ] && /etc/init.d/openclash stop 2>/dev/null
 	if [ -f "/etc/config/openclash" ] && [ ! -f "/tmp/openclash.bak" ]; then
 		cp -f "/etc/config/openclash" "/tmp/openclash.bak" >/dev/null 2>&1
 		cp -rf "/etc/openclash" "/tmp/openclash" >/dev/null 2>&1
-		cp -rf "/usr/share/openclash/ui/yacd" "/tmp/openclash_yacd" >/dev/null 2>&1
-		cp -rf "/usr/share/openclash/ui/dashboard" "/tmp/openclash_dashboard" >/dev/null 2>&1
+		cp -rf "/usr/share/openclash/ui" "/tmp/openclash_ui" >/dev/null 2>&1
 		cp -rf "/www/luci-static/resources/openclash/pac" "/tmp/pac" >/dev/null 2>&1
 	fi
 	exit 0
@@ -138,19 +134,13 @@ define Package/$(PKG_NAME)/postrm
 	rm -rf /tmp/openclash.log >/dev/null 2>&1
 	rm -rf /tmp/openclash_start.log >/dev/null 2>&1
 	rm -rf /tmp/openclash_last_version >/dev/null 2>&1
-	rm -rf /tmp/openclash_config.tmp >/dev/null 2>&1
 	rm -rf /tmp/openclash.change >/dev/null 2>&1
-	rm -rf /tmp/Proxy_Group >/dev/null 2>&1
-	rm -rf /tmp/rules_name >/dev/null 2>&1
-	rm -rf /tmp/rule_providers_name >/dev/null 2>&1
 	rm -rf /tmp/clash_last_version >/dev/null 2>&1
 	rm -rf /usr/share/openclash >/dev/null 2>&1
 	rm -rf ${DNSMASQ_CONF_DIR}/dnsmasq_openclash_custom_domain.conf >/dev/null 2>&1
 	rm -rf ${DNSMASQ_CONF_DIR}/dnsmasq_openclash_chnroute_pass.conf >/dev/null 2>&1
 	rm -rf ${DNSMASQ_CONF_DIR}/dnsmasq_openclash_chnroute6_pass.conf >/dev/null 2>&1
-	rm -rf /tmp/dler* >/dev/null 2>&1
 	rm -rf /tmp/etc/openclash >/dev/null 2>&1
-	rm -rf /tmp/openclash_edit_file_name >/dev/null 2>&1
 	rm -rf /tmp/openclash_announcement >/dev/null 2>&1
 	rm -rf /www/luci-static/resources/openclash >/dev/null 2>&1
 	sed -i '/OpenClash Append/,/OpenClash Append End/d' "/usr/lib/lua/luci/model/network.lua" >/dev/null 2>&1
@@ -162,7 +152,8 @@ define Package/$(PKG_NAME)/postrm
 	uci -q delete ucitrack.@openclash[-1]
 	uci -q commit ucitrack
 	}
-	rm -rf /tmp/luci-*
+	rm -rf /tmp/luci-indexcache /tmp/luci-indexcache.* /var/luci-indexcache /var/luci-indexcache.* >/dev/null 2>&1
+	rm -rf /tmp/luci-modulecache /var/luci-modulecache >/dev/null 2>&1
 	exit 0
 endef
 
